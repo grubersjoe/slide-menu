@@ -1,0 +1,53 @@
+@mixin list-unstyled {
+	padding-left: 0;
+	list-style: none;
+}
+
+
+.slide-menu {
+	$width: 320px;
+	$transition-dur: 300ms;
+	$transition-easing: ease-in-out;
+
+	position: fixed;
+	width: 320px;
+	height: 100vh;
+	top: 0;
+	right: 0;
+	background: $color-primary;
+	overflow: hidden;
+	transition: all $transition-dur $transition-easing;
+	transform: translateX($width);
+
+	.slider {
+		position: absolute;
+		top: 48px;
+		left: 0;
+		transition: all $transition-dur $transition-easing;
+		transform: translateX(0);
+	}
+
+	ul {
+		@include list-unstyled;
+
+		position: relative;
+		width: $width;
+		margin: 0;
+
+		ul {
+			position: absolute;
+			top: 0;
+			left: 100%;
+			display: none;
+		}
+
+		a {
+			display: block;
+			color: #fff;
+			padding: 16px 24px;
+			text-decoration: none;
+		}
+	}
+
+
+}

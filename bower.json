@@ -1,0 +1,8 @@
+{
+  "name": "sidebar",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "normalize-css": "normalize.css#^4.2.0"
+  }
+}
