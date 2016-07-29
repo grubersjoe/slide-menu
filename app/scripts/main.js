@@ -3,28 +3,74 @@
 
 (function ($) {
 
-    $.fn.slideMenu = function (options) {
-        // This is the easiest way to have default options.
-        let settings = $.extend({
-            color: '#556b2f',
-            backgroundColor: 'white'
-        }, options);
+    class SlideMenu {
+        constructor(elem) {
+            this.menu    = elem;
+            this.anchors = elem.find('a');
+            this.slider  = elem.find('.slider:first');
 
-        let menu = this;
-        let anchors = menu.find('a');
+            this._isOpen = false;
+
+            this._setupEventHandlers();
+        }
+
+        toggle(open = null) {
+            let offset;
+
+            if (open === null) {
+                if (this._isOpen) {
+                    this.close();
+                } else {
+                    this.open();
+                }
+                return;
+            } else if (open) {
+                offset = 0;
+                this._isOpen = true;
+            } else {
+                offset = this.menu.width();
+                this._isOpen = false;
+            }
+
+            console.log(offset);
+
+            this.menu.css('transform', 'translateX(' + offset + 'px)');
+        }
+
+        open() {
+            this.toggle(true);
+        }
+
+        close() {
+            this.toggle(false);
+        }
+
+        back() {
+            this._navigate(null, -1);
+        }
+
+        _setupEventHandlers() {
+            this.anchors.each(function () {
+                if ($(this).next('ul').length) {
+                    $(this).text($(this).text() + ' *');
+                }
+            });
+
+            this.anchors.click((event) => {
+                this._navigate($(event.target));
+            });
+        }
 
         /**
-         * Navigate the menu - that is slide it left or right
-         * @param {jQuery} menu The menu element to control
+         * Navigate the menu - that is slide it one step left or right
          * @param {jQuery} anchor The clicked anchor or button element
          * @param {int} dir
          */
-        function navigateMenu(menu, anchor, dir = 1) {
-            let level, offset, lastActiveUl, slider;
+        _navigate(anchor, dir = 1) {
+            let level, offset, lastActiveUl;
 
-            slider = menu.find('.slider:first');
-            level = Number(menu.data('level')) || 0;
-            offset = (level + dir) * -menu.width();
+            level = Number(this.menu.data('level')) || 0;
+            offset = (level + dir) * -this.menu.width();
 
             if (dir > 0) {
                 if (!anchor.next('ul').length)
@@ -36,60 +82,22 @@
                     return;
 
                 lastActiveUl = 'ul ' + '.active '.repeat(level);
-                menu.find(lastActiveUl).removeClass('active').fadeOut();
+                this.menu.find(lastActiveUl).removeClass('active').fadeOut();
             }
 
-            menu.data('level', level + dir);
-            slider.css('transform', 'translateX(' + offset + 'px)');
+            this.menu.data('level', level + dir);
+            this.slider.css('transform', 'translateX(' + offset + 'px)');
         }
+    }
 
-        anchors.each(function () {
-            if ($(this).next('ul').length) {
-                $(this).text($(this).text() + ' *');
-            }
-        });
 
-        anchors.click(function () {
-            navigateMenu(menu, $(this));
-        });
+    $.fn.slideMenu = function (options) {
+        let instance = new SlideMenu($(this));
+        $(this).data('SlideMenu', instance);
 
-        $('.slide-menu-control').click(function () {
-            let menu = $('#' + $(this).data('target'));
-            let action = $(this).data('action');
-            let offset;
-
-            if (menu.length === 0)
-                return;
-
-            let actions = new Map([
-                ['back', function () {
-                    navigateMenu(menu, null, -1);
-                }],
-                ['open', function () {
-                    offset = 0;
-                    menu.addClass('open');
-                }],
-                ['close', function () {
-                    offset = menu.width();
-                    menu.removeClass('open');
-                }],
-                ['toggle', function () {
-                    if (menu.hasClass('open')) {
-                        actions.get('close')();
-                    } else {
-                        actions.get('open')();
-                    }
-                }],
-            ]);
-
-            if (actions.has(action)) {
-                actions.get(action)();
-                menu.css('transform', 'translateX(' + offset + 'px)');
-            }
-        });
-
-        return this;
+        return instance;
     };
+
 }(jQuery));
 
 $(document).ready(function () {
