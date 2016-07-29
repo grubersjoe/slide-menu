@@ -22,13 +22,21 @@
     <main role="main">
         <h1>Main content</h1>
         <p>Some more text</p>
-        <button type="button" class="btn btn-slide-menu-control" data-action="open" data-target="my-slide-menu">Open Menu</button>
-        <button type="button" class="btn btn-slide-menu-control" data-action="close" data-target="my-slide-menu">Close Menu</button>
-        <button type="button" class="btn btn-slide-menu-control" data-action="toggle" data-target="my-slide-menu">Toggle Menu</button>
+        <p>
+            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="open">Open Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="close">Close Menu</button>
+        </p>
+        <p>
+            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="toggle">Toggle Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="back">Backward navigation</button>
+        </p>
     </main>
 
-    <nav class="slide-menu" id="my-slide-menu">
-        <a class="btn btn-back">back</a>
+    <nav class="slide-menu" id="my-menu">
+        <div class="controls">
+            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="back">Back</button>
+            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="close">Close</button>
+        </div>
         <div class="slider">
             <ul>
                 <li>
@@ -51,6 +59,23 @@
                                 </li>
                                 <li>
                                     <a href="#">Subsubmenu entry</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#">Subsubsubmenu entry</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Subsubsubmenu entry</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Subsubsubmenu entry</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Subsubsubmenu entry</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Subsubsubmenu entry</a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li>
                                     <a href="#">Subsubmenu entry</a>

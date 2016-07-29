@@ -6,7 +6,7 @@ $color-primary: #cc6666;
 @import "menu";
 
 body {
-	font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: 'PT Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	line-height: 1.4;
 	color: #333;
@@ -18,14 +18,31 @@ main {
 }
 
 a {
-	color: $color-primary;
 	border-bottom: solid 1px darken($color-primary, 8%);
+	color: $color-primary;
 }
 
-.btn {
+main .btn {
 	border: none;
 	background: $color-primary;
 	color: #fff;
 	padding: 4px 12px;
 	border-radius: 4px;
+	font-size: 16px;
+}
+
+.slide-menu {
+	background: $color-primary;
+
+	.slider {
+		top: 48px;
+	}
+
+	a {
+		color: #fff;
+	}
+
+	.btn:last-of-type {
+		float: right;
+	}
 }

@@ -3,7 +3,6 @@
 	list-style: none;
 }
 
-
 .slide-menu {
 	$width: 320px;
 	$transition-dur: 300ms;
@@ -14,14 +13,13 @@
 	height: 100vh;
 	top: 0;
 	right: 0;
-	background: $color-primary;
 	overflow: hidden;
 	transition: all $transition-dur $transition-easing;
 	transform: translateX($width);
 
 	.slider {
 		position: absolute;
-		top: 48px;
+		top: 0;
 		left: 0;
 		transition: all $transition-dur $transition-easing;
 		transform: translateX(0);
@@ -43,7 +41,6 @@
 
 		a {
 			display: block;
-			color: #fff;
 			padding: 16px 24px;
 			text-decoration: none;
 		}

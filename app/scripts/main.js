@@ -1,83 +1,97 @@
-(function($){
-    $(document).ready(function () {
+// TODO: create some kind of plugin API
+// TODO: later: make this library agnostic
 
-        $('.slide-menu').each(function () {
+(function ($) {
 
-            var menu    = $(this);
-            var width   = menu.width();
-            var slider  = menu.find('.slider:first');
-            var anchors = menu.find('a');
+    $.fn.slideMenu = function (options) {
+        // This is the easiest way to have default options.
+        let settings = $.extend({
+            color: '#556b2f',
+            backgroundColor: 'white'
+        }, options);
 
-            anchors.each(function () {
-                if ($(this).next('ul').length) {
-                    $(this).text($(this).text() + ' *');
-                }
-            });
+        let menu = this;
+        let anchors = menu.find('a');
 
-            anchors.click(function () {
-                var level, offset, direction, lastActiveUl;
+        /**
+         * Navigate the menu - that is slide it left or right
+         * @param {jQuery} menu The menu element to control
+         * @param {jQuery} anchor The clicked anchor or button element
+         * @param {int} dir
+         */
+        function navigateMenu(menu, anchor, dir = 1) {
+            let level, offset, lastActiveUl, slider;
 
-                level = Number(menu.data('level')) || 0;
-                direction = $(this).hasClass('btn-back') ? -1 : 1;
-                offset = (level + direction) * -width;
+            slider = menu.find('.slider:first');
+            level = Number(menu.data('level')) || 0;
+            offset = (level + dir) * -menu.width();
 
-                if (direction > 0) {
-                    // abort if no submenu exists
-                    if ($(this).next('ul').length === 0)
-                        return;
+            if (dir > 0) {
+                if (!anchor.next('ul').length)
+                    return;
 
-                    // show the next level otherwise
-                    $(this).next('ul').addClass('active').show();
-                } else {
-                    // abort if on top level
-                    if (level === 0)
-                        return;
+                anchor.next('ul').addClass('active').show();
+            } else {
+                if (level === 0)
+                    return;
 
-                    // find the last active ul and fade it out
-                    lastActiveUl = 'ul ' + '.active '.repeat(level);
-                    menu.find(lastActiveUl).removeClass('active').fadeOut();
-                }
+                lastActiveUl = 'ul ' + '.active '.repeat(level);
+                menu.find(lastActiveUl).removeClass('active').fadeOut();
+            }
 
-                // save current level and trigger the animation
-                menu.data('level', level + direction);
-                slider.css('transform', 'translateX(' + offset + 'px)');
-            })
+            menu.data('level', level + dir);
+            slider.css('transform', 'translateX(' + offset + 'px)');
+        }
+
+        anchors.each(function () {
+            if ($(this).next('ul').length) {
+                $(this).text($(this).text() + ' *');
+            }
         });
 
-        $('.btn-slide-menu-control').click(function () {
-            var menu  = $('#' + $(this).data('target'));
-            var offset;
+        anchors.click(function () {
+            navigateMenu(menu, $(this));
+        });
+
+        $('.slide-menu-control').click(function () {
+            let menu = $('#' + $(this).data('target'));
+            let action = $(this).data('action');
+            let offset;
 
             if (menu.length === 0)
                 return;
 
-            function open() {
-                offset = 0;
-                menu.addClass('open');
-            }
-
-            function close() {
-                offset = menu.width();
-                menu.removeClass('open');
-            }
-
-            switch ($(this).data('action')) {
-                case 'open':
-                    open();
-                    break;
-                case 'close':
-                    close();
-                    break;
-                default:
+            let actions = new Map([
+                ['back', function () {
+                    navigateMenu(menu, null, -1);
+                }],
+                ['open', function () {
+                    offset = 0;
+                    menu.addClass('open');
+                }],
+                ['close', function () {
+                    offset = menu.width();
+                    menu.removeClass('open');
+                }],
+                ['toggle', function () {
                     if (menu.hasClass('open')) {
-                        close();
-                    }  else {
-                        open();
+                        actions.get('close')();
+                    } else {
+                        actions.get('open')();
                     }
-                    break;
-            }
+                }],
+            ]);
 
-            menu.css('transform', 'translateX(' + offset + 'px)');
+            if (actions.has(action)) {
+                actions.get(action)();
+                menu.css('transform', 'translateX(' + offset + 'px)');
+            }
         });
-    });
-})(jQuery);
+
+        return this;
+    };
+}(jQuery));
+
+$(document).ready(function () {
+    $('#my-menu').slideMenu();
+});
