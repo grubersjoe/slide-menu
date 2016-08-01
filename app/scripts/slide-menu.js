@@ -36,9 +36,6 @@
                 }
                 return;
             } else if (open) {
-
-                console.log('wtf');
-
                 offset = 0;
                 this._isOpen = true;
             } else {
