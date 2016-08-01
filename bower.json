@@ -1,8 +1,28 @@
 {
-  "name": "sidebar",
-  "private": true,
-  "dependencies": {
-    "jquery": "~2.1.1",
-    "normalize-css": "normalize.css#^4.2.0"
-  }
+	"name": "sidebar",
+	"author": "Jonathan Gruber",
+	"description": "A simple multilevel CSS menu, with a slide effect",
+	"main": [
+		"app/scripts/slide-menu.js",
+		"app/styles/slide-menu.scss"
+	],
+	"dependencies": {
+		"jquery": "^2.0.0"
+	},
+	"devDependencies": {
+		"normalize-css": "normalize.css#^4.2.0"
+	},
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components"
+	],
+	"authors": [
+		"Jonathan Gruber <gruberjonathan@gmail.com>"
+	],
+	"keywords": [
+		"menu",
+		"navigation"
+	],
+	"license": "MIT"
 }

@@ -13,7 +13,7 @@
     <!-- endbuild -->
 
     <!-- build:css styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="../styles/main.css">
     <!-- endbuild -->
 
 </head>
@@ -23,19 +23,19 @@
         <h1>Main content</h1>
         <p>Some more text</p>
         <p>
-            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="open">Open Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="close">Close Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu" data-action="open">Open Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu" data-action="close">Close Menu</button>
         </p>
         <p>
-            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="toggle">Toggle Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="back">Backward navigation</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu" data-action="toggle">Toggle Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu" data-action="back">Backward navigation</button>
         </p>
     </main>
 
-    <nav class="slide-menu" id="my-menu">
+    <nav class="slide-menu" id="test-menu">
         <div class="controls">
-            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="back">Back</button>
-            <button type="button" class="btn slide-menu-control" data-target="my-menu" data-action="close">Close</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu" data-action="back">Back</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu" data-action="close">Close</button>
         </div>
         <div class="slider">
             <ul>
@@ -204,7 +204,17 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
+    <script src="scripts/slide-menu.js"></script>
     <!-- endbuild -->
+
+    <script>
+        $(document).ready(function () {
+            var menu = $('#test-menu').slideMenu({
+                submenuIndicator: '*'
+            });
+
+            menu.open();
+        });
+    </script>
 </body>
 </html>
