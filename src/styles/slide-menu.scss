@@ -23,6 +23,7 @@ $transition-easing: ease-in-out !default;
 	background: $menu-bg;
 	transition: all $transition-dur $transition-easing;
 	transform: translateX($menu-width);
+	z-index: 1000;
 
 	.slider {
 		position: absolute;
