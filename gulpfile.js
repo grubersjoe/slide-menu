@@ -73,7 +73,7 @@ gulp.task('serve', ['styles', 'scripts'], () => {
         notify: false,
         port: 9000,
         server: {
-            baseDir: ['.tmp', 'app/test'],
+            baseDir: ['.tmp', 'app'],
             routes: {
                 '/bower_components': 'bower_components'
             }
