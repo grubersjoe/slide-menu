@@ -1,11 +1,11 @@
-$menu-width: 320px !default;
-$menu-bg: #333 !default;
+$sm-menu-width: 320px !default;
+$sm-menu-bg: #333 !default;
 
-$link-color: #fff !default;
-$link-padding: 12px 24px !default;
+$sm-link-color: #fff !default;
+$sm-link-padding: 12px 24px !default;
 
-$transition-dur: 300ms !default;
-$transition-easing: ease-in-out !default;
+$sm-transition-dur: 300ms !default;
+$sm-transition-easing: ease-in-out !default;
 
 
 @mixin list-unstyled {
@@ -15,21 +15,21 @@ $transition-easing: ease-in-out !default;
 
 .slide-menu {
 	position: fixed;
-	width: $menu-width;
+	width: $sm-menu-width;
 	height: 100vh;
 	top: 0;
 	right: 0;
 	overflow: hidden;
-	background: $menu-bg;
-	transition: all $transition-dur $transition-easing;
-	transform: translateX($menu-width);
+	background: $sm-menu-bg;
+	transition: all $sm-transition-dur $sm-transition-easing;
+	transform: translateX($sm-menu-width);
 	z-index: 1000;
 
 	.slider {
 		position: absolute;
 		top: 0;
 		left: 0;
-		transition: all $transition-dur $transition-easing;
+		transition: all $sm-transition-dur $sm-transition-easing;
 		transform: translateX(0);
 	}
 
@@ -37,7 +37,7 @@ $transition-easing: ease-in-out !default;
 		@include list-unstyled;
 
 		position: relative;
-		width: $menu-width;
+		width: $sm-menu-width;
 		margin: 0;
 
 		ul {
@@ -49,8 +49,8 @@ $transition-easing: ease-in-out !default;
 
 		a {
 			display: block;
-			padding: $link-padding;
-			color: $link-color;
+			padding: $sm-link-padding;
+			color: $sm-link-color;
 			text-decoration: none;
 		}
 	}

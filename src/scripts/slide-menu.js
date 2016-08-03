@@ -19,7 +19,7 @@
             this._isAnimating = false;
 
             this._setupEventHandlers();
-            this._addSubmenuIndicator();
+            this._setupSubmenus();
         }
 
         /**
@@ -131,12 +131,15 @@
          * Adds an indicator to links in the menus, which have a submenu
          * @private
          */
-        _addSubmenuIndicator() {
+        _setupSubmenus() {
             if (this.options.submenuIndicator) {
                 this.anchors.each((i, anchor) => {
                     anchor = $(anchor);
                     if (anchor.next('ul').length) {
                         anchor.text(anchor.text() + ' ' + this.options.submenuIndicator);
+                        anchor.click(function (ev) {
+                            ev.preventDefault();
+                        })
                     }
                 });
             }
