@@ -16,6 +16,7 @@
             this.slider  = this.menu.find('.slider:first');
 
             this._isOpen = false;
+            this._isAnimating = false;
 
             this._setupEventHandlers();
             this._addSubmenuIndicator();
@@ -43,7 +44,7 @@
                 this._isOpen = false;
             }
 
-            this.menu.css('transform', 'translateX(' + offset + 'px)');
+            this._triggerAnimation(this.menu, offset);
         }
 
         /**
@@ -75,6 +76,10 @@
             this.anchors.click((event) => {
                 this._navigate($(event.target));
             });
+
+            $(this.menu.add(this.slider)).on('transitionend msTransitionEnd', () => {
+                this._isAnimating = false;
+            });
         }
 
         /**
@@ -84,6 +89,11 @@
          * @private
          */
         _navigate(anchor, dir = 1) {
+            // Abort if an animation is still running
+            if (this._isAnimating) {
+                return;
+            }
+
             let level, offset, lastActiveUl;
 
             level = Number(this.menu.data('level')) || 0;
@@ -103,7 +113,18 @@
             }
 
             this.menu.data('level', level + dir);
-            this.slider.css('transform', 'translateX(' + offset + 'px)');
+            this._triggerAnimation(this.slider, offset);
+        }
+
+        /**
+         * Start the animation (the CSS transition)
+         * @param elem
+         * @param offset
+         * @private
+         */
+        _triggerAnimation(elem, offset) {
+            elem.css('transform', 'translateX(' + offset + 'px)');
+            this._isAnimating = true;
         }
 
         /**
