@@ -1,21 +1,28 @@
+$menu-width: 320px !default;
+$menu-bg: #333;
+
+$link-color: #fff !default;
+$link-padding: 12px 24px !default;
+
+$transition-dur: 300ms !default;
+$transition-easing: ease-in-out !default;
+
+
 @mixin list-unstyled {
 	padding-left: 0;
 	list-style: none;
 }
 
 .slide-menu {
-	$width: 320px;
-	$transition-dur: 300ms;
-	$transition-easing: ease-in-out;
-
 	position: fixed;
-	width: 320px;
+	width: $menu-width;
 	height: 100vh;
 	top: 0;
 	right: 0;
 	overflow: hidden;
+	background: $menu-bg;
 	transition: all $transition-dur $transition-easing;
-	transform: translateX($width);
+	transform: translateX($menu-width);
 
 	.slider {
 		position: absolute;
@@ -29,7 +36,7 @@
 		@include list-unstyled;
 
 		position: relative;
-		width: $width;
+		width: $menu-width;
 		margin: 0;
 
 		ul {
@@ -41,7 +48,8 @@
 
 		a {
 			display: block;
-			padding: 16px 24px;
+			padding: $link-padding;
+			color: $link-color;
 			text-decoration: none;
 		}
 	}
