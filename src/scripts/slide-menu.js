@@ -136,7 +136,7 @@
                 this.anchors.each((i, anchor) => {
                     anchor = $(anchor);
                     if (anchor.next('ul').length) {
-                        anchor.text(anchor.text() + ' ' + this.options.submenuIndicator);
+                        anchor.html(anchor.text() + ' ' + this.options.submenuIndicator);
                         anchor.click(function (ev) {
                             ev.preventDefault();
                         })
