@@ -1,19 +1,20 @@
 {
-	"name": "sidebar",
+	"name": "slide-menu",
 	"author": "Jonathan Gruber",
 	"description": "A simple multilevel CSS menu, with a slide effect",
 	"main": [
-		"app/scripts/slide-menu.js",
+		"dist/scripts/slide-menu.js",
 		"app/styles/slide-menu.scss"
 	],
 	"dependencies": {
-		"jquery": "^2.0.0",
-		"normalize-css": "normalize.css#^4.2.0"
+		"jquery": "^2.0.0"
 	},
 	"ignore": [
 		"**/.*",
 		"node_modules",
-		"bower_components"
+		"bower_components",
+		"package.json",
+		"gulpfile.js"
 	],
 	"authors": [
 		"Jonathan Gruber <gruberjonathan@gmail.com>"

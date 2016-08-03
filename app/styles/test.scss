@@ -3,8 +3,6 @@
 
 $color-primary: #cc6666;
 
-@import 'slide-menu';
-
 body {
 	font-family: 'PT Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 18px;
@@ -23,12 +21,13 @@ a {
 }
 
 main .btn {
+	padding: 8px 12px;
 	border: none;
 	background: $color-primary;
-	color: #fff;
-	padding: 4px 12px;
 	border-radius: 4px;
+	color: #fff;
 	font-size: 16px;
+	font-family: inherit;
 }
 
 .slide-menu {
