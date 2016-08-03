@@ -4,7 +4,7 @@
 	"description": "A simple multilevel CSS menu, with a slide effect",
 	"main": [
 		"dist/scripts/slide-menu.js",
-		"app/styles/slide-menu.scss"
+		"src/styles/slide-menu.scss"
 	],
 	"dependencies": {
 		"jquery": "^2.0.0"
