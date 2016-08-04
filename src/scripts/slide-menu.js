@@ -138,7 +138,7 @@
     }
 
     // Link control buttons with 'API'
-    $('body').on('click', '.slide-menu-control', function () {
+    $('.slide-menu-control').unbind().click(function () {
         let menu = $('#' + $(this).data('target'));
 
         if (!menu.length) return;

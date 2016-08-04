@@ -177,7 +177,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     // Link control buttons with 'API'
 
 
-    $('body').on('click', '.slide-menu-control', function () {
+    $('.slide-menu-control').unbind().click(function () {
         var menu = $('#' + $(this).data('target'));
 
         if (!menu.length) return;
