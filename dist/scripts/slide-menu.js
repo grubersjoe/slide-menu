@@ -10,7 +10,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var PLUGIN_NAME = 'slideMenu';
     var DEFAULT_OPTIONS = {
-        submenuIndicator: ''
+        showBackLink: true,
+        submenuLinkBefore: '',
+        submenuLinkAfter: '',
+        backLinkBefore: '',
+        backLinkAfter: ''
     };
 
     var SlideMenu = function () {
@@ -18,9 +22,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             _classCallCheck(this, SlideMenu);
 
             this.options = options;
-            this.menu = options.elem;
-            this.anchors = this.menu.find('a');
-            this.slider = this.menu.find('.slider:first');
+
+            this._menu = options.elem;
+
+            this._menu.find('ul:first').wrap('<div class="slider">');
+
+            this._anchors = this._menu.find('a');
+            this._slider = this._menu.find('.slider:first');
 
             this._isOpen = false;
             this._isAnimating = false;
@@ -30,7 +38,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         /**
-         * Toggle the menu
+         * Toggle the _menu
          * @param {boolean|null} open
          */
 
@@ -53,11 +61,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     offset = 0;
                     this._isOpen = true;
                 } else {
-                    offset = this.menu.width();
+                    offset = this._menu.width();
                     this._isOpen = false;
                 }
 
-                this._triggerAnimation(this.menu, offset);
+                this._triggerAnimation(this._menu, offset);
             }
         }, {
             key: 'open',
@@ -85,17 +93,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _setupEventHandlers() {
                 var _this = this;
 
-                this.anchors.click(function (event) {
+                this._anchors.click(function (event) {
                     _this._navigate($(event.target));
                 });
 
-                $(this.menu.add(this.slider)).on('transitionend msTransitionEnd', function () {
+                $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
                     _this._isAnimating = false;
                 });
             }
 
             /**
-             * Navigate the menu - that is slide it one step left or right
+             * Navigate the _menu - that is slide it one step left or right
              * @param {jQuery} anchor The clicked anchor or button element
              * @param {int} dir
              * @private
@@ -115,8 +123,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     offset = void 0,
                     lastActiveUl = void 0;
 
-                level = Number(this.menu.data('level')) || 0;
-                offset = (level + dir) * -this.menu.width();
+                level = Number(this._menu.data('level')) || 0;
+                offset = (level + dir) * -this._menu.width();
 
                 if (dir > 0) {
                     if (!anchor.next('ul').length) return;
@@ -126,11 +134,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     if (level === 0) return;
 
                     lastActiveUl = 'ul ' + '.active '.repeat(level);
-                    this.menu.find(lastActiveUl).removeClass('active').fadeOut();
+                    this._menu.find(lastActiveUl).removeClass('active').fadeOut();
                 }
 
-                this.menu.data('level', level + dir);
-                this._triggerAnimation(this.slider, offset);
+                this._menu.data('level', level + dir);
+                this._triggerAnimation(this._slider, offset);
             }
 
             /**
@@ -157,14 +165,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _setupSubmenus() {
                 var _this2 = this;
 
-                if (this.options.submenuIndicator) {
-                    this.anchors.each(function (i, anchor) {
+                if (this.options.submenuLinkAfter) {
+                    this._anchors.each(function (i, anchor) {
                         anchor = $(anchor);
                         if (anchor.next('ul').length) {
-                            anchor.html(anchor.text() + ' ' + _this2.options.submenuIndicator);
+                            var anchorTitle = anchor.text();
+                            anchor.html(_this2.options.submenuLinkBefore + anchorTitle + _this2.options.submenuLinkAfter);
+
+                            // prevent default behaviour (use link just to navigate)
                             anchor.click(function (ev) {
                                 ev.preventDefault();
                             });
+
+                            // add a back button
+                            if (_this2.options.showBackLink) {
+                                var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                                backLink.html(_this2.options.backLinkBefore + backLink.text() + _this2.options.backLinkAfter);
+                                anchor.next('ul').prepend($('<li>').append(backLink));
+                            }
                         }
                     });
                 }
@@ -174,18 +192,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return SlideMenu;
     }();
 
-    // Link control buttons with 'API'
+    // Link control buttons with the API
 
 
-    $('.slide-menu-control').unbind().click(function () {
-        var menu = $('#' + $(this).data('target'));
+    $('body').unbind().on('click', '.slide-menu-control', function () {
+        var menu = void 0;
+        var target = $(this).data('target');
+
+        if (!target || target === 'this') {
+            menu = $(this).parents('.slide-menu:first');
+        } else {
+            menu = $('#' + target);
+        }
 
         if (!menu.length) return;
 
         var instance = menu.data(PLUGIN_NAME);
         var action = $(this).data('action');
 
-        if (typeof instance[action] === 'function') {
+        if (instance && typeof instance[action] === 'function') {
             instance[action]();
         }
     });

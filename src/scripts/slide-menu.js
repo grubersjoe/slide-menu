@@ -4,16 +4,24 @@
 
     const PLUGIN_NAME = 'slideMenu';
     const DEFAULT_OPTIONS = {
-        submenuIndicator: ''
+        showBackLink: true,
+        submenuLinkBefore: '',
+        submenuLinkAfter: '',
+        backLinkBefore: '',
+        backLinkAfter: '',
     };
 
     class SlideMenu {
 
         constructor(options) {
             this.options = options;
-            this.menu    = options.elem;
-            this.anchors = this.menu.find('a');
-            this.slider  = this.menu.find('.slider:first');
+
+            this._menu    = options.elem;
+
+            this._menu.find('ul:first').wrap('<div class="slider">');
+
+            this._anchors = this._menu.find('a');
+            this._slider  = this._menu.find('.slider:first');
 
             this._isOpen = false;
             this._isAnimating = false;
@@ -23,7 +31,7 @@
         }
 
         /**
-         * Toggle the menu
+         * Toggle the _menu
          * @param {boolean|null} open
          */
         toggle(open = null) {
@@ -40,11 +48,11 @@
                 offset = 0;
                 this._isOpen = true;
             } else {
-                offset = this.menu.width();
+                offset = this._menu.width();
                 this._isOpen = false;
             }
 
-            this._triggerAnimation(this.menu, offset);
+            this._triggerAnimation(this._menu, offset);
         }
 
         open() {
@@ -64,17 +72,17 @@
          * @private
          */
         _setupEventHandlers() {
-            this.anchors.click((event) => {
+            this._anchors.click((event) => {
                 this._navigate($(event.target));
             });
 
-            $(this.menu.add(this.slider)).on('transitionend msTransitionEnd', () => {
+            $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', () => {
                 this._isAnimating = false;
             });
         }
 
         /**
-         * Navigate the menu - that is slide it one step left or right
+         * Navigate the _menu - that is slide it one step left or right
          * @param {jQuery} anchor The clicked anchor or button element
          * @param {int} dir
          * @private
@@ -87,8 +95,8 @@
 
             let level, offset, lastActiveUl;
 
-            level = Number(this.menu.data('level')) || 0;
-            offset = (level + dir) * -this.menu.width();
+            level = Number(this._menu.data('level')) || 0;
+            offset = (level + dir) * -this._menu.width();
 
             if (dir > 0) {
                 if (!anchor.next('ul').length)
@@ -100,11 +108,11 @@
                     return;
 
                 lastActiveUl = 'ul ' + '.active '.repeat(level);
-                this.menu.find(lastActiveUl).removeClass('active').fadeOut();
+                this._menu.find(lastActiveUl).removeClass('active').fadeOut();
             }
 
-            this.menu.data('level', level + dir);
-            this._triggerAnimation(this.slider, offset);
+            this._menu.data('level', level + dir);
+            this._triggerAnimation(this._slider, offset);
         }
 
         /**
@@ -123,30 +131,47 @@
          * @private
          */
         _setupSubmenus() {
-            if (this.options.submenuIndicator) {
-                this.anchors.each((i, anchor) => {
+            if (this.options.submenuLinkAfter) {
+                this._anchors.each((i, anchor) => {
                     anchor = $(anchor);
                     if (anchor.next('ul').length) {
-                        anchor.html(anchor.text() + ' ' + this.options.submenuIndicator);
+                        let anchorTitle = anchor.text();
+                        anchor.html(this.options.submenuLinkBefore + anchorTitle + this.options.submenuLinkAfter);
+
+                        // prevent default behaviour (use link just to navigate)
                         anchor.click(function (ev) {
                             ev.preventDefault();
-                        })
+                        });
+
+                        // add a back button
+                        if (this.options.showBackLink) {
+                            let backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                            backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
+                            anchor.next('ul').prepend($('<li>').append(backLink));
+                        }
                     }
                 });
             }
         }
     }
 
-    // Link control buttons with 'API'
-    $('.slide-menu-control').unbind().click(function () {
-        let menu = $('#' + $(this).data('target'));
+    // Link control buttons with the API
+    $('body').unbind().on('click', '.slide-menu-control', function () {
+        let menu;
+        let target = $(this).data('target');
+
+        if (!target || target === 'this') {
+            menu = $(this).parents('.slide-menu:first');
+        } else {
+            menu = $('#' + target)
+        }
 
         if (!menu.length) return;
 
         let instance = menu.data(PLUGIN_NAME);
         let action = $(this).data('action');
 
-        if (typeof instance[action] === 'function') {
+        if (instance && typeof instance[action] === 'function') {
             instance[action]();
         }
     });
