@@ -33,8 +33,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this._isOpen = false;
             this._isAnimating = false;
 
-            this._setupEventHandlers();
             this._setupSubmenus();
+            this._setupEventHandlers();
         }
 
         /**
@@ -94,7 +94,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _this = this;
 
                 this._anchors.click(function (event) {
-                    _this._navigate($(event.target));
+                    var anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
+                    _this._navigate(anchor);
                 });
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
@@ -165,27 +166,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _setupSubmenus() {
                 var _this2 = this;
 
-                if (this.options.submenuLinkAfter) {
-                    this._anchors.each(function (i, anchor) {
-                        anchor = $(anchor);
-                        if (anchor.next('ul').length) {
-                            var anchorTitle = anchor.text();
-                            anchor.html(_this2.options.submenuLinkBefore + anchorTitle + _this2.options.submenuLinkAfter);
+                this._anchors.each(function (i, anchor) {
+                    anchor = $(anchor);
+                    if (anchor.next('ul').length) {
+                        var anchorTitle = anchor.text();
+                        anchor.html(_this2.options.submenuLinkBefore + anchorTitle + _this2.options.submenuLinkAfter);
 
-                            // prevent default behaviour (use link just to navigate)
-                            anchor.click(function (ev) {
-                                ev.preventDefault();
-                            });
+                        // prevent default behaviour (use link just to navigate)
+                        anchor.click(function (ev) {
+                            ev.preventDefault();
+                        });
 
-                            // add a back button
-                            if (_this2.options.showBackLink) {
-                                var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
-                                backLink.html(_this2.options.backLinkBefore + backLink.text() + _this2.options.backLinkAfter);
-                                anchor.next('ul').prepend($('<li>').append(backLink));
-                            }
+                        // add a back button
+                        if (_this2.options.showBackLink) {
+                            var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                            backLink.html(_this2.options.backLinkBefore + backLink.text() + _this2.options.backLinkAfter);
+                            anchor.next('ul').prepend($('<li>').append(backLink));
                         }
-                    });
-                }
+                    }
+                });
             }
         }]);
 
