@@ -3,14 +3,14 @@
 *A simple multilevel CSS menu, with a slide effect*.
 
 ## Install
-```
+```sh
 bower install slide-menu
 ``` 
 
 ## Getting started
 All you need is the traditional CSS menu HTML markup and a wrapper with the class `slide-menu`. Menus can be nested endlessly. To programmatically control the menu you should also asign an ID to be able to use API (see below).
 
-```
+```html
 <nav class="slide-menu" id="my-menu">
  <ul>
      <li>
@@ -35,7 +35,7 @@ The SCSS and JS code is included automatically when using [wiredep](https://gith
 
 Create the menu then like this:
 
-```
+```javascript
 $(document).ready(function () {
     var menu = $('#my-menu').slideMenu();
 });
@@ -55,7 +55,7 @@ Option | Description | Valid values | Default
  
  Example:
  
- ```
+ ```javascript
  $(document).ready(function () {
      var menu = $('#my-menu').slideMenu({
          showBackLink: false,
@@ -68,7 +68,7 @@ Option | Description | Valid values | Default
  
 Either use the variable where you initialized the slideMenu (`menu` in above example) to call the API or, if you need the instance later, fetch it from the element like this:
 
-```
+```javascript
 var menu = $('#my-menu').data('slideMenu');
 
 menu.open();
@@ -83,14 +83,14 @@ menu.close();
  
 Buttons to control the menu can be created easily. Add the class `slide-menu-control` to links or buttons and set the `data` attributes `target` with the ID of desired menu and `action` to specify the API method:
 
-```
+```html
 <a class="slide-menu-control" data-target="my-menu" data-action="open">Open</a>
 <a class="slide-menu-control" data-target="my-menu" data-action="close">Close</a>
 ```
 
 Inside the menu container the attribute `data-target` can be omitted or set to to the string `this` to control *this* menu.
 
-```
+```html
 <a class="slide-menu-control" data-action="close">Close this menu</a>
 <a class="slide-menu-control" data-target="this" data-action="close">Close this menu</a>
 ```
