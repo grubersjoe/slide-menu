@@ -12,22 +12,22 @@ All you need is the traditional CSS menu HTML markup and a wrapper with the clas
 
 ```html
 <nav class="slide-menu" id="my-menu">
- <ul>
-     <li>
-         <a href="#">Home</a>
-         <ul>
-             <li><a href="#">Submenu entry 1</a></li>
-             <li><a href="#">Submenu entry 2</a></li>
-             <li><a href="#">Submenu entry 3</a></li>
-         </ul>
-     </li>
-     <li>
-        <a href="/blog">Blog</a>
-    </li>
-     <li>
-        <a href="/blog">About</a>
-    </li>
-</ul>
+    <ul>
+        <li>
+            <a href="#">Home</a>
+            <ul>
+                <li><a href="#">Submenu entry 1</a></li>
+                <li><a href="#">Submenu entry 2</a></li>
+                <li><a href="#">Submenu entry 3</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="/blog">Blog</a>
+        </li>
+        <li>
+            <a href="/blog">About</a>
+        </li>
+    </ul>
 </nav>
 ```
 
