@@ -47,23 +47,14 @@
             this._triggerAnimation(this.menu, offset);
         }
 
-        /**
-         * Open the menu
-         */
         open() {
             this.toggle(true);
         }
 
-        /**
-         * Close the menu
-         */
         close() {
             this.toggle(false);
         }
 
-        /**
-         * Navigate one step backward in menu hierarchy if possible
-         */
         back() {
             this._navigate(null, -1);
         }
