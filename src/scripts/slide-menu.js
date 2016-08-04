@@ -26,8 +26,8 @@
             this._isOpen = false;
             this._isAnimating = false;
 
-            this._setupEventHandlers();
             this._setupSubmenus();
+            this._setupEventHandlers();
         }
 
         /**
@@ -73,7 +73,8 @@
          */
         _setupEventHandlers() {
             this._anchors.click((event) => {
-                this._navigate($(event.target));
+                let anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
+                this._navigate(anchor);
             });
 
             $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', () => {
@@ -131,27 +132,25 @@
          * @private
          */
         _setupSubmenus() {
-            if (this.options.submenuLinkAfter) {
-                this._anchors.each((i, anchor) => {
-                    anchor = $(anchor);
-                    if (anchor.next('ul').length) {
-                        let anchorTitle = anchor.text();
-                        anchor.html(this.options.submenuLinkBefore + anchorTitle + this.options.submenuLinkAfter);
+            this._anchors.each((i, anchor) => {
+                anchor = $(anchor);
+                if (anchor.next('ul').length) {
+                    let anchorTitle = anchor.text();
+                    anchor.html(this.options.submenuLinkBefore + anchorTitle + this.options.submenuLinkAfter);
 
-                        // prevent default behaviour (use link just to navigate)
-                        anchor.click(function (ev) {
-                            ev.preventDefault();
-                        });
+                    // prevent default behaviour (use link just to navigate)
+                    anchor.click(function (ev) {
+                        ev.preventDefault();
+                    });
 
-                        // add a back button
-                        if (this.options.showBackLink) {
-                            let backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
-                            backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
-                            anchor.next('ul').prepend($('<li>').append(backLink));
-                        }
+                    // add a back button
+                    if (this.options.showBackLink) {
+                        let backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                        backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
+                        anchor.next('ul').prepend($('<li>').append(backLink));
                     }
-                });
-            }
+                }
+            });
         }
     }
 
