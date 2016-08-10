@@ -4,6 +4,7 @@
 
     const PLUGIN_NAME = 'slideMenu';
     const DEFAULT_OPTIONS = {
+        position: 'right',
         showBackLink: true,
         submenuLinkBefore: '',
         submenuLinkAfter: '',
@@ -16,22 +17,26 @@
         constructor(options) {
             this.options = options;
 
-            this._menu    = options.elem;
+            this._menu = options.elem;
 
             this._menu.find('ul:first').wrap('<div class="slider">');
 
             this._anchors = this._menu.find('a');
-            this._slider  = this._menu.find('.slider:first');
+            this._slider = this._menu.find('.slider:first');
 
             this._isOpen = false;
             this._isAnimating = false;
+            this._hasMenu = this._anchors.length > 0;
 
-            this._setupSubmenus();
             this._setupEventHandlers();
+            this._setupMenu();
+
+            if (this._hasMenu)
+                this._setupSubmenus();
         }
 
         /**
-         * Toggle the _menu
+         * Toggle the menu
          * @param {boolean|null} open
          */
         toggle(open = null) {
@@ -48,7 +53,7 @@
                 offset = 0;
                 this._isOpen = true;
             } else {
-                offset = this._menu.width();
+                offset = (this.options.position === 'left') ? -this._menu.outerWidth() : this._menu.outerWidth();
                 this._isOpen = false;
             }
 
@@ -72,12 +77,17 @@
          * @private
          */
         _setupEventHandlers() {
-            this._anchors.click((event) => {
-                let anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
-                this._navigate(anchor);
-            });
+            if (this._hasMenu) {
+                this._anchors.click((event) => {
+                    let anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
+                    this._navigate(anchor);
+                });
+            }
 
             $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', () => {
+                if (this._menu.css('visibility') === 'hidden')
+                    this._menu.css('visibility', 'visible');
+
                 this._isAnimating = false;
             });
         }
@@ -97,7 +107,7 @@
             let level, offset, lastActiveUl;
 
             level = Number(this._menu.data('level')) || 0;
-            offset = (level + dir) * -this._menu.width();
+            offset = (level + dir) * -this._menu.outerWidth();
 
             if (dir > 0) {
                 if (!anchor.next('ul').length)
@@ -125,6 +135,29 @@
         _triggerAnimation(elem, offset) {
             elem.css('transform', 'translateX(' + offset + 'px)');
             this._isAnimating = true;
+        }
+
+        /**
+         *
+         * @private
+         */
+        _setupMenu() {
+            switch (this.options.position) {
+                case 'left':
+                    this._menu.css({
+                        left: 0,
+                        right: 'auto',
+                        transform: 'translateX(' + (-this._menu.outerWidth()) + 'px)'
+                    });
+                    break;
+                default:
+                    this._menu.css({
+                        left: 'auto',
+                        right: 0
+                    });
+                    break;
+            }
+
         }
 
         /**
@@ -177,7 +210,7 @@
 
     // Register the jQuery plugin
     $.fn[PLUGIN_NAME] = function (options) {
-        options = $.extend(DEFAULT_OPTIONS, options);
+        options = $.extend({}, DEFAULT_OPTIONS, options);
         options.elem = $(this);
 
         let instance = new SlideMenu(options);

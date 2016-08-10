@@ -18,8 +18,10 @@ $sm-transition-easing: ease-in-out !default;
 	width: $sm-menu-width;
 	height: 100vh;
 	top: 0;
-	right: 0;
+	right: 50%; // trick to always trigger a transitionend event used to position the menu first and show it afterwards
 	overflow: hidden;
+	visibility: hidden;
+	box-sizing: border-box;
 	background: $sm-menu-bg;
 	transition: all $sm-transition-dur $sm-transition-easing;
 	transform: translateX($sm-menu-width);

@@ -43,10 +43,11 @@ $(document).ready(function () {
  
 ## Options
  
-Some aspects can be configured with an options object:
+You can pass an options array as argument to the slideMenu() constructor.
   
 Option | Description | Valid values | Default
 --- | --- | --- | ---
+`position` | Position of the menu | "left" or "right" | "right"
 `showBackLink` | Show a link to parent level in submenus | *boolean* | `true`
 `submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  *empty*
 `submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  *empty*
@@ -64,22 +65,31 @@ Option | Description | Valid values | Default
  });
  ```
  
- ## API
- 
-Either use the variable where you initialized the slideMenu (`menu` in above example) to call the API or, if you need the instance later, fetch it from the element like this:
+## API
 
-```javascript
-var menu = $('#my-menu').data('slideMenu');
+You can call the API in two different ways:
 
-menu.open();
-menu.close();
-```
+* Reuse the variable of the jQuery element, where the plugin has been initialized: 
+    ```javascript
+    var menu = $('#my-menu').data('slideMenu');
+    
+    menu.open();
+    menu.close();
+    ```
+* If you need to control an existing menu, you can fetch the menu instance  any time this way:
+
+    ```javascript
+    $('#my-menu').data('slide-menu').toggle();
+    ```
+
+### Methods
 
 * `toggle()` - Toggle the menu
 * `open()` - Open the menu
 * `close()` - Close the menu
 * `back()` - Navigate on level back if possible
 
+### Control buttons
  
 Buttons to control the menu can be created easily. Add the class `slide-menu-control` to links or buttons and set the `data` attributes `target` with the ID of desired menu and `action` to specify the API method:
 
