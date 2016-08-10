@@ -4,6 +4,7 @@ const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync');
 const del = require('del');
 const wiredep = require('wiredep').stream;
+const rename = require("gulp-rename");
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -51,8 +52,15 @@ gulp.task('lint', () => {
 gulp.task('html', ['styles', 'scripts'], () => {
     return gulp.src('src/*.html')
         .pipe($.useref({searchPath: ['.tmp', 'src', '.']}))
-        //.pipe($.if('*.js', $.uglify()))
+
+        .pipe($.if('*.js', gulp.dest('dist')))
+        .pipe($.if('*.js', $.uglify()))
+        .pipe($.if('*.js', $.rename({ suffix: '.min' })))
+
+        .pipe($.if('*.css', gulp.dest('dist')))
         .pipe($.if('*.css', $.cssnano({safe: true, autoprefixer: false})))
+        .pipe($.if('*.css', $.rename({ suffix: '.min' })))
+
         .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
         .pipe(gulp.dest('dist'));
 });
