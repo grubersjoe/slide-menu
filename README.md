@@ -2,6 +2,8 @@
 
 *A simple multilevel CSS menu, with a slide effect*.
 
+**[Demo](https://grubersjoe.github.io/slide-menu)**
+
 ## Install
 ```sh
 bower install slide-menu
