@@ -1,15 +1,10 @@
 <!doctype html>
-<html lang="">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SlideMenu</title>
-
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
 
     <!-- build:css styles/slide-menu.css -->
     <link rel="stylesheet" href="styles/slide-menu.css">
@@ -20,6 +15,8 @@
     <!-- endbuild -->
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -156,31 +153,29 @@
         </ul>
     </nav>
 
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <!-- endbower -->
-
     <!-- build:js scripts/slide-menu.js -->
     <script src="scripts/slide-menu.js"></script>
     <!-- endbuild -->
 
-    <script>
-        $(document).ready(function () {
+    <script defer>
+        (function ($) {
+            $(document).ready(function () {
 
-            var menuLeft = $('#test-menu-left').slideMenu({
-                position: 'left',
-                submenuLinkAfter: ' >',
-                backLinkBefore: '< ',
+                var menuLeft = $('#test-menu-left').slideMenu({
+                    position: 'left',
+                    submenuLinkAfter: ' >',
+                    backLinkBefore: '< ',
+                });
+
+                var menuRight = $('#test-menu-right').slideMenu({
+                    submenuLinkAfter: ' ⇒',
+                    backLinkBefore: '⇐ ',
+                });
+
+                menuRight.open();
+
             });
-
-            var menuRight = $('#test-menu-right').slideMenu({
-                submenuLinkAfter: ' ⇒',
-                backLinkBefore: '⇐ ',
-            });
-
-            menuRight.open();
-
-        });
+        })(jQuery);
     </script>
 </body>
 </html>
