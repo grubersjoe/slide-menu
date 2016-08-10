@@ -25,7 +25,7 @@ All you need is the traditional CSS menu HTML markup and a wrapper with the clas
             <a href="/blog">Blog</a>
         </li>
         <li>
-            <a href="/blog">About</a>
+            <a href="/about">About</a>
         </li>
     </ul>
 </nav>
@@ -91,7 +91,7 @@ You can call the API in two different ways:
 
 ### Control buttons
  
-Buttons to control the menu can be created easily. Add the class `slide-menu-control` to links or buttons and set the `data` attributes `target` with the ID of desired menu and `action` to specify the API method:
+Buttons to control the menu can be created easily. Add the class `slide-menu-control` to links or buttons and set the `data` attributes `target` to the ID of the desired menu and `action` to the API method:
 
 ```html
 <a class="slide-menu-control" data-target="my-menu" data-action="open">Open</a>
