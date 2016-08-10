@@ -10,6 +10,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var PLUGIN_NAME = 'slideMenu';
     var DEFAULT_OPTIONS = {
+        position: 'right',
         showBackLink: true,
         submenuLinkBefore: '',
         submenuLinkAfter: '',
@@ -32,13 +33,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             this._isOpen = false;
             this._isAnimating = false;
+            this._hasMenu = this._anchors.length > 0;
 
-            this._setupSubmenus();
             this._setupEventHandlers();
+            this._setupMenu();
+
+            if (this._hasMenu) this._setupSubmenus();
         }
 
         /**
-         * Toggle the _menu
+         * Toggle the menu
          * @param {boolean|null} open
          */
 
@@ -61,7 +65,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     offset = 0;
                     this._isOpen = true;
                 } else {
-                    offset = this._menu.width();
+                    offset = this.options.position === 'left' ? -this._menu.outerWidth() : this._menu.outerWidth();
                     this._isOpen = false;
                 }
 
@@ -93,12 +97,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _setupEventHandlers() {
                 var _this = this;
 
-                this._anchors.click(function (event) {
-                    var anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
-                    _this._navigate(anchor);
-                });
+                if (this._hasMenu) {
+                    this._anchors.click(function (event) {
+                        var anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
+                        _this._navigate(anchor);
+                    });
+                }
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
+                    if (_this._menu.css('visibility') === 'hidden') _this._menu.css('visibility', 'visible');
+
                     _this._isAnimating = false;
                 });
             }
@@ -125,7 +133,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     lastActiveUl = void 0;
 
                 level = Number(this._menu.data('level')) || 0;
-                offset = (level + dir) * -this._menu.width();
+                offset = (level + dir) * -this._menu.outerWidth();
 
                 if (dir > 0) {
                     if (!anchor.next('ul').length) return;
@@ -154,6 +162,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _triggerAnimation(elem, offset) {
                 elem.css('transform', 'translateX(' + offset + 'px)');
                 this._isAnimating = true;
+            }
+
+            /**
+             *
+             * @private
+             */
+
+        }, {
+            key: '_setupMenu',
+            value: function _setupMenu() {
+                switch (this.options.position) {
+                    case 'left':
+                        this._menu.css({
+                            left: 0,
+                            right: 'auto',
+                            transform: 'translateX(' + -this._menu.outerWidth() + 'px)'
+                        });
+                        break;
+                    default:
+                        this._menu.css({
+                            left: 'auto',
+                            right: 0
+                        });
+                        break;
+                }
             }
 
             /**
@@ -216,7 +249,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     // Register the jQuery plugin
     $.fn[PLUGIN_NAME] = function (options) {
-        options = $.extend(DEFAULT_OPTIONS, options);
+        options = $.extend({}, DEFAULT_OPTIONS, options);
         options.elem = $(this);
 
         var instance = new SlideMenu(options);
