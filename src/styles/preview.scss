@@ -26,11 +26,6 @@ h2 {
 	font-weight: normal;
 }
 
-main {
-	width: 50%;
-	margin: 48px auto;
-}
-
 a {
 	border-bottom: solid 1px darken($color-primary, 8%);
 	color: $color-primary;
@@ -46,6 +41,9 @@ a {
 }
 
 main {
+	width: 50%;
+	margin: 48px auto;
+
 	.btn {
 		display: inline-block;
 		padding: 12px 16px;
@@ -60,6 +58,16 @@ main {
 
 	p, .btn-list {
 		margin-bottom: 2em;
+	}
+
+	@media (max-width: 767px) {
+		width: 90%;
+
+		.btn {
+			width: 100%;
+			display: block;
+			margin: 8px 0;
+		}
 	}
 }
 
