@@ -16,11 +16,11 @@ $sm-transition-easing: ease-in-out !default;
 .slide-menu {
 	position: fixed;
 	width: $sm-menu-width;
+	max-width: 100%;
 	height: 100vh;
 	top: 0;
-	right: 50%; // trick to always trigger a transitionend event used to position the menu first and show it afterwards
+	right: 0;
 	overflow: hidden;
-	visibility: hidden;
 	box-sizing: border-box;
 	background: $sm-menu-bg;
 	transition: all $sm-transition-dur $sm-transition-easing;
@@ -57,4 +57,7 @@ $sm-transition-easing: ease-in-out !default;
 		}
 	}
 
+	&.no-transition {
+		transition: none !important;
+	}
 }
