@@ -26,11 +26,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             this._menu = options.elem;
 
+            // Add wrapper
             this._menu.find('ul:first').wrap('<div class="slider">');
 
             this._anchors = this._menu.find('a');
             this._slider = this._menu.find('.slider:first');
 
+            this._level = 0;
             this._isOpen = false;
             this._isAnimating = false;
             this._hasMenu = this._anchors.length > 0;
@@ -44,6 +46,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         /**
          * Toggle the menu
          * @param {boolean|null} open
+         * @param {boolean} animate
          */
 
 
@@ -51,6 +54,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             key: 'toggle',
             value: function toggle() {
                 var open = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+                var animate = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
                 var offset = void 0;
 
@@ -65,22 +69,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     offset = 0;
                     this._isOpen = true;
                 } else {
-                    offset = this.options.position === 'left' ? -this._menu.outerWidth() : this._menu.outerWidth();
+                    offset = this.options.position === 'left' ? '-100%' : '100%';
                     this._isOpen = false;
                 }
 
-                this._triggerAnimation(this._menu, offset);
+                if (animate) this._triggerAnimation(this._menu, offset);else {
+                    this._pauseAnimations(this._triggerAnimation.bind(this, this._menu, offset));
+                    this._isAnimating = false;
+                }
             }
+
+            /**
+             * Open the menu
+             * @param {boolean} animate Use CSS transitions
+             */
+
         }, {
             key: 'open',
             value: function open() {
-                this.toggle(true);
+                var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+                this.toggle(true, animate);
             }
+
+            /**
+             * Close the menu
+             * @param {boolean} animate Use CSS transitions
+             */
+
         }, {
             key: 'close',
             value: function close() {
-                this.toggle(false);
+                var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+                this.toggle(false, animate);
             }
+
+            /**
+             * Navigate one menu hierarchy back if possible
+             */
+
         }, {
             key: 'back',
             value: function back() {
@@ -105,8 +133,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
-                    if (_this._menu.css('visibility') === 'hidden') _this._menu.css('visibility', 'visible');
-
                     _this._isAnimating = false;
                 });
             }
@@ -128,25 +154,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return;
                 }
 
-                var level = void 0,
-                    offset = void 0,
+                var offset = void 0,
                     lastActiveUl = void 0;
 
-                level = Number(this._menu.data('level')) || 0;
-                offset = (level + dir) * -this._menu.outerWidth();
+                this._level = Number(this._menu.data('level')) || 0;
+                offset = (this._level + dir) * -100;
 
                 if (dir > 0) {
                     if (!anchor.next('ul').length) return;
 
                     anchor.next('ul').addClass('active').show();
                 } else {
-                    if (level === 0) return;
+                    if (this._level === 0) return;
 
-                    lastActiveUl = 'ul ' + '.active '.repeat(level);
+                    lastActiveUl = 'ul ' + '.active '.repeat(this._level);
                     this._menu.find(lastActiveUl).removeClass('active').fadeOut();
                 }
 
-                this._menu.data('level', level + dir);
+                this._menu.data('level', this._level + dir);
                 this._triggerAnimation(this._slider, offset);
             }
 
@@ -154,66 +179,89 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
              * Start the animation (the CSS transition)
              * @param elem
              * @param offset
+             * @param useTransition
              * @private
              */
 
         }, {
             key: '_triggerAnimation',
             value: function _triggerAnimation(elem, offset) {
-                elem.css('transform', 'translateX(' + offset + 'px)');
+                if (!String(offset).includes('%')) offset += '%';
+
+                elem.css('transform', 'translateX(' + offset + ')');
                 this._isAnimating = true;
             }
 
             /**
-             *
+             * Initialize the menu
              * @private
              */
 
         }, {
             key: '_setupMenu',
             value: function _setupMenu() {
-                switch (this.options.position) {
-                    case 'left':
-                        this._menu.css({
-                            left: 0,
-                            right: 'auto',
-                            transform: 'translateX(' + -this._menu.outerWidth() + 'px)'
-                        });
-                        break;
-                    default:
-                        this._menu.css({
-                            left: 'auto',
-                            right: 0
-                        });
-                        break;
-                }
+                var _this2 = this;
+
+                this._pauseAnimations(function () {
+                    switch (_this2.options.position) {
+                        case 'left':
+                            _this2._menu.css({
+                                left: 0,
+                                right: 'auto',
+                                transform: 'translateX(-100%)'
+                            });
+                            break;
+                        default:
+                            _this2._menu.css({
+                                left: 'auto',
+                                right: 0
+                            });
+                            break;
+                    }
+                });
             }
 
             /**
-             * Adds an indicator to links in the menus, which have a submenu
+             * Pause the CSS transitions, to apply CSS changes directly without an animation
+             * @param work
+             * @private
+             */
+
+        }, {
+            key: '_pauseAnimations',
+            value: function _pauseAnimations(work) {
+                this._menu.addClass('no-transition');
+                work();
+                this._menu[0].offsetHeight; // trigger a reflow, flushing the CSS changes
+                this._menu.removeClass('no-transition');
+            }
+
+            /**
+             * Enhance the markup of menu items which contain a submenu
              * @private
              */
 
         }, {
             key: '_setupSubmenus',
             value: function _setupSubmenus() {
-                var _this2 = this;
+                var _this3 = this;
 
                 this._anchors.each(function (i, anchor) {
                     anchor = $(anchor);
                     if (anchor.next('ul').length) {
-                        var anchorTitle = anchor.text();
-                        anchor.html(_this2.options.submenuLinkBefore + anchorTitle + _this2.options.submenuLinkAfter);
-
                         // prevent default behaviour (use link just to navigate)
                         anchor.click(function (ev) {
                             ev.preventDefault();
                         });
 
+                        // add `before` and `after` text
+                        var anchorTitle = anchor.text();
+                        anchor.html(_this3.options.submenuLinkBefore + anchorTitle + _this3.options.submenuLinkAfter);
+
                         // add a back button
-                        if (_this2.options.showBackLink) {
+                        if (_this3.options.showBackLink) {
                             var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
-                            backLink.html(_this2.options.backLinkBefore + backLink.text() + _this2.options.backLinkAfter);
+                            backLink.html(_this3.options.backLinkBefore + backLink.text() + _this3.options.backLinkAfter);
                             anchor.next('ul').prepend($('<li>').append(backLink));
                         }
                     }
