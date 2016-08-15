@@ -24,19 +24,19 @@
         <h1>Slide Menu</h1>
         <p><em>A simple multilevel CSS menu, with a slide effect.</em></p>
 
+        <h2>Multi-purpose menu (left)</h2>
+        <div class="btn-list">
+            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="toggle">Toggle Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="open">Open Menu</button>
+            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="close">Close Menu</button>
+        </div>
+
         <h2>Navigation menu (right)</h2>
         <div class="btn-list">
             <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="toggle">Toggle Menu</button>
             <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="open">Open Menu</button>
             <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="close">Close Menu</button>
             <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="back">Backward navigation</button>
-        </div>
-
-        <h2>Multi-purpose menu (left)</h2>
-        <div class="btn-list">
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="toggle">Toggle Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="open">Open Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="close">Close Menu</button>
         </div>
     </main>
 
@@ -172,7 +172,9 @@
                     backLinkBefore: '⇐ ',
                 });
 
-                menuRight.open();
+                if ($(window).width() > 767) {
+                    menuRight.open(false);
+                }
 
             });
         })(jQuery);
