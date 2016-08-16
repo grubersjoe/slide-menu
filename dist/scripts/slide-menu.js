@@ -11,6 +11,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var PLUGIN_NAME = 'slideMenu';
     var DEFAULT_OPTIONS = {
         position: 'right',
+        keycodeOpen: null,
+        keycodeClose: 27, //esc
         showBackLink: true,
         submenuLinkBefore: '',
         submenuLinkAfter: '',
@@ -134,6 +136,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
                     _this._isAnimating = false;
+                });
+
+                $(document).keydown(function (e) {
+                    switch (e.which) {
+                        case _this.options.keycodeClose:
+                            _this.close();
+                            break;
+
+                        case _this.options.keycodeOpen:
+                            _this.open();
+                            break;
+
+                        default:
+                            return;
+                    }
+                    e.preventDefault();
                 });
             }
 
@@ -275,7 +293,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     // Link control buttons with the API
 
 
-    $('body').unbind().on('click', '.slide-menu-control', function () {
+    $('body').on('click', '.slide-menu-control', function () {
         var menu = void 0;
         var target = $(this).data('target');
 
