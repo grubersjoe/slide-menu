@@ -236,6 +236,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             });
                             break;
                     }
+                    _this2._menu.show();
                 });
             }
 
@@ -315,6 +316,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     // Register the jQuery plugin
     $.fn[PLUGIN_NAME] = function (options) {
+        if (!$(this).length) {
+            console.warn('Slide Menu: Unable to find menu DOM element. Maybe a typo?');
+            return;
+        }
+
         options = $.extend({}, DEFAULT_OPTIONS, options);
         options.elem = $(this);
 
