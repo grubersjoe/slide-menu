@@ -1,4 +1,5 @@
 // TODO: make this library agnostic
+// TODO: document the events
 
 (function ($) {
 
@@ -12,8 +13,6 @@
         submenuLinkAfter: '',
         backLinkBefore: '',
         backLinkAfter: '',
-        callbackOpen: null,
-        callbackClose: null
     };
 
     class SlideMenu {
@@ -65,6 +64,8 @@
                 this._isOpen = false;
             }
 
+            this._triggerEvent();
+
             if (animate)
                 this._triggerAnimation(this._menu, offset);
             else {
@@ -113,7 +114,7 @@
 
             $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', () => {
                 this._isAnimating = false;
-                this._handleCallbacks();
+                this._triggerEvent(true);
             });
 
             $(document).keydown((e) => {
@@ -131,24 +132,29 @@
                 }
                 e.preventDefault();
             });
-        }
 
-        _handleCallbacks() {
-            let func = this.options['callback' + this._lastAction[0].toUpperCase() + this._lastAction.substr(1)];
-            if (typeof func === 'function') {
-                func();
-            }
-
-            if (this._lastAction === 'back') {
+            this._menu.on('sm.back.after', () => {
                 let lastActiveUl = 'ul ' + '.active '.repeat(this._level);
                 this._menu.find(lastActiveUl).removeClass('active').hide();
-            }
+            });
+        }
+
+        /**
+         * Trigger a custom event to support callbacks
+         * @param {boolean} afterAnimation Mark this event as `before` or `after` callback
+         * @private
+         */
+        _triggerEvent(afterAnimation = false) {
+            let eventName = 'sm.' + this._lastAction;
+            eventName += afterAnimation ? '.after' : '.before';
+
+            this._menu.trigger(eventName);
         }
 
         /**
          * Navigate the _menu - that is slide it one step left or right
          * @param {jQuery} anchor The clicked anchor or button element
-         * @param {int} dir
+         * @param {int} dir Navigation direction: 1 = forward, 0 = backwards
          * @private
          */
         _navigate(anchor, dir = 1) {
@@ -157,10 +163,8 @@
                 return;
             }
 
-            let offset, lastActiveUl;
-
             this._level = Number(this._menu.data('level')) || 0;
-            offset = (this._level + dir) * -100;
+            let offset = (this._level + dir) * -100;
 
             if (dir > 0) {
                 if (!anchor.next('ul').length)
@@ -181,10 +185,11 @@
          * Start the animation (the CSS transition)
          * @param elem
          * @param offset
-         * @param useTransition
          * @private
          */
         _triggerAnimation(elem, offset) {
+            this._triggerEvent();
+
             if (!String(offset).includes('%'))
                 offset += '%';
 

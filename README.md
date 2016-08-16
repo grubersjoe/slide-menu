@@ -57,8 +57,6 @@ Option | Description | Valid values | Default
 `submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  *empty*
 `backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  *empty*
 `backLinkAfter` | HTML to append to back link in submenus | HTML code |  *empty*
-`callbackOpen` | A callback function after the menu has been opened | Any function object |  `null`
-`callbackClose` | A callback function after the menu has been closed | Any function object |  `null`
  
  Example:
  
