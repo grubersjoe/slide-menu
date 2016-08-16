@@ -24,7 +24,7 @@ $sm-transition-easing: ease-in-out !default;
 	box-sizing: border-box;
 	background: $sm-menu-bg;
 	transition: transform $sm-transition-dur $sm-transition-easing;
-	transform: translateX($sm-menu-width);
+	transform: translateX(100%);
 	will-change: transform;
 	z-index: 1000;
 
