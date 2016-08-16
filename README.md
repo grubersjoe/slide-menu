@@ -50,13 +50,15 @@ You can pass an options array as argument to the slideMenu() constructor.
 Option | Description | Valid values | Default
 --- | --- | --- | ---
 `position` | Position of the menu | `"left"` or `"right"` | `"right"`
+`showBackLink` | Show a link to parent level in submenus | *boolean* | `true`
 `keycodeOpen` | Keycode used to open the menu | [Any valid JS keycode](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode) | `null`
 `keycodeClose` | Keycode used to close the menu | [Any valid JS keycode](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode) | `27` (ESC)
-`showBackLink` | Show a link to parent level in submenus | *boolean* | `true`
 `submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  *empty*
 `submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  *empty*
 `backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  *empty*
 `backLinkAfter` | HTML to append to back link in submenus | HTML code |  *empty*
+`callbackOpen` | A callback function after the menu has been opened | Any function object |  `null`
+`callbackClose` | A callback function after the menu has been closed | Any function object |  `null`
  
  Example:
  
