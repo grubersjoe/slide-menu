@@ -23,16 +23,18 @@ $sm-transition-easing: ease-in-out !default;
 	overflow: hidden;
 	box-sizing: border-box;
 	background: $sm-menu-bg;
-	transition: all $sm-transition-dur $sm-transition-easing;
+	transition: transform $sm-transition-dur $sm-transition-easing;
 	transform: translateX($sm-menu-width);
+	will-change: transform;
 	z-index: 1000;
 
 	.slider {
 		position: absolute;
 		top: 0;
 		left: 0;
-		transition: all $sm-transition-dur $sm-transition-easing;
+		transition: transform $sm-transition-dur $sm-transition-easing;
 		transform: translateX(0);
+		will-change: transform;
 	}
 
 	ul {

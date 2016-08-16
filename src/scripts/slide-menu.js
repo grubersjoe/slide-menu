@@ -5,6 +5,8 @@
     const PLUGIN_NAME = 'slideMenu';
     const DEFAULT_OPTIONS = {
         position: 'right',
+        keycodeOpen: null,
+        keycodeClose: 27, //esc
         showBackLink: true,
         submenuLinkBefore: '',
         submenuLinkAfter: '',
@@ -105,6 +107,22 @@
 
             $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', () => {
                 this._isAnimating = false;
+            });
+
+            $(document).keydown((e) => {
+                switch(e.which) {
+                    case this.options.keycodeClose:
+                        this.close();
+                        break;
+
+                    case this.options.keycodeOpen:
+                        this.open();
+                        break;
+
+                    default:
+                        return;
+                }
+                e.preventDefault();
             });
         }
 
@@ -222,7 +240,7 @@
     }
 
     // Link control buttons with the API
-    $('body').unbind().on('click', '.slide-menu-control', function () {
+    $('body').on('click', '.slide-menu-control', function () {
         let menu;
         let target = $(this).data('target');
 
