@@ -16,13 +16,13 @@
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js" integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8=" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <main role="main">
         <h1>Slide Menu</h1>
-        <p><em>A simple multilevel CSS menu, with a slide effect.</em></p>
+        <p>A simple multilevel CSS menu, with a slide effect and various options.</p>
 
         <h2>Multi-purpose menu (left)</h2>
         <div class="btn-list">
@@ -164,12 +164,12 @@
                 var menuLeft = $('#test-menu-left').slideMenu({
                     position: 'left',
                     submenuLinkAfter: ' >',
-                    backLinkBefore: '< ',
+                    backLinkBefore: '< '
                 });
 
                 var menuRight = $('#test-menu-right').slideMenu({
                     submenuLinkAfter: ' ⇒',
-                    backLinkBefore: '⇐ ',
+                    backLinkBefore: '⇐ '
                 });
 
                 if ($(window).width() > 767) {
