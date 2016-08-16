@@ -1,6 +1,6 @@
 # Slide Menu
 
-*A simple multilevel CSS menu, with a slide effect*.
+*A simple multilevel CSS menu, with a slide effect and various options*.
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
@@ -49,7 +49,9 @@ You can pass an options array as argument to the slideMenu() constructor.
   
 Option | Description | Valid values | Default
 --- | --- | --- | ---
-`position` | Position of the menu | "left" or "right" | "right"
+`position` | Position of the menu | `"left"` or `"right"` | `"right"`
+`keycodeOpen` | Keycode used to open the menu | [Any valid JS keycode](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode) | `null`
+`keycodeClose` | Keycode used to close the menu | [Any valid JS keycode](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode) | `27` (ESC)
 `showBackLink` | Show a link to parent level in submenus | *boolean* | `true`
 `submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  *empty*
 `submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  *empty*
@@ -76,7 +78,7 @@ You can call the API in two different ways:
     var menu = $('#my-menu').data('slideMenu');
     
     menu.open();
-    menu.close();
+    menu.close(false);
     ```
 * If you need to control an existing menu, you can fetch the menu instance  any time this way:
 
@@ -86,9 +88,9 @@ You can call the API in two different ways:
 
 ### Methods
 
-* `toggle()` - Toggle the menu
-* `open()` - Open the menu
-* `close()` - Close the menu
+* `toggle(animate = true)` - Toggle the menu
+* `open(animate = true)` - Open the menu
+* `close(animate = true)` - Close the menu
 * `back()` - Navigate on level back if possible
 
 ### Control buttons
