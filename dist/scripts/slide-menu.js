@@ -11,13 +11,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var PLUGIN_NAME = 'slideMenu';
     var DEFAULT_OPTIONS = {
         position: 'right',
+        showBackLink: true,
         keycodeOpen: null,
         keycodeClose: 27, //esc
-        showBackLink: true,
         submenuLinkBefore: '',
         submenuLinkAfter: '',
         backLinkBefore: '',
-        backLinkAfter: ''
+        backLinkAfter: '',
+        callbackOpen: null,
+        callbackClose: null
     };
 
     var SlideMenu = function () {
@@ -38,6 +40,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this._isOpen = false;
             this._isAnimating = false;
             this._hasMenu = this._anchors.length > 0;
+            this._lastAction = null;
 
             this._setupEventHandlers();
             this._setupMenu();
@@ -91,6 +94,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function open() {
                 var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
+                this._lastAction = 'open';
                 this.toggle(true, animate);
             }
 
@@ -104,6 +108,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function close() {
                 var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
+                this._lastAction = 'close';
                 this.toggle(false, animate);
             }
 
@@ -114,6 +119,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'back',
             value: function back() {
+                this._lastAction = 'back';
                 this._navigate(null, -1);
             }
 
@@ -136,6 +142,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
                     _this._isAnimating = false;
+                    _this._handleCallbacks();
                 });
 
                 $(document).keydown(function (e) {
@@ -153,6 +160,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                     e.preventDefault();
                 });
+            }
+        }, {
+            key: '_handleCallbacks',
+            value: function _handleCallbacks() {
+                var func = this.options['callback' + this._lastAction[0].toUpperCase() + this._lastAction.substr(1)];
+                if (typeof func === 'function') {
+                    func();
+                }
+
+                if (this._lastAction === 'back') {
+                    var lastActiveUl = 'ul ' + '.active '.repeat(this._level);
+                    this._menu.find(lastActiveUl).removeClass('active').hide();
+                }
             }
 
             /**
@@ -182,14 +202,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     if (!anchor.next('ul').length) return;
 
                     anchor.next('ul').addClass('active').show();
-                } else {
-                    if (this._level === 0) return;
-
-                    lastActiveUl = 'ul ' + '.active '.repeat(this._level);
-                    this._menu.find(lastActiveUl).removeClass('active').fadeOut();
+                } else if (this._level === 0) {
+                    return;
                 }
 
+                this._lastAction = dir > 0 ? 'forward' : 'back';
                 this._menu.data('level', this._level + dir);
+
                 this._triggerAnimation(this._slider, offset);
             }
 
