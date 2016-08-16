@@ -196,6 +196,7 @@
                         });
                         break;
                 }
+                this._menu.show();
             });
         }
 
@@ -262,6 +263,11 @@
 
     // Register the jQuery plugin
     $.fn[PLUGIN_NAME] = function (options) {
+        if (!$(this).length) {
+            console.warn('Slide Menu: Unable to find menu DOM element. Maybe a typo?');
+            return;
+        }
+
         options = $.extend({}, DEFAULT_OPTIONS, options);
         options.elem = $(this);
 

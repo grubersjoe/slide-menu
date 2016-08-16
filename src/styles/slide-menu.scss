@@ -20,6 +20,7 @@ $sm-transition-easing: ease-in-out !default;
 	height: 100vh;
 	top: 0;
 	right: 0;
+	display: none;
 	overflow: hidden;
 	box-sizing: border-box;
 	background: $sm-menu-bg;
