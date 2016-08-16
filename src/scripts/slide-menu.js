@@ -5,13 +5,15 @@
     const PLUGIN_NAME = 'slideMenu';
     const DEFAULT_OPTIONS = {
         position: 'right',
+        showBackLink: true,
         keycodeOpen: null,
         keycodeClose: 27, //esc
-        showBackLink: true,
         submenuLinkBefore: '',
         submenuLinkAfter: '',
         backLinkBefore: '',
         backLinkAfter: '',
+        callbackOpen: null,
+        callbackClose: null
     };
 
     class SlideMenu {
@@ -31,6 +33,7 @@
             this._isOpen = false;
             this._isAnimating = false;
             this._hasMenu = this._anchors.length > 0;
+            this._lastAction = null;
 
             this._setupEventHandlers();
             this._setupMenu();
@@ -75,6 +78,7 @@
          * @param {boolean} animate Use CSS transitions
          */
         open(animate = true) {
+            this._lastAction = 'open';
             this.toggle(true, animate);
         }
 
@@ -83,6 +87,7 @@
          * @param {boolean} animate Use CSS transitions
          */
         close(animate = true) {
+            this._lastAction = 'close';
             this.toggle(false, animate);
         }
 
@@ -90,6 +95,7 @@
          * Navigate one menu hierarchy back if possible
          */
         back() {
+            this._lastAction = 'back';
             this._navigate(null, -1);
         }
 
@@ -107,6 +113,7 @@
 
             $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', () => {
                 this._isAnimating = false;
+                this._handleCallbacks();
             });
 
             $(document).keydown((e) => {
@@ -124,6 +131,18 @@
                 }
                 e.preventDefault();
             });
+        }
+
+        _handleCallbacks() {
+            let func = this.options['callback' + this._lastAction[0].toUpperCase() + this._lastAction.substr(1)];
+            if (typeof func === 'function') {
+                func();
+            }
+
+            if (this._lastAction === 'back') {
+                let lastActiveUl = 'ul ' + '.active '.repeat(this._level);
+                this._menu.find(lastActiveUl).removeClass('active').hide();
+            }
         }
 
         /**
@@ -148,15 +167,13 @@
                     return;
 
                 anchor.next('ul').addClass('active').show();
-            } else {
-                if (this._level === 0)
-                    return;
-
-                lastActiveUl = 'ul ' + '.active '.repeat(this._level);
-                this._menu.find(lastActiveUl).removeClass('active').fadeOut();
+            } else if (this._level === 0) {
+                return;
             }
 
+            this._lastAction = dir > 0 ? 'forward' : 'back';
             this._menu.data('level', this._level + dir);
+
             this._triggerAnimation(this._slider, offset);
         }
 
