@@ -5,6 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // TODO: make this library agnostic
+// TODO: document the events
 
 (function ($) {
 
@@ -17,9 +18,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         submenuLinkBefore: '',
         submenuLinkAfter: '',
         backLinkBefore: '',
-        backLinkAfter: '',
-        callbackOpen: null,
-        callbackClose: null
+        backLinkAfter: ''
     };
 
     var SlideMenu = function () {
@@ -77,6 +76,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     offset = this.options.position === 'left' ? '-100%' : '100%';
                     this._isOpen = false;
                 }
+
+                this._triggerEvent();
 
                 if (animate) this._triggerAnimation(this._menu, offset);else {
                     this._pauseAnimations(this._triggerAnimation.bind(this, this._menu, offset));
@@ -142,7 +143,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
                     _this._isAnimating = false;
-                    _this._handleCallbacks();
+                    _this._triggerEvent(true);
                 });
 
                 $(document).keydown(function (e) {
@@ -160,25 +161,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                     e.preventDefault();
                 });
-            }
-        }, {
-            key: '_handleCallbacks',
-            value: function _handleCallbacks() {
-                var func = this.options['callback' + this._lastAction[0].toUpperCase() + this._lastAction.substr(1)];
-                if (typeof func === 'function') {
-                    func();
-                }
 
-                if (this._lastAction === 'back') {
-                    var lastActiveUl = 'ul ' + '.active '.repeat(this._level);
-                    this._menu.find(lastActiveUl).removeClass('active').hide();
-                }
+                this._menu.on('sm.back.after', function () {
+                    var lastActiveUl = 'ul ' + '.active '.repeat(_this._level);
+                    _this._menu.find(lastActiveUl).removeClass('active').hide();
+                });
+            }
+
+            /**
+             * Trigger a custom event to support callbacks
+             * @param {boolean} afterAnimation Mark this event as `before` or `after` callback
+             * @private
+             */
+
+        }, {
+            key: '_triggerEvent',
+            value: function _triggerEvent() {
+                var afterAnimation = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+                var eventName = 'sm.' + this._lastAction;
+                eventName += afterAnimation ? '.after' : '.before';
+
+                this._menu.trigger(eventName);
             }
 
             /**
              * Navigate the _menu - that is slide it one step left or right
              * @param {jQuery} anchor The clicked anchor or button element
-             * @param {int} dir
+             * @param {int} dir Navigation direction: 1 = forward, 0 = backwards
              * @private
              */
 
@@ -192,11 +202,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return;
                 }
 
-                var offset = void 0,
-                    lastActiveUl = void 0;
-
                 this._level = Number(this._menu.data('level')) || 0;
-                offset = (this._level + dir) * -100;
+                var offset = (this._level + dir) * -100;
 
                 if (dir > 0) {
                     if (!anchor.next('ul').length) return;
@@ -216,13 +223,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
              * Start the animation (the CSS transition)
              * @param elem
              * @param offset
-             * @param useTransition
              * @private
              */
 
         }, {
             key: '_triggerAnimation',
             value: function _triggerAnimation(elem, offset) {
+                this._triggerEvent();
+
                 if (!String(offset).includes('%')) offset += '%';
 
                 elem.css('transform', 'translateX(' + offset + ')');
