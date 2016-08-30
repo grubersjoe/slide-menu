@@ -146,8 +146,7 @@
          */
         _triggerEvent(afterAnimation = false) {
             let eventName = 'sm.' + this._lastAction;
-            eventName += afterAnimation ? '.after' : '.before';
-
+            if (afterAnimation) eventName += '-after';
             this._menu.trigger(eventName);
         }
 
