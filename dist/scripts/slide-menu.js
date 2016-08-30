@@ -180,8 +180,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var afterAnimation = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
                 var eventName = 'sm.' + this._lastAction;
-                eventName += afterAnimation ? '.after' : '.before';
-
+                if (afterAnimation) eventName += '-after';
                 this._menu.trigger(eventName);
             }
 
