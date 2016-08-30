@@ -93,6 +93,23 @@ You can call the API in two different ways:
 * `close(animate = true)` - Close the menu
 * `back()` - Navigate on level back if possible
 
+### Events
+
+All events have also an `*-after` pendant, which is triggered after the transition is complete.
+
+* `sm.open[-after]`
+
+    Fires immediately when the `open()` method is called or after the animation is complete respectively.
+* `sm.close[-after]`
+
+    Fires immediately when the `close()` method is called or after the animation is complete respectively. 
+* `sm.forward[-after]`
+
+    Fires immediately when navigating forward in the menu hierarchy or after the animation is complete respectively. 
+* `sm.back[-after]`
+
+    Fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
+
 ### Control buttons
  
 Buttons to control the menu can be created easily. Add the class `slide-menu-control` to links or buttons and set the `data` attributes `target` to the ID of the desired menu and `action` to the API method:
