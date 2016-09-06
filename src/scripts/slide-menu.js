@@ -101,6 +101,29 @@
         }
 
         /**
+         * Navigate to a specific link on any level (useful to open the correct hierarchy directly)
+         * @param {string|object} target A string selector a plain DOM object or a jQuery instance
+         */
+        navigateTo(target) {
+            target = this._menu.find($(target)).first();
+
+            if (!target.length)
+                return false;
+
+            var parents = target.parents('ul');
+            var level = parents.length - 1;
+
+            if (level === 0)
+                return false;
+
+            this._pauseAnimations(() => {
+                this._level = level;
+                parents.show().first().addClass('active');
+                this._triggerAnimation(this._slider, -this._level * 100);
+            });
+        }
+
+        /**
          * Set up all event handlers
          * @private
          */

@@ -92,6 +92,9 @@ You can call the API in two different ways:
 * `open(animate = true)` - Open the menu
 * `close(animate = true)` - Close the menu
 * `back()` - Navigate on level back if possible
+* `navigateTo(target)`
+    
+    Open the menu level which contains specified menu element. `target` can be any jQuery compatible string selector, a plain DOM object or a jQuery object. The first found element will be used.
 
 ### Events
 
