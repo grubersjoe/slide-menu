@@ -330,7 +330,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         // add a back button
                         if (_this4.options.showBackLink) {
-                            var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                            var backLink = $('<a class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
                             backLink.html(_this4.options.backLinkBefore + backLink.text() + _this4.options.backLinkAfter);
                             anchor.next('ul').prepend($('<li>').append(backLink));
                         }
