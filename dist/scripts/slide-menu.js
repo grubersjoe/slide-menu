@@ -125,6 +125,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
 
             /**
+             * Navigate to a specific link on any level (useful to open the correct hierarchy directly)
+             * @param {string|object} target A string selector a plain DOM object or a jQuery instance
+             */
+
+        }, {
+            key: 'navigateTo',
+            value: function navigateTo(target) {
+                var _this = this;
+
+                target = this._menu.find($(target)).first();
+
+                if (!target.length) return false;
+
+                var parents = target.parents('ul');
+                var level = parents.length - 1;
+
+                if (level === 0) return false;
+
+                this._pauseAnimations(function () {
+                    _this._level = level;
+                    parents.show().first().addClass('active');
+                    _this._triggerAnimation(_this._slider, -_this._level * 100);
+                });
+            }
+
+            /**
              * Set up all event handlers
              * @private
              */
@@ -132,28 +158,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_setupEventHandlers',
             value: function _setupEventHandlers() {
-                var _this = this;
+                var _this2 = this;
 
                 if (this._hasMenu) {
                     this._anchors.click(function (event) {
                         var anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
-                        _this._navigate(anchor);
+                        _this2._navigate(anchor);
                     });
                 }
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
-                    _this._isAnimating = false;
-                    _this._triggerEvent(true);
+                    _this2._isAnimating = false;
+                    _this2._triggerEvent(true);
                 });
 
                 $(document).keydown(function (e) {
                     switch (e.which) {
-                        case _this.options.keycodeClose:
-                            _this.close();
+                        case _this2.options.keycodeClose:
+                            _this2.close();
                             break;
 
-                        case _this.options.keycodeOpen:
-                            _this.open();
+                        case _this2.options.keycodeOpen:
+                            _this2.open();
                             break;
 
                         default:
@@ -162,9 +188,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     e.preventDefault();
                 });
 
-                this._menu.on('sm.back.after', function () {
-                    var lastActiveUl = 'ul ' + '.active '.repeat(_this._level);
-                    _this._menu.find(lastActiveUl).removeClass('active').hide();
+                this._menu.on('sm.back-after', function () {
+                    var lastActiveUl = 'ul ' + '.active '.repeat(_this2._level + 1);
+                    _this2._menu.find(lastActiveUl).removeClass('active').hide();
                 });
             }
 
@@ -201,7 +227,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return;
                 }
 
-                this._level = Number(this._menu.data('level')) || 0;
                 var offset = (this._level + dir) * -100;
 
                 if (dir > 0) {
@@ -213,7 +238,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 this._lastAction = dir > 0 ? 'forward' : 'back';
-                this._menu.data('level', this._level + dir);
+                this._level = this._level + dir;
 
                 this._triggerAnimation(this._slider, offset);
             }
@@ -244,25 +269,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_setupMenu',
             value: function _setupMenu() {
-                var _this2 = this;
+                var _this3 = this;
 
                 this._pauseAnimations(function () {
-                    switch (_this2.options.position) {
+                    switch (_this3.options.position) {
                         case 'left':
-                            _this2._menu.css({
+                            _this3._menu.css({
                                 left: 0,
                                 right: 'auto',
                                 transform: 'translateX(-100%)'
                             });
                             break;
                         default:
-                            _this2._menu.css({
+                            _this3._menu.css({
                                 left: 'auto',
                                 right: 0
                             });
                             break;
                     }
-                    _this2._menu.show();
+                    _this3._menu.show();
                 });
             }
 
@@ -289,7 +314,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_setupSubmenus',
             value: function _setupSubmenus() {
-                var _this3 = this;
+                var _this4 = this;
 
                 this._anchors.each(function (i, anchor) {
                     anchor = $(anchor);
@@ -301,12 +326,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         // add `before` and `after` text
                         var anchorTitle = anchor.text();
-                        anchor.html(_this3.options.submenuLinkBefore + anchorTitle + _this3.options.submenuLinkAfter);
+                        anchor.html(_this4.options.submenuLinkBefore + anchorTitle + _this4.options.submenuLinkAfter);
 
                         // add a back button
-                        if (_this3.options.showBackLink) {
+                        if (_this4.options.showBackLink) {
                             var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
-                            backLink.html(_this3.options.backLinkBefore + backLink.text() + _this3.options.backLinkAfter);
+                            backLink.html(_this4.options.backLinkBefore + backLink.text() + _this4.options.backLinkAfter);
                             anchor.next('ul').prepend($('<li>').append(backLink));
                         }
                     }
