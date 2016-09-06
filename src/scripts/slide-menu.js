@@ -274,7 +274,7 @@
 
                     // add a back button
                     if (this.options.showBackLink) {
-                        let backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                        let backLink = $('<a class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
                         backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
                         anchor.next('ul').prepend($('<li>').append(backLink));
                     }
