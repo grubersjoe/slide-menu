@@ -133,8 +133,8 @@
                 e.preventDefault();
             });
 
-            this._menu.on('sm.back.after', () => {
-                let lastActiveUl = 'ul ' + '.active '.repeat(this._level);
+            this._menu.on('sm.back-after', () => {
+                let lastActiveUl = 'ul ' + '.active '.repeat(this._level + 1);
                 this._menu.find(lastActiveUl).removeClass('active').hide();
             });
         }
@@ -162,7 +162,6 @@
                 return;
             }
 
-            this._level = Number(this._menu.data('level')) || 0;
             let offset = (this._level + dir) * -100;
 
             if (dir > 0) {
@@ -175,7 +174,7 @@
             }
 
             this._lastAction = dir > 0 ? 'forward' : 'back';
-            this._menu.data('level', this._level + dir);
+            this._level = this._level + dir;
 
             this._triggerAnimation(this._slider, offset);
         }
