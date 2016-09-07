@@ -284,7 +284,8 @@
     }
 
     // Link control buttons with the API
-    $('body').on('click', '.slide-menu-control', function () {
+    // (`touchstart` is required to deal with certain issues on iOS, e.g. anchors without href attribute)
+    $('body').on('click touchstart', '.slide-menu-control', function () {
         let menu;
         let target = $(this).data('target');
 
