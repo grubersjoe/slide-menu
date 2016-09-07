@@ -255,7 +255,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _triggerAnimation(elem, offset) {
                 this._triggerEvent();
 
-                if (!String(offset).includes('%')) offset += '%';
+                if (!(String(offset).indexOf('%') !== -1)) offset += '%';
 
                 elem.css('transform', 'translateX(' + offset + ')');
                 this._isAnimating = true;
