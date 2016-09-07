@@ -343,9 +343,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     // Link control buttons with the API
+    // (`touchstart` is required to deal with certain issues on iOS, e.g. anchors without href attribute)
 
 
-    $('body').on('click', '.slide-menu-control', function () {
+    $('body').on('click touchstart', '.slide-menu-control', function () {
         var menu = void 0;
         var target = $(this).data('target');
 
