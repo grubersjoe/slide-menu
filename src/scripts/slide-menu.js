@@ -274,7 +274,7 @@
 
                     // add a back button
                     if (this.options.showBackLink) {
-                        let backLink = $('<a class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                        let backLink = $('<a href class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
                         backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
                         anchor.next('ul').prepend($('<li>').append(backLink));
                     }
@@ -284,8 +284,7 @@
     }
 
     // Link control buttons with the API
-    // (`touchstart` is required to deal with certain issues on iOS, e.g. anchors without href attribute)
-    $('body').on('click touchstart', '.slide-menu-control', function () {
+    $('body').on('click', '.slide-menu-control', function (e) {
         let menu;
         let target = $(this).data('target');
 
@@ -303,6 +302,8 @@
         if (instance && typeof instance[action] === 'function') {
             instance[action]();
         }
+
+        return false;
     });
 
     // Register the jQuery plugin
