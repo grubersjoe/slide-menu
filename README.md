@@ -98,7 +98,7 @@ You can call the API in two different ways:
 
 ### Events
 
-All events have also an `*-after` pendant, which is triggered after the transition is complete.
+All events have also an `*-after` equivalent, which is triggered after the transition is complete.
 
 * `sm.open[-after]`
 
