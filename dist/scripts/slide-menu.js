@@ -330,7 +330,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         // add a back button
                         if (_this4.options.showBackLink) {
-                            var backLink = $('<a class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                            var backLink = $('<a href class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
                             backLink.html(_this4.options.backLinkBefore + backLink.text() + _this4.options.backLinkAfter);
                             anchor.next('ul').prepend($('<li>').append(backLink));
                         }
@@ -343,10 +343,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     // Link control buttons with the API
-    // (`touchstart` is required to deal with certain issues on iOS, e.g. anchors without href attribute)
 
 
-    $('body').on('click touchstart', '.slide-menu-control', function () {
+    $('body').on('click', '.slide-menu-control', function (e) {
         var menu = void 0;
         var target = $(this).data('target');
 
@@ -364,6 +363,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (instance && typeof instance[action] === 'function') {
             instance[action]();
         }
+
+        return false;
     });
 
     // Register the jQuery plugin
