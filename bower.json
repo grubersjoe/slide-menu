@@ -1,7 +1,7 @@
 {
 	"name": "slide-menu",
 	"author": "Jonathan Gruber",
-	"description": "A simple multilevel CSS menu, with a slide effect",
+	"description": "A simple multilevel CSS menu with a slide effect",
 	"main": [
 		"dist/scripts/slide-menu.js",
 		"src/styles/slide-menu.scss"
