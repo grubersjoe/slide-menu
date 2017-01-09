@@ -1,6 +1,6 @@
 # Slide Menu
 
-*A simple multilevel CSS menu, with a slide effect and various options*.
+*A simple multilevel CSS menu with a slide effect and various options*.
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
