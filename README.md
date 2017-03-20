@@ -45,7 +45,7 @@ $(document).ready(function () {
  
 ## Options
  
-You can pass an options array as argument to the slideMenu() constructor.
+You can pass an options object as argument to the slideMenu() constructor.
   
 Option | Description | Valid values | Default
 --- | --- | --- | ---
