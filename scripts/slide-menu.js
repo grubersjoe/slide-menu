@@ -57,8 +57,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(SlideMenu, [{
             key: 'toggle',
             value: function toggle() {
-                var open = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-                var animate = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+                var open = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+                var animate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
                 var offset = void 0;
 
@@ -93,7 +93,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'open',
             value: function open() {
-                var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+                var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
                 this._lastAction = 'open';
                 this.toggle(true, animate);
@@ -107,7 +107,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'close',
             value: function close() {
-                var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+                var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
                 this._lastAction = 'close';
                 this.toggle(false, animate);
@@ -125,6 +125,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
 
             /**
+             * Navigate to a specific link on any level (useful to open the correct hierarchy directly)
+             * @param {string|object} target A string selector a plain DOM object or a jQuery instance
+             */
+
+        }, {
+            key: 'navigateTo',
+            value: function navigateTo(target) {
+                var _this = this;
+
+                target = this._menu.find($(target)).first();
+
+                if (!target.length) return false;
+
+                var parents = target.parents('ul');
+                var level = parents.length - 1;
+
+                if (level === 0) return false;
+
+                this._pauseAnimations(function () {
+                    _this._level = level;
+                    parents.show().first().addClass('active');
+                    _this._triggerAnimation(_this._slider, -_this._level * 100);
+                });
+            }
+
+            /**
              * Set up all event handlers
              * @private
              */
@@ -132,28 +158,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_setupEventHandlers',
             value: function _setupEventHandlers() {
-                var _this = this;
+                var _this2 = this;
 
                 if (this._hasMenu) {
                     this._anchors.click(function (event) {
                         var anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
-                        _this._navigate(anchor);
+                        _this2._navigate(anchor);
                     });
                 }
 
                 $(this._menu.add(this._slider)).on('transitionend msTransitionEnd', function () {
-                    _this._isAnimating = false;
-                    _this._triggerEvent(true);
+                    _this2._isAnimating = false;
+                    _this2._triggerEvent(true);
                 });
 
                 $(document).keydown(function (e) {
                     switch (e.which) {
-                        case _this.options.keycodeClose:
-                            _this.close();
+                        case _this2.options.keycodeClose:
+                            _this2.close();
                             break;
 
-                        case _this.options.keycodeOpen:
-                            _this.open();
+                        case _this2.options.keycodeOpen:
+                            _this2.open();
                             break;
 
                         default:
@@ -162,9 +188,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     e.preventDefault();
                 });
 
-                this._menu.on('sm.back.after', function () {
-                    var lastActiveUl = 'ul ' + '.active '.repeat(_this._level);
-                    _this._menu.find(lastActiveUl).removeClass('active').hide();
+                this._menu.on('sm.back-after', function () {
+                    var lastActiveUl = 'ul ' + '.active '.repeat(_this2._level + 1);
+                    _this2._menu.find(lastActiveUl).removeClass('active').hide();
                 });
             }
 
@@ -177,11 +203,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_triggerEvent',
             value: function _triggerEvent() {
-                var afterAnimation = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+                var afterAnimation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
                 var eventName = 'sm.' + this._lastAction;
-                eventName += afterAnimation ? '.after' : '.before';
-
+                if (afterAnimation) eventName += '-after';
                 this._menu.trigger(eventName);
             }
 
@@ -195,14 +220,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_navigate',
             value: function _navigate(anchor) {
-                var dir = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+                var dir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
                 // Abort if an animation is still running
                 if (this._isAnimating) {
                     return;
                 }
 
-                this._level = Number(this._menu.data('level')) || 0;
                 var offset = (this._level + dir) * -100;
 
                 if (dir > 0) {
@@ -214,7 +238,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 this._lastAction = dir > 0 ? 'forward' : 'back';
-                this._menu.data('level', this._level + dir);
+                this._level = this._level + dir;
 
                 this._triggerAnimation(this._slider, offset);
             }
@@ -231,7 +255,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function _triggerAnimation(elem, offset) {
                 this._triggerEvent();
 
-                if (!String(offset).includes('%')) offset += '%';
+                if (!(String(offset).indexOf('%') !== -1)) offset += '%';
 
                 elem.css('transform', 'translateX(' + offset + ')');
                 this._isAnimating = true;
@@ -245,25 +269,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_setupMenu',
             value: function _setupMenu() {
-                var _this2 = this;
+                var _this3 = this;
 
                 this._pauseAnimations(function () {
-                    switch (_this2.options.position) {
+                    switch (_this3.options.position) {
                         case 'left':
-                            _this2._menu.css({
+                            _this3._menu.css({
                                 left: 0,
                                 right: 'auto',
                                 transform: 'translateX(-100%)'
                             });
                             break;
                         default:
-                            _this2._menu.css({
+                            _this3._menu.css({
                                 left: 'auto',
                                 right: 0
                             });
                             break;
                     }
-                    _this2._menu.show();
+                    _this3._menu.show();
                 });
             }
 
@@ -290,7 +314,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_setupSubmenus',
             value: function _setupSubmenus() {
-                var _this3 = this;
+                var _this4 = this;
 
                 this._anchors.each(function (i, anchor) {
                     anchor = $(anchor);
@@ -302,12 +326,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         // add `before` and `after` text
                         var anchorTitle = anchor.text();
-                        anchor.html(_this3.options.submenuLinkBefore + anchorTitle + _this3.options.submenuLinkAfter);
+                        anchor.html(_this4.options.submenuLinkBefore + anchorTitle + _this4.options.submenuLinkAfter);
 
                         // add a back button
-                        if (_this3.options.showBackLink) {
-                            var backLink = $('<a href="#" class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
-                            backLink.html(_this3.options.backLinkBefore + backLink.text() + _this3.options.backLinkAfter);
+                        if (_this4.options.showBackLink) {
+                            var backLink = $('<a href class="slide-menu-control" data-action="back">' + anchorTitle + '</a>');
+                            backLink.html(_this4.options.backLinkBefore + backLink.text() + _this4.options.backLinkAfter);
                             anchor.next('ul').prepend($('<li>').append(backLink));
                         }
                     }
@@ -321,7 +345,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     // Link control buttons with the API
 
 
-    $('body').on('click', '.slide-menu-control', function () {
+    $('body').on('click', '.slide-menu-control', function (e) {
         var menu = void 0;
         var target = $(this).data('target');
 
@@ -339,6 +363,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (instance && typeof instance[action] === 'function') {
             instance[action]();
         }
+
+        return false;
     });
 
     // Register the jQuery plugin
