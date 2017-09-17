@@ -1,5 +1,6 @@
 {
 	"name": "slide-menu",
+	"version": "0.7.4",
 	"author": "Jonathan Gruber",
 	"description": "A jQuery plugin for a multilevel CSS menu with a smooth slide effect and various options",
 	"main": [
