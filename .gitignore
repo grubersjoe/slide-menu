@@ -1,5 +1,5 @@
-.tmp
-.idea
+.tmp/
+.idea/
 node_modules
 bower_components
 test/bower_components
