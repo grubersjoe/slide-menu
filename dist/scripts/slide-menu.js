@@ -57,8 +57,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _createClass(SlideMenu, [{
             key: 'toggle',
             value: function toggle() {
-                var open = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-                var animate = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+                var open = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+                var animate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
                 var offset = void 0;
 
@@ -93,7 +93,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'open',
             value: function open() {
-                var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+                var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
                 this._lastAction = 'open';
                 this.toggle(true, animate);
@@ -107,7 +107,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'close',
             value: function close() {
-                var animate = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+                var animate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
                 this._lastAction = 'close';
                 this.toggle(false, animate);
@@ -203,7 +203,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_triggerEvent',
             value: function _triggerEvent() {
-                var afterAnimation = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+                var afterAnimation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
                 var eventName = 'sm.' + this._lastAction;
                 if (afterAnimation) eventName += '-after';
@@ -220,7 +220,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_navigate',
             value: function _navigate(anchor) {
-                var dir = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+                var dir = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
                 // Abort if an animation is still running
                 if (this._isAnimating) {
