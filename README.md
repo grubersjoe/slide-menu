@@ -1,6 +1,6 @@
 # Slide Menu
 
-*A simple multilevel CSS menu with a slide effect and various options*.
+*A jQuery plugin for a multilevel CSS menu with a smooth slide effect and various options*.
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
