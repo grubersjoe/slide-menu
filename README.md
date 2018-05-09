@@ -33,7 +33,7 @@ All you need is the traditional CSS menu HTML markup and a wrapper with the clas
 </nav>
 ```
 
-The SCSS and JS code is included automatically when using [wiredep](https://github.com/taptapship/wiredep). Add `dist/scripts/slide-menu.js` and the CSS or SCSS code manually to your project otherwise.
+The SCSS and JS code is included automatically when using [wiredep](https://github.com/taptapship/wiredep). Add `dist/scripts/SlideMenu.js` and the CSS or SCSS code manually to your project otherwise.
 
 Create the menu then like this:
 
