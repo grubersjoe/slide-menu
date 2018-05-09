@@ -1,3 +1,6 @@
+// TODO: PostCSS only in production
+// TODO: integrate Flow
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -18,7 +21,7 @@ module.exports = (env, options) => ({
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
+            presets: ['flow'],
           },
         },
       },
@@ -37,7 +40,10 @@ module.exports = (env, options) => ({
     new HtmlWebpackPlugin({
       title: 'Slide Menu',
       template: 'src/index.html',
-      minify: options.mode === 'production' ? { collapseWhitespace: true, minifyJS: true } : false,
+      minify: options.mode === 'production' ? {
+        collapseWhitespace: true,
+        minifyJS: true,
+      } : false,
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css',

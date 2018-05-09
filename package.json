@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
-    "clean": "rm -v ./dist/*"
+    "clean": "rm -v ./dist/*",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "jquery",
@@ -16,14 +17,17 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^8.4.1",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
     "css-loader": "^0.28.11",
     "cssnano": "^3.10.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
+    "flow-bin": "^0.72.0",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",

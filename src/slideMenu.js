@@ -251,12 +251,12 @@ import './styles/demo.scss';
 
     /**
      * Pause the CSS transitions, to apply CSS changes directly without an animation
-     * @param work
+     * @param callback
      * @private
      */
-    pauseAnimations(work) {
+    pauseAnimations(callback) {
       this.menu.addClass('no-transition');
-      work();
+      callback();
       this.menu[0].offsetHeight; // trigger a reflow, flushing the CSS changes
       this.menu.removeClass('no-transition');
     }
