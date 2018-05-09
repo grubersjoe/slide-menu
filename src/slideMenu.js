@@ -280,7 +280,7 @@ import './styles/demo.scss';
 
           // add a back button
           if (this.options.showBackLink) {
-            const backLink = $(`<a href class="slide-menu-control" data-action="back">${anchorTitle}</a>`);
+            const backLink = $(`<a class="slide-menu-control" data-action="back">${anchorTitle}</a>`);
             backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
             anchor.next('ul').prepend($('<li>').append(backLink));
           }

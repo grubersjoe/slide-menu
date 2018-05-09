@@ -61,6 +61,10 @@ $sm-transition-easing: ease-in-out !default;
         }
     }
 
+    a {
+        cursor: pointer;
+    }
+
     &.no-transition, &.no-transition * {
         transition: none !important;
     }

@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, options) => ({
   entry: {
-    slideMenu: './src/index.js',
+    slideMenu: './src/slideMenu.js',
     demo: './src/styles/demo.scss',
   },
   output: {
@@ -27,6 +27,7 @@ module.exports = (env, options) => ({
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
+          'postcss-loader',
           'sass-loader',
         ],
       },
