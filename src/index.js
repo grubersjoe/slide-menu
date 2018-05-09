@@ -1,7 +1,8 @@
 // TODO: make this library agnostic
 // TODO: document the events
 
-import './SlideMenu.scss';
+import './styles/slide-menu.scss';
+import './styles/demo.scss';
 
 (function ($) {
   const PLUGIN_NAME = 'slideMenu';
@@ -98,7 +99,7 @@ import './SlideMenu.scss';
      */
     back() {
       this.lastAction = 'back';
-      this._navigate(null, -1);
+      this.navigate(null, -1);
     }
 
     /**
@@ -134,7 +135,7 @@ import './SlideMenu.scss';
       if (this.hasMenu) {
         this.anchors.click((event) => {
           const anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
-          this._navigate(anchor);
+          this.navigate(anchor);
         });
       }
 
@@ -182,7 +183,7 @@ import './SlideMenu.scss';
      * @param {int} dir Navigation direction: 1 = forward, 0 = backwards
      * @private
      */
-    _navigate(anchor, dir = 1) {
+    navigate(anchor, dir = 1) {
       // Abort if an animation is still running
       if (this.isAnimating) {
         return;
@@ -307,8 +308,6 @@ import './SlideMenu.scss';
     if (instance && typeof instance[action] === 'function') {
       instance[action]();
     }
-
-    return false;
   });
 
   // Register the jQuery plugin
