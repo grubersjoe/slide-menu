@@ -52,10 +52,6 @@ module.exports = (env, options) => ({
     new HtmlWebpackPlugin({
       title: 'Slide Menu',
       template: 'src/index.html',
-      minify: options.mode === 'production' ? {
-        collapseWhitespace: true,
-        minifyJS: true,
-      } : false,
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
