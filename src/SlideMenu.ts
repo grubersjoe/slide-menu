@@ -2,23 +2,56 @@
 // TODO: document the events
 
 import './styles/slide-menu.scss';
-import './styles/demo.scss';
 
-(function ($) {
-  const PLUGIN_NAME = 'slideMenu';
-  const DEFAULT_OPTIONS = {
-    position: 'right',
-    showBackLink: true,
-    keycodeOpen: null,
-    keycodeClose: 27, // esc
-    submenuLinkBefore: '',
-    submenuLinkAfter: '',
-    backLinkBefore: '',
-    backLinkAfter: '',
-  };
+interface IOptions {
+  elem: JQuery;
+  position: string;
+  showBackLink: boolean;
+  keycodeOpen: number | null;
+  keycodeClose: number | null;
+  submenuLinkBefore: string;
+  submenuLinkAfter: string;
+  backLinkBefore: string;
+  backLinkAfter: string;
+}
 
+enum Directions {
+  Backward = -1,
+  Forward = 1,
+}
+
+enum Actions {
+  Back = 'back',
+  Close = 'close',
+  Foward = 'forward',
+  Open = 'open',
+}
+
+const PLUGIN_NAME = 'slideMenu';
+const DEFAULT_OPTIONS = {
+  backLinkAfter: '',
+  backLinkBefore: '',
+  keycodeClose: undefined,
+  keycodeOpen: undefined,
+  position: 'right',
+  showBackLink: true,
+  submenuLinkAfter: '',
+  submenuLinkBefore: '',
+};
+
+(($) => {
   class SlideMenu {
-    constructor(options) {
+    private options: IOptions;
+    private anchors: JQuery;
+    private level: number;
+    private isOpen: boolean;
+    private isAnimating: boolean;
+    private lastAction: Actions | null;
+    private readonly menu: JQuery<HTMLElement>;
+    private readonly slider: JQuery;
+    private readonly hasMenu: boolean;
+
+    constructor(options: IOptions) {
       this.options = options;
 
       this.menu = options.elem;
@@ -48,16 +81,11 @@ import './styles/demo.scss';
      * @param {boolean|null} open
      * @param {boolean} animate
      */
-    toggle(open = null, animate = true) {
+    public toggle(open?: boolean, animate = true): void {
       let offset;
 
-      if (open === null) {
-        if (this.isOpen) {
-          this.close();
-        } else {
-          this.open();
-        }
-        return;
+      if (open === undefined) {
+        return this.isOpen ? this.close() : this.open();
       } else if (open) {
         offset = 0;
         this.isOpen = true;
@@ -80,8 +108,8 @@ import './styles/demo.scss';
      * Open the menu
      * @param {boolean} animate Use CSS transitions
      */
-    open(animate = true) {
-      this.lastAction = 'open';
+    public open(animate: boolean = true): void {
+      this.lastAction = Actions.Open;
       this.toggle(true, animate);
     }
 
@@ -89,52 +117,57 @@ import './styles/demo.scss';
      * Close the menu
      * @param {boolean} animate Use CSS transitions
      */
-    close(animate = true) {
-      this.lastAction = 'close';
+    public close(animate: boolean = true): void {
+      this.lastAction = Actions.Close;
       this.toggle(false, animate);
     }
 
     /**
      * Navigate one menu hierarchy back if possible
      */
-    back() {
-      this.lastAction = 'back';
-      this.navigate(null, -1);
+    public back(): void {
+      this.lastAction = Actions.Back;
+      this.navigate(undefined, Directions.Backward);
     }
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Navigate to a specific link on any level (useful to open the correct hierarchy directly)
-     * @param {string|object} target A string selector a plain DOM object or a jQuery instance
+     * @param {string|JQuery} target A string selector a plain DOM object or a jQuery instance
      */
-    navigateTo(target) {
-      target = this.menu.find($(target)).first();
+    public navigateTo(target: string|JQuery): void {
+      const $elem = typeof target === 'string' ? $(target) : target;
+      const $target = this.menu.find($elem).first();
 
-      if (!target.length) {
-        return false;
+      if (!$target.length) {
+        return;
       }
 
-      const parents = target.parents('ul');
+      // Hide other menu branches
+      this.slider.find('.active').hide().removeClass('active');
+
+      const parents = $target.parents('ul');
       const level = parents.length - 1;
 
-      if (level === 0) {
-        return false;
+      // Trigger the animation only if levels are different
+      if (level > 0 && level !== this.level) {
+        this.level = level;
+        this.triggerAnimation(this.slider, -this.level * 100);
       }
 
-      this.pauseAnimations(() => {
-        this.level = level;
-        parents.show().first().addClass('active');
-        this.triggerAnimation(this.slider, -this.level * 100);
-      });
+      parents.show().addClass('active');
     }
 
     /**
      * Set up all event handlers
      * @private
      */
-    setupEventHandlers() {
+    private setupEventHandlers(): void {
       if (this.hasMenu) {
-        this.anchors.click((event) => {
-          const anchor = $(event.target).is('a') ? $(event.target) : $(event.target).parents('a:first');
+        this.anchors.on('click', (event) => {
+          const anchor = $(event.target).is('a')
+            ? $(event.target)
+            : $(event.target).parents('a:first');
           this.navigate(anchor);
         });
       }
@@ -144,7 +177,7 @@ import './styles/demo.scss';
         this.triggerEvent(true);
       });
 
-      $(document).keydown((e) => {
+      $(document).on('keydown', (e) => {
         switch (e.which) {
           case this.options.keycodeClose:
             this.close();
@@ -171,19 +204,23 @@ import './styles/demo.scss';
      * @param {boolean} afterAnimation Mark this event as `before` or `after` callback
      * @private
      */
-    triggerEvent(afterAnimation = false) {
-      let eventName = `sm.${this.lastAction}`;
-      if (afterAnimation) eventName += '-after';
-      this.menu.trigger(eventName);
+    private triggerEvent(afterAnimation: boolean = false): void {
+      if (this.lastAction) {
+        let eventName = `sm.${this.lastAction}`;
+        if (afterAnimation) {
+          eventName += '-after';
+        }
+        this.menu.trigger(eventName);
+      }
     }
 
     /**
      * Navigate the menu - that is slide it one step left or right
      * @param {jQuery} anchor The clicked anchor or button element
-     * @param {int} dir Navigation direction: 1 = forward, 0 = backwards
+     * @param {Directions} dir Navigation direction: Directions.Forward or Directions.Backward
      * @private
      */
-    navigate(anchor, dir = 1) {
+    private navigate(anchor?: JQuery, dir: Directions = Directions.Forward) {
       // Abort if an animation is still running
       if (this.isAnimating) {
         return;
@@ -191,7 +228,7 @@ import './styles/demo.scss';
 
       const offset = (this.level + dir) * -100;
 
-      if (dir > 0) {
+      if (anchor && dir === Directions.Forward) {
         if (!anchor.next('ul').length) {
           return;
         }
@@ -201,9 +238,8 @@ import './styles/demo.scss';
         return;
       }
 
-      this.lastAction = dir > 0 ? 'forward' : 'back';
+      this.lastAction = dir === Directions.Forward ? Actions.Foward : Actions.Back;
       this.level = this.level + dir;
-
       this.triggerAnimation(this.slider, offset);
     }
 
@@ -213,10 +249,11 @@ import './styles/demo.scss';
      * @param offset
      * @private
      */
-    triggerAnimation(elem, offset) {
+    private triggerAnimation(elem: JQuery, offset: string | number): void {
       this.triggerEvent();
 
-      if (!String(offset).includes('%')) {
+      // Add percentage sign
+      if (!offset.toString().includes('%')) {
         offset += '%';
       }
 
@@ -228,7 +265,7 @@ import './styles/demo.scss';
      * Initialize the menu
      * @private
      */
-    setupMenu() {
+    private setupMenu(): void {
       this.pauseAnimations(() => {
         switch (this.options.position) {
           case 'left':
@@ -254,9 +291,10 @@ import './styles/demo.scss';
      * @param callback
      * @private
      */
-    pauseAnimations(callback) {
+    private pauseAnimations(callback: () => void): void {
       this.menu.addClass('no-transition');
       callback();
+      // noinspection TsLint
       this.menu[0].offsetHeight; // trigger a reflow, flushing the CSS changes
       this.menu.removeClass('no-transition');
     }
@@ -265,24 +303,24 @@ import './styles/demo.scss';
      * Enhance the markup of menu items which contain a submenu
      * @private
      */
-    setupSubmenus() {
+    private setupSubmenus(): void {
       this.anchors.each((i, anchor) => {
-        anchor = $(anchor);
-        if (anchor.next('ul').length) {
+        const $anchor = $(anchor);
+        if ($anchor.next('ul').length) {
           // prevent default behaviour (use link just to navigate)
-          anchor.click((ev) => {
+          $anchor.on('click', (ev) => {
             ev.preventDefault();
           });
 
-          // add `before` and `after` text
-          const anchorTitle = anchor.text();
-          anchor.html(this.options.submenuLinkBefore + anchorTitle + this.options.submenuLinkAfter);
+          // Add `before` and `after` text
+          const anchorTitle = $anchor.text();
+          $anchor.html(this.options.submenuLinkBefore + anchorTitle + this.options.submenuLinkAfter);
 
-          // add a back button
+          // Add a back button
           if (this.options.showBackLink) {
             const backLink = $(`<a class="slide-menu-control" data-action="back">${anchorTitle}</a>`);
             backLink.html(this.options.backLinkBefore + backLink.text() + this.options.backLinkAfter);
-            anchor.next('ul').prepend($('<li>').append(backLink));
+            $anchor.next('ul').prepend($('<li>').append(backLink));
           }
         }
       });
@@ -290,7 +328,7 @@ import './styles/demo.scss';
   }
 
   // Link control buttons with the API
-  $('body').on('click', '.slide-menu-control', function (e) {
+  $('body').on('click', '.slide-menu-control', function() {
     let menu;
     const target = $(this).data('target');
 
@@ -300,19 +338,23 @@ import './styles/demo.scss';
       menu = $(`#${target}`);
     }
 
-    if (!menu.length) return;
+    if (!menu.length) {
+      return;
+    }
 
     const instance = menu.data(PLUGIN_NAME);
     const action = $(this).data('action');
+    const arg = $(this).data('arg');
 
-    if (instance && typeof instance[action] === 'function') {
-      instance[action]();
+    if (instance instanceof SlideMenu && typeof instance[action] === 'function') {
+      arg ? instance[action](arg) : instance[action]();
     }
   });
 
   // Register the jQuery plugin
-  $.fn[PLUGIN_NAME] = function (options) {
+  $.fn[PLUGIN_NAME] = function register(options: IOptions) {
     if (!$(this).length) {
+      // noinspection TsLint
       console.warn('Slide Menu: Unable to find menu DOM element. Maybe a typo?');
       return;
     }
@@ -325,4 +367,4 @@ import './styles/demo.scss';
 
     return instance;
   };
-}(jQuery));
+})(jQuery);
