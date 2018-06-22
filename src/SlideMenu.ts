@@ -38,6 +38,8 @@ const DEFAULT_OPTIONS = {
   submenuLinkAfter: '',
   submenuLinkBefore: '',
 };
+const CLASS_ACTIVE = 'slide-menu__submenu--active';
+const CLASS_SLIDER = 'slide-menu__slider';
 
 (($) => {
   class SlideMenu {
@@ -57,10 +59,10 @@ const DEFAULT_OPTIONS = {
       this.menu = options.elem;
 
       // Add wrapper
-      this.menu.find('ul:first').wrap('<div class="slider">');
+      this.menu.find('ul:first').wrap(`<div class="${CLASS_SLIDER}">`);
 
       this.anchors = this.menu.find('a');
-      this.slider = this.menu.find('.slider:first');
+      this.slider = this.menu.find(`.${CLASS_SLIDER}:first`);
 
       this.level = 0;
       this.isOpen = false;
@@ -144,7 +146,7 @@ const DEFAULT_OPTIONS = {
       }
 
       // Hide other menu branches
-      this.slider.find('.active').hide().removeClass('active');
+      this.slider.find(`.${CLASS_ACTIVE}`).hide().removeClass(CLASS_ACTIVE);
 
       const parents = $target.parents('ul');
       const level = parents.length - 1;
@@ -155,7 +157,7 @@ const DEFAULT_OPTIONS = {
         this.triggerAnimation(this.slider, -this.level * 100);
       }
 
-      parents.show().addClass('active');
+      parents.show().addClass(CLASS_ACTIVE);
     }
 
     /**
@@ -194,8 +196,9 @@ const DEFAULT_OPTIONS = {
       });
 
       this.menu.on('sm.back-after', () => {
-        const lastActiveUl = `ul ${'.active '.repeat(this.level + 1)}`;
-        this.menu.find(lastActiveUl).removeClass('active').hide();
+        const lastActiveSelector = `.${CLASS_ACTIVE} `.repeat(this.level + 1);
+        const lastActiveUl = `ul ${lastActiveSelector}`;
+        this.menu.find(lastActiveUl).removeClass(CLASS_ACTIVE).hide();
       });
     }
 
@@ -233,7 +236,7 @@ const DEFAULT_OPTIONS = {
           return;
         }
 
-        anchor.next('ul').addClass('active').show();
+        anchor.next('ul').addClass(CLASS_ACTIVE).show();
       } else if (this.level === 0) {
         return;
       }

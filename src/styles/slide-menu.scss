@@ -23,7 +23,7 @@ $sm-transition-easing: ease-in-out !default;
     will-change: transform;
     z-index: 1000;
 
-    .slider {
+    .slide-menu__slider {
         width: 100%;
         transition: transform $sm-transition-dur $sm-transition-easing;
         transform: translateX(0);
