@@ -2,7 +2,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "A jQuery plugin for a multilevel CSS menu with a slide effect and various options",
-  "main": "src/SlideMenu.ts",
+  "main": "dist/slide-menu.js",
   "scripts": {
     "postinstall": "npm run build",
     "build": "webpack --mode production",
@@ -13,6 +13,7 @@
   },
   "keywords": [
     "jquery",
+    "menu",
     "navigation"
   ],
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
