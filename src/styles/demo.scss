@@ -1,110 +1,116 @@
-$color-primary: #45ADA8;
+$color-primary: #368883;
 
 *:active, *:focus {
-	outline: none !important;
+    outline: none !important;
+}
+
+html {
+    font-size: 1.125rem;
 }
 
 body {
-	font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-size: 18px;
-	line-height: 1.4;
-	color: #333;
+    font-family: 'Lato', sans-serif;
+    line-height: 1.4;
+    color: fade_out(#000, 0.1);
 }
 
-h1, h2, h3 {
-	font-weight: bold;}
-
 h1 {
-	font-size: 200%;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 h2 {
-	font-size: 130%;
-	font-weight: normal;
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: normal;
 }
 
 a {
-	border-bottom: solid 1px darken($color-primary, 8%);
-	color: $color-primary;
+    color: $color-primary;
 }
 
 .btn {
-	border: none;
-	background: transparent;
-	font-family: inherit;
-	font-size: 16px;
-	line-height: 1;
-	cursor: pointer;
+    display: inline-block;
+    padding: .6rem .8rem;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 85%;
+    line-height: 1;
 }
 
 main {
-	width: 50%;
-	margin: 48px auto;
+    width: 90%;
+    margin: 2.5rem auto;
 
-	.btn {
-		display: inline-block;
-		padding: 12px 16px;
-		background: $color-primary;
-		border-radius: 4px;
-		color: #fff;
+    .btn {
+        width: 100%;
+        display: block;
+        margin: 8px 0;
+        background-color: $color-primary;
+        border-radius: 0.2rem;
 
-		&:hover {
-			background: darken($color-primary, 6%);
-		}
-	}
+    }
 
-	p, .btn-list {
-		margin-bottom: 2em;
-	}
+    p, .btn-list {
+        margin-bottom: 2em;
+    }
 
-	@media (max-width: 767px) {
-		width: 90%;
+    @media (min-width: 768px) {
+        max-width: 40rem;
 
-		.btn {
-			width: 100%;
-			display: block;
-			margin: 8px 0;
-		}
-	}
+        .btn {
+            width: auto;
+            display: inline-block;
+
+            &:hover {
+                background-color: darken($color-primary, 6%);
+            }
+        }
+    }
 }
 
 .slide-menu {
-	background: $color-primary;
-	color: #fff;
+    background-color: $color-primary;
+    color: #fff;
 
-	.slider {
-		top: 48px;
-	}
+    .controls {
+        display: flex;
+        margin-bottom: 1rem;
+    }
 
-	.controls {
-		overflow: hidden;
-	}
+    .btn {
+        flex: 1 0 auto;
+        color: #fff;
+        background-color: darken($color-primary, 12%);
+        padding: 8px;
 
-	a {
-		color: #fff;
+        &:hover {
+            background-color: darken($color-primary, 12% + 4%);
+        }
 
-		&:hover {
-			background: darken($color-primary, 6%);
-		}
-	}
+        &:first-of-type:before {
+            content: '⇐';
+            margin-right: .5rem;
+        }
 
-	.btn {
-		float: right;
-		color: #fff;
-		background: darken($color-primary, 12%);
-		padding: 8px;
+        &:last-of-type:before {
+            content: '❌';
+            margin-right: .5rem;
+        }
+    }
 
-		&:hover {
-			background: darken($color-primary, 12% + 6%);
-		}
+    a {
+        border-bottom: solid 1px darken($color-primary, 6%);
 
-		& + .btn {
-			margin-right: 1px;
-		}
-	}
-
+        &:hover {
+            background-color: darken($color-primary, 6%);
+        }
+    }
 }
 
-#test-menu-left {
-	padding: 16px;
+#test-menu-left p {
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
