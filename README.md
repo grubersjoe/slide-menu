@@ -6,7 +6,7 @@
 
 ## Install
 ```sh
-bower install slide-menu
+npm install slide-menu
 ``` 
 
 ## Getting started
@@ -32,9 +32,6 @@ All you need is the traditional CSS menu HTML markup and a wrapper with the clas
     </ul>
 </nav>
 ```
-
-The SCSS and JS code is included automatically when using [wiredep](https://github.com/taptapship/wiredep). Add `dist/scripts/index.js` and the CSS or SCSS code manually to your project otherwise.
-
 Create the menu then like this:
 
 ```javascript
