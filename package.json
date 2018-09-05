@@ -1,16 +1,16 @@
 {
   "name": "slide-menu",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
-  "description": "A jQuery plugin for a multilevel CSS menu with a slide effect and various options",
+  "description": "A library agnostic multilevel JavaScript menu with a slide effect",
   "main": "dist/slide-menu.js",
   "scripts": {
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "clean": "rm -v ./dist/*",
-    "start": "webpack-dev-server --mode production",
-    "start:dev": "webpack-dev-server --mode development"
+    "start": "webpack-dev-server --mode production --host 0.0.0.0",
+    "start:dev": "webpack-dev-server --mode development --host 0.0.0.0"
   },
   "keywords": [
     "jquery",

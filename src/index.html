@@ -15,47 +15,46 @@
 </head>
 <body>
   <main role="main">
-    <h1>jQuery Slide Menu</h1>
-    <p>A jQuery plugin for a multilevel CSS menu with a smooth slide effect and various options.</p>
+    <h1>Slide Menu</h1>
+    <p>A library agnostic multilevel JavaScript menu with a smooth slide effect and various options.</p>
 
     <h2>Multi-purpose menu (left)</h2>
     <div class="btn-list">
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="toggle">
-        Toggle Menu
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-left" data-action="toggle">
+        Toggle menu
       </button>
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="open">
-        Open Menu
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-left" data-action="open">
+        Open menu
       </button>
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="close">
-        Close Menu
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-left" data-action="close">
+        Close menu
       </button>
     </div>
 
     <h2>Navigation menu (right)</h2>
     <div class="btn-list">
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="toggle">
-        Toggle
-        Menu
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="toggle">
+        Toggle menu
       </button>
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="open">
-        Open Menu
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="open">
+        Open menu
       </button>
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="close">
-        Close Menu
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="close">
+        Close menu
       </button>
       <br>
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="back">
-        Backward navigation
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="back">
+        Navigate back
       </button>
-      <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="navigateTo" data-arg="#special-link-2">
-        Navigate to special element
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="navigateTo" data-arg="#special-link-2">
+        Navigate to specific menu element
       </button>
     </div>
   </main>
 
   <nav class="slide-menu" id="test-menu-left">
     <div class="controls">
-      <button type="button" class="btn slide-menu-control" data-action="close">Close</button>
+      <button type="button" class="btn slide-menu__control" data-action="close">Close</button>
     </div>
 
     <p>You aren't limited to classical navigation menus.</p>
@@ -64,8 +63,8 @@
 
   <nav class="slide-menu" id="test-menu-right">
     <div class="controls">
-      <button type="button" class="btn slide-menu-control" data-action="back">Back</button>
-      <button type="button" class="btn slide-menu-control" data-action="close">Close</button>
+      <button type="button" class="btn slide-menu__control" data-action="back">Back</button>
+      <button type="button" class="btn slide-menu__control" data-action="close">Close</button>
     </div>
     <ul>
       <li>
@@ -75,7 +74,7 @@
             <a href="#">Submenu entry</a>
           </li>
           <li>
-            <a href="http://google.de">Submenu entry</a>
+            <a href="http://google.de">WAT</a>
             <ul>
               <li>
                 <a href="http://google.de">Subsubmenu entry</a>
@@ -166,24 +165,22 @@
   </nav>
 
   <script>
-    (function ($) {
-      $(document).ready(function () {
-        const menuLeft = $('#test-menu-left').slideMenu({
-          position: 'left',
-          submenuLinkAfter: ' >',
-          backLinkBefore: '< '
-        });
-
-        const menuRight = $('#test-menu-right').slideMenu({
-          submenuLinkAfter: ' ⇒',
-          backLinkBefore: '⇐ '
-        });
-
-        if ($(window).width() > 767) {
-          menuRight.open(false);
-        }
+    document.addEventListener("DOMContentLoaded", function(event) {
+      const menuLeft = new SlideMenu(document.getElementById('test-menu-left'), {
+        position: 'left',
+        submenuLinkAfter: ' >',
+        backLinkBefore: '< '
       });
-    })(jQuery);
+
+      const menuRight = new SlideMenu(document.getElementById('test-menu-right'), {
+        submenuLinkAfter: ' ⇒',
+        backLinkBefore: '⇐ '
+      });
+
+      if ($(window).width() > 767) {
+        menuRight.open(false);
+      }
+    });
   </script>
 </body>
 </html>
