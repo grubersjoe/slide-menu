@@ -1,9 +1,4 @@
 $sm-menu-width: 320px !default;
-$sm-menu-bg: #333 !default;
-
-$sm-link-color: #fff !default;
-$sm-link-padding: 12px 24px !default;
-
 $sm-transition-dur: 300ms !default;
 $sm-transition-easing: ease-in-out !default;
 
@@ -17,7 +12,6 @@ $sm-transition-easing: ease-in-out !default;
     display: none;
     overflow: hidden;
     box-sizing: border-box;
-    background: $sm-menu-bg;
     transition: transform $sm-transition-dur $sm-transition-easing;
     transform: translateX(100%);
     will-change: transform;
@@ -32,8 +26,7 @@ $sm-transition-easing: ease-in-out !default;
 
     ul {
         position: relative;
-        width: $sm-menu-width;
-        max-width: 100%;
+        width: 100%;
         margin: 0;
         padding-left: 0;
         list-style: none;
@@ -47,9 +40,6 @@ $sm-transition-easing: ease-in-out !default;
 
         a {
             display: block;
-            padding: $sm-link-padding;
-            color: $sm-link-color;
-            text-decoration: none;
         }
     }
 

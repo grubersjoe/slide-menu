@@ -31,12 +31,12 @@ a {
 
 .btn {
     display: inline-block;
-    padding: .6rem .8rem;
+    padding: .7rem .8rem;
     border: none;
     color: #fff;
     cursor: pointer;
     font-family: inherit;
-    font-size: 85%;
+    font-size: 90%;
     line-height: 1;
 }
 
@@ -47,10 +47,9 @@ main {
     .btn {
         width: 100%;
         display: block;
-        margin: 8px 0;
+        margin: 0.5rem 0.25rem 0.5rem 0;
         background-color: $color-primary;
         border-radius: 0.2rem;
-
     }
 
     p, .btn-list {
@@ -72,8 +71,23 @@ main {
 }
 
 .slide-menu {
+    width: 340px;
     background-color: $color-primary;
-    color: #fff;
+
+    &, a {
+        font-size: .95rem;
+        color: #fff;
+    }
+
+    a {
+        padding: 0.9rem 1.5rem;
+        text-decoration: none;
+        border-bottom: solid 1px darken($color-primary, 6%);
+
+        &:hover {
+            background-color: darken($color-primary, 6%);
+        }
+    }
 
     .controls {
         display: flex;
@@ -84,7 +98,7 @@ main {
         flex: 1 0 auto;
         color: #fff;
         background-color: darken($color-primary, 12%);
-        padding: 8px;
+        padding: 0.5rem;
 
         &:hover {
             background-color: darken($color-primary, 12% + 4%);
@@ -100,17 +114,10 @@ main {
             margin-right: .5rem;
         }
     }
-
-    a {
-        border-bottom: solid 1px darken($color-primary, 6%);
-
-        &:hover {
-            background-color: darken($color-primary, 6%);
-        }
-    }
 }
 
 #test-menu-left p {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    font-size: 110%;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
 }
