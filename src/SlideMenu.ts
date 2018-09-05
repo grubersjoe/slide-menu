@@ -19,8 +19,8 @@ interface ISlideMenuElement extends HTMLElement {
 interface IMenuOptions {
   position?: string;
   showBackLink?: boolean;
-  keyOpen?: string | null;
-  keyClose?: string | null;
+  keyOpen?: string;
+  keyClose?: string;
   submenuLinkBefore: string;
   submenuLinkAfter: string;
   backLinkBefore: string;
@@ -189,7 +189,7 @@ class SlideMenu {
     const level = parentUl.length - 1;
 
     // Trigger the animation only if levels are different
-    if (level > 0 && level !== this.level) {
+    if (level > -1 && level !== this.level) {
       this.level = level;
       this.slideElem(this.slider, -this.level * 100);
     }

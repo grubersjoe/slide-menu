@@ -12,10 +12,13 @@ export function wrapElement(elem: HTMLElement, wrapper: HTMLElement): HTMLElemen
 export function parents(elem: Node, selector: string, limit?: number): HTMLElement[] {
   const matched = [];
 
-  while (elem.parentNode !== null && (limit !== undefined && matched.length < limit)) {
+  while (elem.parentNode !== null || (limit !== undefined && matched.length < limit)) {
     if (elem instanceof HTMLElement && elem.matches(selector)) {
+      // @ts-ignore
       matched.push(elem);
     }
+
+    // @ts-ignore
     elem = elem.parentNode;
   }
 
