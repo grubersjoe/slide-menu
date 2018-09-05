@@ -100,9 +100,9 @@ class SlideMenu {
     this.isAnimating = false;
     this.lastAction = null;
 
-    this.setupEventHandlers();
-    this.setupMenu();
-    this.setupSubmenus();
+    this.initEventHandlers();
+    this.initMenu();
+    this.initSubmenus();
 
     // Save this instance in menu DOM node
     this.menu._slideMenu = this;
@@ -188,7 +188,7 @@ class SlideMenu {
     const parentUl = parents(target, 'ul');
     const level = parentUl.length - 1;
 
-    // Trigger the animation only if levels are different
+    // Trigger the animation only if currently on different level
     if (level > -1 && level !== this.level) {
       this.level = level;
       this.slideElem(this.slider, -this.level * 100);
@@ -203,9 +203,9 @@ class SlideMenu {
   /**
    * Set up all event handlers
    */
-  private setupEventHandlers(): void {
+  private initEventHandlers(): void {
+    // Ordinary navigation inside the menu
     if (this.anchors) {
-      // Anchors inside the menu
       this.anchors.forEach((a) => a.addEventListener('click', (event) => {
         const target = event.target as HTMLElement;
         const targetAnchor = target.matches('a')
@@ -218,10 +218,22 @@ class SlideMenu {
       }));
     }
 
-    [this.menu].forEach((elem) => {
-      elem.addEventListener('transitionend', this.onTransitionEnd.bind(this));
-    });
+    // Handler for end of CSS transition
+    this.menu.addEventListener('transitionend', this.onTransitionEnd.bind(this));
 
+    this.initKeybindings();
+    this.initSubmenuVisibility();
+  }
+
+  private onTransitionEnd() {
+    this.isAnimating = false;
+
+    if (this.lastAction) {
+      this.triggerEvent(this.lastAction, true);
+    }
+  }
+
+  private initKeybindings(): void {
     document.addEventListener('keydown', (event) => {
       switch (event.key) {
         case this.options.keyClose:
@@ -233,9 +245,13 @@ class SlideMenu {
         default:
           return;
       }
+
       event.preventDefault();
     });
+  }
 
+  private initSubmenuVisibility() {
+    // Hide the lastly shown menu when navigating back (important for navigateTo)
     this.menu.addEventListener('sm.back-after', () => {
       const lastActiveSelector = `.${SlideMenu.CLASS_NAMES.active} `.repeat(this.level + 1);
       const lastActiveUl = this.menu.querySelector(`ul ${lastActiveSelector}`) as HTMLUListElement;
@@ -245,14 +261,6 @@ class SlideMenu {
         lastActiveUl.classList.remove(SlideMenu.CLASS_NAMES.active);
       }
     });
-  }
-
-  private onTransitionEnd() {
-    this.isAnimating = false;
-
-    if (this.lastAction) {
-      this.triggerEvent(this.lastAction, true);
-    }
   }
 
   /**
@@ -315,7 +323,7 @@ class SlideMenu {
   /**
    * Initialize the menu
    */
-  private setupMenu(): void {
+  private initMenu(): void {
     this.runWithoutAnimation(() => {
       switch (this.options.position) {
         case MenuPosition.Left:
@@ -357,7 +365,7 @@ class SlideMenu {
   /**
    * Enhance the markup of menu items which contain a submenu
    */
-  private setupSubmenus(): void {
+  private initSubmenus(): void {
     if (!this.anchors) {
       return;
     }
