@@ -21,10 +21,10 @@ interface IMenuOptions {
   showBackLink?: boolean;
   keyOpen?: string | null;
   keyClose?: string | null;
-  submenuLinkBefore?: string;
-  submenuLinkAfter?: string;
-  backLinkBefore?: string;
-  backLinkAfter?: string;
+  submenuLinkBefore: string;
+  submenuLinkAfter: string;
+  backLinkBefore: string;
+  backLinkAfter: string;
 }
 
 enum Direction {
@@ -64,17 +64,16 @@ class SlideMenu {
     slider: `${SlideMenu.NAMESPACE}__slider`,
   };
 
-  private anchors: NodeListOf<HTMLAnchorElement> | null;
   private level: number;
   private isOpen: boolean;
   private isAnimating: boolean;
   private lastAction: Action | null;
 
   private readonly options: IMenuOptions;
-  private readonly hasAnchors: boolean;
 
   private readonly menu: ISlideMenuElement;
   private readonly slider: HTMLElement;
+  private readonly anchors: NodeListOf<HTMLAnchorElement> | null;
 
   constructor(elem: HTMLElement, options: IMenuOptions) {
     if (elem === null) {
@@ -100,14 +99,10 @@ class SlideMenu {
     this.isOpen = false;
     this.isAnimating = false;
     this.lastAction = null;
-    this.hasAnchors = this.anchors.length > 0;
 
     this.setupEventHandlers();
     this.setupMenu();
-
-    if (this.hasAnchors) {
-      this.setupSubmenus();
-    }
+    this.setupSubmenus();
 
     // Save this instance in menu DOM node
     this.menu._slideMenu = this;
@@ -135,8 +130,7 @@ class SlideMenu {
       this.slideElem(this.menu, offset);
     } else {
       const action = this.slideElem.bind(this, this.menu, offset);
-      this.execWithoutAnimation(action);
-      this.isAnimating = false;
+      this.runWithoutAnimation(action);
     }
   }
 
@@ -167,7 +161,6 @@ class SlideMenu {
     this.navigate(Direction.Backward);
   }
 
-  // noinspection JSUnusedGlobalSymbols
   /**
    * Navigate to a specific link on any level (useful to open the correct hierarchy directly)
    * @param {string | HTMLElement} target
@@ -182,10 +175,6 @@ class SlideMenu {
       } else {
         throw new Error('Invalid parameter `target`. A valid query selector is required.');
       }
-    }
-
-    if (target === null) {
-      return;
     }
 
     // Hide other active menus
@@ -215,15 +204,19 @@ class SlideMenu {
    * Set up all event handlers
    */
   private setupEventHandlers(): void {
-    // Anchors inside the menu
-    this.anchors.forEach((a) => a.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      const targetAnchor = target.matches('a')
-        ? target
-        : parentsOne(target, 'a');
+    if (this.anchors) {
+      // Anchors inside the menu
+      this.anchors.forEach((a) => a.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        const targetAnchor = target.matches('a')
+          ? target
+          : parentsOne(target, 'a');
 
-      this.navigate(Direction.Forward, targetAnchor);
-    }));
+        if (targetAnchor) {
+          this.navigate(Direction.Forward, targetAnchor);
+        }
+      }));
+    }
 
     [this.menu].forEach((elem) => {
       elem.addEventListener('transitionend', this.onTransitionEnd.bind(this));
@@ -323,7 +316,7 @@ class SlideMenu {
    * Initialize the menu
    */
   private setupMenu(): void {
-    this.execWithoutAnimation(() => {
+    this.runWithoutAnimation(() => {
       switch (this.options.position) {
         case MenuPosition.Left:
           Object.assign(this.menu.style, {
@@ -348,7 +341,7 @@ class SlideMenu {
    * Pause the CSS transitions, to apply CSS changes directly without an animation
    * @param action
    */
-  private execWithoutAnimation(action: () => void): void {
+  private runWithoutAnimation(action: () => void): void {
     const transitionElems = [this.menu, this.slider];
     transitionElems.forEach((elem) => elem.style.transition = 'none');
 
@@ -357,12 +350,18 @@ class SlideMenu {
     // noinspection TsLint
     this.menu.offsetHeight; // Trigger a reflow, flushing the CSS changes
     transitionElems.forEach((elem) => elem.style.removeProperty('transition'));
+
+    this.isAnimating = false;
   }
 
   /**
    * Enhance the markup of menu items which contain a submenu
    */
   private setupSubmenus(): void {
+    if (!this.anchors) {
+      return;
+    }
+
     this.anchors.forEach((anchor) => {
       const submenu = (anchor.parentNode as HTMLElement).querySelector('ul');
       if (submenu) {
@@ -378,7 +377,7 @@ class SlideMenu {
 
         anchor.innerHTML = submenuLinkBefore + anchorInnerHtml + submenuLinkAfter;
 
-        // Add a back button
+        // TODO: Add a back button
         // if (this.options.showBackLink) {
         //   const { backLinkBefore, backLinkAfter } = this.options;
         //   const backLink = document.createElement('a');
@@ -414,7 +413,7 @@ document
       const action = btn.getAttribute('data-action');
       const arg = btn.getAttribute('data-arg');
 
-      if (instance && typeof instance[action] === 'function') {
+      if (instance && action && typeof instance[action] === 'function') {
         arg ? instance[action](arg) : instance[action]();
       }
     });

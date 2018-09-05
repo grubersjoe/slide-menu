@@ -3,12 +3,13 @@
     "./src/**/*"
   ],
   "compilerOptions": {
-    "outDir": "./dist/",
-    "module": "es6",
-    "target": "es5",
     "lib": [
       "es6",
       "dom"
-    ]
+    ],
+    "module": "es6",
+    "outDir": "./dist/",
+    "strictNullChecks": true,
+    "target": "es5"
   }
 }
