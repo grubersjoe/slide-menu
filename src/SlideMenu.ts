@@ -1,4 +1,3 @@
-// TODO: make this library agnostic
 // TODO: document the events
 
 import './styles/slide-menu.scss';
@@ -17,8 +16,8 @@ interface ISlideMenuElement extends HTMLElement {
 }
 
 interface IMenuOptions {
-  position?: string;
-  showBackLink?: boolean;
+  position: string;
+  showBackLink: boolean;
   keyOpen?: string;
   keyClose?: string;
   submenuLinkBefore: string;
@@ -73,7 +72,6 @@ class SlideMenu {
 
   private readonly menu: ISlideMenuElement;
   private readonly slider: HTMLElement;
-  private readonly anchors: NodeListOf<HTMLAnchorElement> | null;
 
   constructor(elem: HTMLElement, options: IMenuOptions) {
     if (elem === null) {
@@ -84,7 +82,6 @@ class SlideMenu {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
 
     this.menu = elem as ISlideMenuElement;
-    this.anchors = this.menu.querySelectorAll('a');
 
     // Add wrapper
     this.slider = document.createElement('div');
@@ -100,9 +97,9 @@ class SlideMenu {
     this.isAnimating = false;
     this.lastAction = null;
 
-    this.initEventHandlers();
     this.initMenu();
     this.initSubmenus();
+    this.initEventHandlers();
 
     // Save this instance in menu DOM node
     this.menu._slideMenu = this;
@@ -205,8 +202,10 @@ class SlideMenu {
    */
   private initEventHandlers(): void {
     // Ordinary navigation inside the menu
-    if (this.anchors) {
-      this.anchors.forEach((a) => a.addEventListener('click', (event) => {
+    this.menu
+      .querySelectorAll('a')
+      .forEach((a) => a.addEventListener('click', (event) => {
+
         const target = event.target as HTMLElement;
         const targetAnchor = target.matches('a')
           ? target
@@ -216,7 +215,6 @@ class SlideMenu {
           this.navigate(Direction.Forward, targetAnchor);
         }
       }));
-    }
 
     // Handler for end of CSS transition
     this.menu.addEventListener('transitionend', this.onTransitionEnd.bind(this));
@@ -366,66 +364,64 @@ class SlideMenu {
    * Enhance the markup of menu items which contain a submenu
    */
   private initSubmenus(): void {
-    if (!this.anchors) {
-      return;
-    }
+    this.menu
+      .querySelectorAll('a')
+      .forEach((anchor) => {
+        const submenu = (anchor.parentNode as HTMLElement).querySelector('ul');
+        if (submenu) {
+          // Prevent default behaviour (use link just to navigate)
+          anchor.addEventListener('click', (event) => {
+            event.preventDefault();
+          });
 
-    this.anchors.forEach((anchor) => {
-      const submenu = (anchor.parentNode as HTMLElement).querySelector('ul');
-      if (submenu) {
-        // Prevent default behaviour (use link just to navigate)
-        anchor.addEventListener('click', (event) => {
-          event.preventDefault();
-        });
+          // Add `before` and `after` text
+          const { submenuLinkBefore, submenuLinkAfter } = this.options;
+          const anchorInnerHtml = anchor.textContent;
+          anchor.innerHTML = submenuLinkBefore + anchorInnerHtml + submenuLinkAfter;
 
-        const anchorInnerHtml = anchor.textContent;
+          if (this.options.showBackLink) {
+            const { backLinkBefore, backLinkAfter } = this.options;
 
-        // Add `before` and `after` text
-        const { submenuLinkBefore, submenuLinkAfter } = this.options;
+            const backLink = document.createElement('a');
+            backLink.innerHTML = backLinkBefore + anchorInnerHtml + backLinkAfter;
+            backLink.classList.add(SlideMenu.CLASS_NAMES.control);
+            backLink.setAttribute('data-action', Action.Back);
 
-        anchor.innerHTML = submenuLinkBefore + anchorInnerHtml + submenuLinkAfter;
+            const backLinkLi = document.createElement('li');
+            backLinkLi.appendChild(backLink);
 
-        // TODO: Add a back button
-        // if (this.options.showBackLink) {
-        //   const { backLinkBefore, backLinkAfter } = this.options;
-        //   const backLink = document.createElement('a');
-        //   backLink.innerHTML = backLinkBefore + anchorInnerHtml + backLinkAfter;
-        //   backLink.classList.add(SlideMenu.CLASS_NAMES.control);
-        //   backLink.setAttribute('data-action', Actions.Back);
-        //
-        //   const backLinkWrapper = document.createElement('li').appendChild(backLink);
-        //   submenu.innerHTML = backLinkWrapper + submenu.innerHTML;
-        // }
-      }
-    });
+            submenu.insertBefore(backLinkLi, submenu.firstChild);
+          }
+        }
+      });
   }
 }
 
 // Link control buttons with the API
-document
-  .querySelectorAll(`.${SlideMenu.CLASS_NAMES.control}`)
-  .forEach((control) => {
-    control.addEventListener('click', (event) => {
-      const btn = event.target as HTMLElement;
+document.addEventListener('click', (event) => {
+  const control = event.target as HTMLElement;
 
-      const target = btn.getAttribute('data-target');
-      const menu = (!target || target === 'this')
-        ? parentsOne(btn, `.${SlideMenu.NAMESPACE}`)
-        : document.getElementById(target); // assumes #id
+  if (!control.className.includes(`${SlideMenu.CLASS_NAMES.control}`)) {
+    return;
+  }
 
-      if (!menu) {
-        throw new Error(`Unable to find menu ${target}`);
-      }
+  const target = control.getAttribute('data-target');
+  const menu = (!target || target === 'this')
+    ? parentsOne(control, `.${SlideMenu.NAMESPACE}`)
+    : document.getElementById(target); // assumes #id
 
-      const instance = (menu as ISlideMenuElement)._slideMenu;
-      const action = btn.getAttribute('data-action');
-      const arg = btn.getAttribute('data-arg');
+  if (!menu) {
+    throw new Error(`Unable to find menu ${target}`);
+  }
 
-      if (instance && action && typeof instance[action] === 'function') {
-        arg ? instance[action](arg) : instance[action]();
-      }
-    });
-  });
+  const instance = (menu as ISlideMenuElement)._slideMenu;
+  const action = control.getAttribute('data-action');
+  const arg = control.getAttribute('data-arg');
+
+  if (instance && action && typeof instance[action] === 'function') {
+    arg ? instance[action](arg) : instance[action]();
+  }
+});
 
 // Expose SlideMenu to global namespace
 window.SlideMenu = SlideMenu;
