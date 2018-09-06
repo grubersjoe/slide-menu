@@ -1,6 +1,6 @@
 // TODO: document the events
 
-import './styles/slide-menu.scss';
+import '../styles/slide-menu.scss';
 
 import { parents, parentsOne, wrapElement } from './Utils';
 

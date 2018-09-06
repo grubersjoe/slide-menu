@@ -19,7 +19,7 @@ const babelOptions = {
 
 module.exports = (env, options) => ({
   entry: {
-    'slide-menu': './src/SlideMenu.ts',
+    'slide-menu': './src/ts/SlideMenu.ts',
     demo: './src/styles/demo.scss',
   },
   resolve: {
