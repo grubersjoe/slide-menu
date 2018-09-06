@@ -3,13 +3,27 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const babelOptions = {
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          browsers: ['last 2 versions', 'Firefox ESR', 'not dead', 'not ie > 0']
+        },
+        useBuiltIns: "usage",
+      }
+    ]
+  ],
+};
+
 module.exports = (env, options) => ({
   entry: {
     'slide-menu': './src/SlideMenu.ts',
     demo: './src/styles/demo.scss',
   },
   resolve: {
-    extensions: [ '.ts', '.js' ],
+    extensions: ['.ts', '.js'],
   },
   output: {
     path: `${__dirname}/dist`,
@@ -26,7 +40,15 @@ module.exports = (env, options) => ({
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: babelOptions
+          },
+          {
+            loader: 'ts-loader',
+          }
+        ],
         exclude: /node_modules/,
       },
       {

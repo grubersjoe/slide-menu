@@ -2,7 +2,6 @@
 
 import './styles/slide-menu.scss';
 
-import './Polyfills';
 import { parents, parentsOne, wrapElement } from './Utils';
 
 declare let window: IWindow;
@@ -18,8 +17,8 @@ interface ISlideMenuElement extends HTMLElement {
 interface IMenuOptions {
   position: string;
   showBackLink: boolean;
-  keyOpen?: string;
-  keyClose?: string;
+  keyOpen: string;
+  keyClose: string;
   submenuLinkBefore: string;
   submenuLinkAfter: string;
   backLinkBefore: string;
