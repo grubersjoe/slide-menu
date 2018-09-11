@@ -1,8 +1,6 @@
-// TODO: document the events
-
 import '../styles/slide-menu.scss';
 
-import { parents, parentsOne, wrapElement } from './Utils';
+import { parents, parentsOne, wrapElement } from './DomUtils';
 
 declare let window: IWindow;
 
@@ -174,8 +172,8 @@ class SlideMenu {
     }
 
     // Hide other active menus
-    this.slider
-      .querySelectorAll(`.${SlideMenu.CLASS_NAMES.active}`)
+    Array
+      .from(this.slider.querySelectorAll(`.${SlideMenu.CLASS_NAMES.active}`))
       .forEach((activeElem: HTMLElement) => {
         activeElem.style.display = 'none';
         activeElem.classList.remove(SlideMenu.CLASS_NAMES.active);
@@ -201,10 +199,9 @@ class SlideMenu {
    */
   private initEventHandlers(): void {
     // Ordinary navigation inside the menu
-    this.menu
-      .querySelectorAll('a')
+    Array
+      .from(this.menu.querySelectorAll('a'))
       .forEach((a) => a.addEventListener('click', (event) => {
-
         const target = event.target as HTMLElement;
         const targetAnchor = target.matches('a')
           ? target
@@ -268,7 +265,7 @@ class SlideMenu {
   private triggerEvent(action: Action, afterAnimation: boolean = false): void {
     this.lastAction = action;
     const name = `sm.${action}${afterAnimation ? '-after' : ''}`;
-    const event = new Event(name);
+    const event = new CustomEvent(name);
     this.menu.dispatchEvent(event);
   }
 
@@ -363,8 +360,8 @@ class SlideMenu {
    * Enhance the markup of menu items which contain a submenu
    */
   private initSubmenus(): void {
-    this.menu
-      .querySelectorAll('a')
+    Array
+      .from(this.menu.querySelectorAll('a'))
       .forEach((anchor) => {
         const submenu = (anchor.parentNode as HTMLElement).querySelector('ul');
         if (submenu) {
