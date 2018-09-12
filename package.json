@@ -1,45 +1,51 @@
 {
-  "private": true,
-  "engines": {
-    "node": ">=4"
+  "name": "@grubersjoe/slide-menu",
+  "version": "1.0.10",
+  "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
+  "license": "MIT",
+  "description": "A library agnostic multilevel JavaScript menu with a smooth slide effect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grubersjoe/slide-menu.git"
   },
+  "bugs": "https://github.com/grubersjoe/slide-menu/issues",
+  "main": "dist/slide-menu.js",
+  "scripts": {
+    "build": "npm run clean && webpack --mode production && npm run post-build",
+    "build:dev": "npm run clean && webpack --mode development && npm run post-build",
+    "clean": "rm -f ./dist/*",
+    "post-build": "rm -f dist/demo.js*",
+    "start": "webpack-dev-server --mode production --host 0.0.0.0",
+    "start:dev": "webpack-dev-server --mode development --host 0.0.0.0"
+  },
+  "keywords": [
+    "menu",
+    "multi level",
+    "navigation"
+  ],
   "devDependencies": {
-    "babel-core": "^6.4.0",
-    "babel-plugin-array-includes": "^2.0.3",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-register": "^6.5.2",
-    "browser-sync": "^2.2.1",
-    "del": "^1.1.1",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.0.1",
-    "gulp-babel": "^6.1.1",
-    "gulp-cache": "^0.4.2",
-    "gulp-cssnano": "^2.0.0",
-    "gulp-eslint": "^2.0.0",
-    "gulp-htmlmin": "^1.3.0",
-    "gulp-if": "^2.0.0",
-    "gulp-load-plugins": "^0.10.0",
-    "gulp-plumber": "^1.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.0.0",
-    "gulp-size": "^1.2.1",
-    "gulp-sourcemaps": "^1.5.0",
-    "gulp-uglify": "^1.1.0",
-    "gulp-useref": "^3.0.0",
-    "main-bower-files": "^2.5.0",
-    "wiredep": "^2.2.2"
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@types/jquery": "^3.3.4",
+    "autoprefixer": "^9.0.0",
+    "babel-loader": "^8.0.2",
+    "css-loader": "^1.0.0",
+    "cssnano": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.0.1",
+    "ts-loader": "^5.0.0",
+    "tslint": "^5.10.0",
+    "typescript": "^3.0.0",
+    "webpack": "^4.17.2",
+    "webpack-cli": "^3.0.0",
+    "webpack-dev-server": "^3.1.4"
   },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true,
-      "browser": true
-    },
-    "rules": {
-      "quotes": [
-        2,
-        "single"
-      ]
-    }
+  "dependencies": {
+    "@babel/preset-stage-2": "^7.0.0",
+    "core-js": "^2.5.7",
+    "custom-event-polyfill": "^1.0.6"
   }
 }

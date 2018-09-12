@@ -1,183 +1,192 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SlideMenu</title>
+  <title><%= title %></title>
 
-    <!-- build:css styles/slide-menu.css -->
-    <link rel="stylesheet" href="styles/slide-menu.css">
-    <!-- endbuild -->
-
-    <!-- build:css styles/preview.css -->
-    <link rel="stylesheet" href="styles/preview.css">
-    <!-- endbuild -->
-
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js" integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8=" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700" rel="stylesheet">
 </head>
 <body>
+  <main role="main">
+    <h1>Slide Menu
+      <small><%= version %></small>
+    </h1>
+    <p><%= description %>.</p>
 
-    <main role="main">
-        <h1>Slide Menu</h1>
-        <p>A jQuery plugin for a multilevel CSS menu with a smooth slide effect and various options.</p>
+    <h2>Multi-purpose menu (left)</h2>
+    <div class="btn-list">
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-left" data-action="toggle">
+        Toggle menu
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-left" data-action="open">
+        Open menu
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-left" data-action="close">
+        Close menu
+      </button>
+    </div>
 
-        <h2>Multi-purpose menu (left)</h2>
-        <div class="btn-list">
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="toggle">Toggle Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="open">Open Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-left" data-action="close">Close Menu</button>
-        </div>
+    <h2>Navigation menu (right)</h2>
+    <div class="btn-list">
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="toggle">
+        Toggle menu
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="open">
+        Open menu
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="close">
+        Close menu
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="back">
+        Navigate back
+      </button>
+      <br>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="navigateTo" data-arg="#special-link-1">
+        Jump to specific link (1)
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="navigateTo" data-arg="#special-link-2">
+        Jump to specific link (2)
+      </button>
+      <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="navigateTo" data-arg="#special-link-3">
+        Jump to specific link (3)
+      </button>
+    </div>
 
-        <h2>Navigation menu (right)</h2>
-        <div class="btn-list">
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="toggle">Toggle Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="open">Open Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="close">Close Menu</button>
-            <button type="button" class="btn slide-menu-control" data-target="test-menu-right" data-action="back">Backward navigation</button>
-        </div>
-    </main>
+    <p>
+      Made with
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon">
+        <path fill="#dc3545" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
+      </svg>
+      by <a href="https://grubersjoe.de">@grubersjoe</a></p>
+  </main>
 
-    <nav class="slide-menu" id="test-menu-left">
-        <div class="controls">
-            <button type="button" class="btn slide-menu-control" data-action="close">Close</button>
-        </div>
+  <nav class="slide-menu" id="test-menu-left">
+    <div class="controls">
+      <button type="button" class="btn slide-menu__control" data-action="close">Close</button>
+    </div>
 
-        <p>You aren't limited to classical navigation menus.</p>
-        <p>In fact you can put anything you like in the menu</p>
-    </nav>
+    <p>Slide Menu can also be used for other content different from traditional menus.</p>
+  </nav>
 
-
-    <nav class="slide-menu" id="test-menu-right">
-        <div class="controls">
-            <button type="button" class="btn slide-menu-control" data-action="close">Close</button>
-            <button type="button" class="btn slide-menu-control" data-action="back">Back</button>
-        </div>
+  <nav class="slide-menu" id="test-menu-right">
+    <div class="controls">
+      <button type="button" class="btn slide-menu__control" data-action="back">Back</button>
+      <button type="button" class="btn slide-menu__control" data-action="close">Close</button>
+    </div>
+    <ul>
+      <li>
+        <a href="http://google.de">News</a>
         <ul>
-            <li>
-                <a href="http://google.de">News</a>
+          <li>
+            <a href="#">News 1.1</a>
+          </li>
+          <li>
+            <a href="http://google.de">News 1.2</a>
+            <ul>
+              <li>
+                <a href="http://google.de">News 1.2.1</a>
+              </li>
+              <li>
+                <a href="#" id="special-link-1">News 1.2.2 &ndash; I'm special (1)!</a>
+              </li>
+              <li>
+                <a href="#">News 1.2.2</a>
+              </li>
+              <li>
+                <a href="#">News 1.2.3</a>
                 <ul>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                    <li>
-                        <a href="http://google.de">Submenu entry</a>
-                        <ul>
-                            <li>
-                                <a href="http://google.de">Subsubmenu entry</a>
-                            </li>
-                            <li>
-                                <a href="#" id="special-link-2">Subsubsubmenu entry - I'm special 2!</a>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                                <ul>
-                                    <li>
-                                        <a href="#">Subsubsubmenu entry</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Subsubsubmenu entry</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Subsubsubmenu entry</a>
-                                    </li>
-                                    <li id="special-link-3">
-                                        <a href="#">Subsubsubmenu entry - I'm special 3!</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Subsubsubmenu entry</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
+                  <li>
+                    <a href="#">News 1.2.3.1</a>
+                  </li>
+                  <li>
+                    <a href="#">News 1.2.3.2</a>
+                  </li>
+                  <li>
+                    <a href="#">News 1.2.3.3</a>
+                  </li>
+                  <li id="special-link-2">
+                    <a href="#">News 1.2.3.4 - I'm special (2)!</a>
+                  </li>
+                  <li>
+                    <a href="#">News 1.2.3.5</a>
+                  </li>
                 </ul>
-            </li>
-            <li>
-                <a href="#" id="special-link-1">Blog</a>
-            </li>
-            <li>
-                <a href="#">About</a>
-                <ul>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                        <ul>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                            <li>
-                                <a href="#">Subsubmenu entry</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                    <li>
-                        <a href="#">Submenu entry</a>
-                    </li>
-                </ul>
-            </li>
+              </li>
+              <li>
+                <a href="#">News 1.2.4</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">News 1.3</a>
+          </li>
+          <li>
+            <a href="#">News 1.3</a>
+          </li>
+          <li>
+            <a href="#">News 1.4</a>
+          </li>
         </ul>
-    </nav>
+      </li>
+      <li>
+        <a href="#" id="special-link-3">Blog</a>
+      </li>
+      <li>
+        <a href="#">About</a>
+        <ul>
+          <li>
+            <a href="#">About 1.1</a>
+          </li>
+          <li>
+            <a href="#">About 1.2</a>
+            <ul>
+              <li>
+                <a href="#">About 1.2.1</a>
+              </li>
+              <li>
+                <a href="#">About 1.2.2</a>
+              </li>
+              <li>
+                <a href="#">About 1.2.3</a>
+              </li>
+              <li>
+                <a href="#">About 1.2.4</a>
+              </li>
+              <li>
+                <a href="#">About 1.2.5</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">About 1.3</a>
+          </li>
+          <li>
+            <a href="#">About 1.4</a>
+          </li>
+          <li>
+            <a href="#">About 1.5</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
 
-    <!-- build:js scripts/slide-menu.js -->
-    <script src="scripts/slide-menu.js"></script>
-    <!-- endbuild -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      new SlideMenu(document.getElementById('test-menu-left'), {
+        position: 'left',
+        submenuLinkAfter: ' >',
+        backLinkBefore: '< '
+      });
 
-    <script defer>
-        (function ($) {
-            $(document).ready(function () {
+      const menuRight = new SlideMenu(document.getElementById('test-menu-right'), {
+        submenuLinkAfter: ' ⇒',
+        backLinkBefore: '⇐ ',
+      });
 
-                var menuLeft = $('#test-menu-left').slideMenu({
-                    position: 'left',
-                    submenuLinkAfter: ' >',
-                    backLinkBefore: '< '
-                });
-
-                var menuRight = $('#test-menu-right').slideMenu({
-                    submenuLinkAfter: ' ⇒',
-                    backLinkBefore: '⇐ '
-                });
-
-                if ($(window).width() > 767) {
-                    menuRight.open(false);
-                }
-
-            });
-        })(jQuery);
-    </script>
+      if (window.innerWidth > 767) {
+        menuRight.open(false);
+      }
+    });
+  </script>
 </body>
 </html>

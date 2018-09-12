@@ -1,0 +1,14 @@
+{
+  "include": [
+    "./src/**/*"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "removeComments": true,
+    "strictNullChecks": true,
+    "target": "es6"
+  }
+}
