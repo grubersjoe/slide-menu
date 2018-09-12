@@ -1,9 +1,14 @@
 {
   "name": "slide-menu",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
-  "description": "A library agnostic multilevel JavaScript menu with a slide effect",
+  "description": "A library agnostic multilevel JavaScript menu with a smooth slide effect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grubersjoe/slide-menu.git"
+  },
+  "bugs": "https://github.com/grubersjoe/slide-menu/issues",
   "main": "dist/slide-menu.js",
   "scripts": {
     "build": "npm run clean && webpack --mode production && npm run post-build",
@@ -15,6 +20,7 @@
   },
   "keywords": [
     "menu",
+    "multi level",
     "navigation"
   ],
   "devDependencies": {

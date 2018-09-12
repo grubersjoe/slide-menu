@@ -3,6 +3,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const packageMeta = require('./package.json');
+
 module.exports = [
   (env, options) => ({
     entry: {
@@ -67,8 +69,17 @@ module.exports = [
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'Slide Menu',
         template: 'src/index.html',
+        templateParameters: {
+          version: packageMeta.version,
+          title: 'Slide Menu',
+          description: packageMeta.description,
+        },
+        meta: {
+          charset: 'utf-8',
+          description: packageMeta.description,
+          viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+        }
       }),
       new MiniCssExtractPlugin({
         filename: '[name].css',
@@ -76,7 +87,7 @@ module.exports = [
     ],
   }),
 
-  // Build legacy code seperately
+  // Build code for legacy browsers seperately
   (env, options) => ({
     entry: {
       'slide-menu.ie': './src/ts/SlideMenu.legacy.ts',
@@ -101,7 +112,7 @@ module.exports = [
                     '@babel/env',
                     {
                       targets: {
-                        browsers: ['> 1%', 'ie > 10']
+                        browsers: ['> 1%', 'ie > 11']
                       },
                       useBuiltIns: 'usage',
                     }
