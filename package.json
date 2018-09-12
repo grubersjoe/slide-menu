@@ -1,6 +1,6 @@
 {
   "name": "slide-menu",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
   "description": "A library agnostic multilevel JavaScript menu with a smooth slide effect",

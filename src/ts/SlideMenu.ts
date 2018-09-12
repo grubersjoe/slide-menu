@@ -36,7 +36,7 @@ enum MenuPosition {
 enum Action {
   Back = 'back',
   Close = 'close',
-  Foward = 'forward',
+  Forward = 'forward',
   Navigate = 'navigate',
   Open = 'open',
 }
@@ -292,7 +292,7 @@ class SlideMenu {
       ul.style.display = 'block';
     }
 
-    const action = dir === Direction.Forward ? Action.Foward : Action.Back;
+    const action = dir === Direction.Forward ? Action.Forward : Action.Back;
     this.triggerEvent(action);
 
     this.level = this.level + dir;
