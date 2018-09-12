@@ -1,22 +1,16 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slide Menu</title>
 
   <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700" rel="stylesheet">
-
-  <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-      crossorigin="anonymous"></script>
-<link href="slide-menu.css" rel="stylesheet"><link href="demo.css" rel="stylesheet"></head>
+<meta name="charset" content="utf-8"><meta name="description" content="A library agnostic multilevel JavaScript menu with a smooth slide effect"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="slide-menu.css" rel="stylesheet"><link href="demo.css" rel="stylesheet"></head>
 <body>
-  <div class="container">
-    <h1>Slide Menu</h1>
-    <p>A library agnostic multilevel JavaScript menu with a smooth slide effect and various options.</p>
+  <main role="main">
+    <h1>Slide Menu
+      <small>1.0.8</small>
+    </h1>
+    <p>A library agnostic multilevel JavaScript menu with a smooth slide effect.</p>
 
     <h2>Multi-purpose menu (left)</h2>
     <div class="btn-list">
@@ -56,14 +50,21 @@
         Jump to specific link (3)
       </button>
     </div>
-  </div>
+
+    <p>
+      Made with
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon">
+        <path fill="#dc3545" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
+      </svg>
+      by <a href="https://grubersjoe.de">@grubersjoe</a></p>
+  </main>
 
   <nav class="slide-menu" id="test-menu-left">
     <div class="controls">
       <button type="button" class="btn slide-menu__control" data-action="close">Close</button>
     </div>
 
-    <p>You aren't limited to classical navigation menus. In fact you can put anything you like in the menu</p>
+    <p>Slide Menu can also be used for other content different from traditional menus.</p>
   </nav>
 
   <nav class="slide-menu" id="test-menu-right">
@@ -170,7 +171,7 @@
   </nav>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
+    document.addEventListener("DOMContentLoaded", function () {
       new SlideMenu(document.getElementById('test-menu-left'), {
         position: 'left',
         submenuLinkAfter: ' >',
@@ -182,7 +183,7 @@
         backLinkBefore: '⇐ '
       });
 
-      if ($(window).width() > 767) {
+      if (window.innerWidth > 767) {
         menuRight.open(false);
       }
     });
