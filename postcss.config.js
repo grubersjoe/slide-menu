@@ -1,7 +1,7 @@
 module.exports = () => ({
   plugins: {
     autoprefixer: {
-      browsers: ['last 2 versions', 'Firefox ESR', 'not dead', 'not ie > 0'],
+      browsers: ['> 1%'],
       remove: false,
     },
     cssnano: {
