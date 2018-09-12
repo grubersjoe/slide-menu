@@ -1,19 +1,34 @@
 # Slide Menu
 
-*A jQuery plugin for a multilevel CSS menu with a smooth slide effect and various options*.
+*A library agnostic multilevel JavaScript menu with a smooth slide effect and various options.*
+
+Support: All current browsers and (if using `dist/slide-menu.ie.js`) IE11+.
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
+## :warning: v1 has been released – breaking changes
+
+Version 1 has been released and includes breaking changes: Since the library has been rewritten in Vanilla JS™, jQuery is no longer a required dependency (*yay!*). This means obviously, that `SlideMenu` also can't be used as a jQuery plugin any more.
+
+See the below instructions how to use the new version. 
+
 ## Install
 ```sh
-npm install slide-menu
+npm install @grubersjoe/slide-menu
 ``` 
 
-## Getting started
-All you need is the traditional CSS menu HTML markup and a wrapper with the class `slide-menu`. Menus can be nested endlessly. To programmatically control the menu you should also asign an ID to be able to use API (see below).
+Now include `dist/slide-menu.js` and `dist/slide-menu.css` into your bundler/ build system of choice or use a 1998 `<script>` tag. `SlideMenu` is available in the global namespace (`window.SlideMenu`) afterwards.
+
+To keep the bundle size small (16 kB vs. 23 kB) Internet Explorer 11 is not supported out of the box. If you need to support Internet Explorer 11 use `dist/slide-menu.ie.js` instead. 
+
+
+## Usage
+All you need is the traditional CSS menu HTML markup and a wrapper with the class `slide-menu`. Menus can be nested endlessly to create the desired hierarchy. If you wish to programmatically control the menu, you should also set an ID to be able to use the API (see below).
+
+**Example**
 
 ```html
-<nav class="slide-menu" id="my-menu">
+<nav class="slide-menu" id="example-menu">
     <ul>
         <li>
             <a href="#">Home</a>
@@ -32,55 +47,57 @@ All you need is the traditional CSS menu HTML markup and a wrapper with the clas
     </ul>
 </nav>
 ```
+
 Create the menu then like this:
 
 ```javascript
-$(document).ready(function () {
-    var menu = $('#my-menu').slideMenu();
+document.addEventListener("DOMContentLoaded", function () {
+  const menu = new SlideMenu(document.getElementById('example-menu'));
 });
 ```
  
 ## Options
- 
-You can pass an options object as argument to the slideMenu() constructor.
+
+The `SlideMenu()` constructor takes an optional second parameter to pass in various options:
   
 Option | Description | Valid values | Default
 --- | --- | --- | ---
-`position` | Position of the menu | `"left"` or `"right"` | `"right"`
-`showBackLink` | Show a link to parent level in submenus | *boolean* | `true`
-`keycodeOpen` | Keycode used to open the menu | [Any valid JS keycode](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode) | `null`
-`keycodeClose` | Keycode used to close the menu | [Any valid JS keycode](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode) | `27` (ESC)
-`submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  *empty*
-`submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  *empty*
-`backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  *empty*
-`backLinkAfter` | HTML to append to back link in submenus | HTML code |  *empty*
+`position` | Position of the menu | `'left'` or `'right'` | `'right'`
+`showBackLink` | Add a link to navigate back in submenus (first entry) | *boolean* | `true`
+`keycodeOpen` | Key used to open the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
+`keycodeClose` | Key used to close the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
+`submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  `''`
+`submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  `''`
+`backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  `''`
+`backLinkAfter` | HTML to append to back link in submenus | HTML code |  `''`
  
  Example:
  
  ```javascript
- $(document).ready(function () {
-     var menu = $('#my-menu').slideMenu({
-         showBackLink: false,
-         submenuLinkAfter: ' <strong>*</strong>'
-     });
- });
+document.addEventListener("DOMContentLoaded", function () {
+  const menu = new SlideMenu(document.getElementById('example-menu'),{
+      showBackLink: false,
+      submenuLinkAfter: ' <strong>⇒</strong>'
+  });
+});
  ```
  
 ## API
 
 You can call the API in two different ways:
 
-* Reuse the variable of the jQuery element, where the plugin has been initialized: 
+* Reuse the reference to the `SlideMenu` instance directly: 
     ```javascript
-    var menu = $('#my-menu').data('slideMenu');
-    
-    menu.open();
-    menu.close(false);
+    const menu = new SlideMenu(document.getElementById('example-menu'));
+  
+    // ... later
+    menu.close();
     ```
-* If you need to control an existing menu, you can fetch the menu instance  any time this way:
+* The `SlideMenu` instance is added as property of the menu DOM element (not incredibly kosher I guess). So if you need to control an existing menu without a reference to it, you can fetch it any time this way:
 
     ```javascript
-    $('#my-menu').data('slide-menu').toggle();
+    const menu = document.getElementById('example-menu')._slideMenu;
+    menu.open();
     ```
 
 ### Methods
@@ -91,11 +108,11 @@ You can call the API in two different ways:
 * `back()` - Navigate on level back if possible
 * `navigateTo(target)`
     
-    Open the menu level which contains specified menu element. `target` can be any jQuery compatible string selector, a plain DOM object or a jQuery object. The first found element will be used.
+    Open the menu level which contains specified menu element. `target` can either be a `document.querySelector` compatible string selector or the the DOM element (inside the menu). The first found element (if any) will be used.
 
 ### Events
 
-All events have also an `*-after` equivalent, which is triggered after the transition is complete.
+`SlideMenu` emits events for all kind of actions. All of the events also have  an `*-after` equivalent, which is triggered after the step is complete (completely animated).
 
 * `sm.open[-after]`
 
@@ -112,14 +129,14 @@ All events have also an `*-after` equivalent, which is triggered after the trans
 
 ### Control buttons
  
-Buttons to control the menu can be created easily. Add the class `slide-menu-control` to links or buttons and set the `data` attributes `target` to the ID of the desired menu and `action` to the API method:
+Buttons to control the menu can be created easily. Add the class `slide-menu__control` to anchors or buttons and set the `data` attributes `target` to the ID of the desired menu and `action` to the API method:
 
 ```html
-<a class="slide-menu-control" data-target="my-menu" data-action="open">Open</a>
-<a class="slide-menu-control" data-target="my-menu" data-action="close">Close</a>
+<button type="button" class="slide-menu__control" data-action="open">Open</button>
+<button type="button" class="slide-menu__control" data-action="back">Back</button>
 ```
 
-Inside the menu container the attribute `data-target` can be omitted or set to to the string `this` to control *this* menu.
+*Inside* the menu container the attribute `data-target` can be omitted or set to to the string `this` to control *this* menu.
 
 ```html
 <a class="slide-menu-control" data-action="close">Close this menu</a>
