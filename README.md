@@ -2,15 +2,15 @@
 
 *A library agnostic multilevel JavaScript menu with a smooth slide effect and various options.*
 
-Support: All current browsers and (if using `dist/slide-menu.ie.js`) IE11+.
+Support: All current browsers and IE11+ (if using `dist/slide-menu.ie.js`).
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
-## :warning: v1 has been released – breaking changes
+## v1 has been released – breaking changes
 
-Version 1 has been released and includes breaking changes: Since the library has been rewritten in Vanilla JS™, jQuery is no longer a required dependency (*yay!*). This means obviously, that `SlideMenu` also can't be used as a jQuery plugin any more.
+Version 1 has been released and includes breaking changes: Since the library has been rewritten in Typescript, jQuery is no longer a required dependency (yay!). Obviously, this also menas, that `SlideMenu` can't be used as a jQuery plugin any more.
 
-See the below instructions how to use the new version. 
+See below instructions how to use the new version. 
 
 ## Install
 ```sh
@@ -29,22 +29,22 @@ All you need is the traditional CSS menu HTML markup and a wrapper with the clas
 
 ```html
 <nav class="slide-menu" id="example-menu">
-    <ul>
-        <li>
-            <a href="#">Home</a>
-            <ul>
-                <li><a href="#">Submenu entry 1</a></li>
-                <li><a href="#">Submenu entry 2</a></li>
-                <li><a href="#">Submenu entry 3</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="/blog">Blog</a>
-        </li>
-        <li>
-            <a href="/about">About</a>
-        </li>
-    </ul>
+  <ul>
+    <li>
+      <a href="#">Home</a>
+      <ul>
+        <li><a href="#">Submenu entry 1</a></li>
+        <li><a href="#">Submenu entry 2</a></li>
+        <li><a href="#">Submenu entry 3</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="/blog">Blog</a>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+  </ul>
 </nav>
 ```
 
@@ -107,25 +107,16 @@ You can call the API in two different ways:
 * `close(animate = true)` - Close the menu
 * `back()` - Navigate on level back if possible
 * `navigateTo(target)`
-    
     Open the menu level which contains specified menu element. `target` can either be a `document.querySelector` compatible string selector or the the DOM element (inside the menu). The first found element (if any) will be used.
 
 ### Events
 
 `SlideMenu` emits events for all kind of actions. All of the events also have  an `*-after` equivalent, which is triggered after the step is complete (completely animated).
 
-* `sm.open[-after]`
-
-    Fires immediately when the `open()` method is called or after the animation is complete respectively.
-* `sm.close[-after]`
-
-    Fires immediately when the `close()` method is called or after the animation is complete respectively. 
-* `sm.forward[-after]`
-
-    Fires immediately when navigating forward in the menu hierarchy or after the animation is complete respectively. 
-* `sm.back[-after]`
-
-    Fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
+* `sm.open[-after]` fires immediately when the `open()` method is called or after the animation is complete respectively.
+* `sm.close[-after]` fires immediately when the `close()` method is called or after the animation is complete respectively. 
+* `sm.forward[-after]`fires immediately when navigating forward in the menu hierarchy or after the animation is complete respectively. 
+* `sm.back[-after]` fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
 
 ### Control buttons
  
