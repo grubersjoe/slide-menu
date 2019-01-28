@@ -3,47 +3,47 @@ $sm-transition-dur: 300ms !default;
 $sm-transition-easing: ease-in-out !default;
 
 .slide-menu {
-    position: fixed;
-    width: $sm-menu-width;
-    max-width: 100%;
-    height: 100vh;
-    top: 0;
-    right: 0;
-    display: none;
-    overflow: hidden;
-    box-sizing: border-box;
-    transition: transform $sm-transition-dur $sm-transition-easing;
-    transform: translateX(100%);
-    will-change: transform;
-    z-index: 1000;
+  position: fixed;
+  width: $sm-menu-width;
+  max-width: 100%;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  display: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: transform $sm-transition-dur $sm-transition-easing;
+  transform: translateX(100%);
+  will-change: transform;
+  z-index: 1000;
 
-    .slide-menu__slider {
-        width: 100%;
-        transition: transform $sm-transition-dur $sm-transition-easing;
-        transform: translateX(0);
-        will-change: transform;
-    }
+  .slide-menu__slider {
+    width: 100%;
+    transition: transform $sm-transition-dur $sm-transition-easing;
+    transform: translateX(0);
+    will-change: transform;
+  }
+
+  ul {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
 
     ul {
-        position: relative;
-        width: 100%;
-        margin: 0;
-        padding-left: 0;
-        list-style: none;
-
-        ul {
-            position: absolute;
-            top: 0;
-            left: 100%;
-            display: none;
-        }
-
-        a {
-            display: block;
-        }
+      position: absolute;
+      top: 0;
+      left: 100%;
+      display: none;
     }
 
     a {
-        cursor: pointer;
+      display: block;
     }
+  }
+
+  a {
+    cursor: pointer;
+  }
 }
