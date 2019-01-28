@@ -1,11 +1,12 @@
 $color-primary: #368883;
+$color-danger: #dc3545;
 
 *:active, *:focus {
   outline: none !important;
 }
 
 html {
-  font-size: 1.2rem;
+  font-size: 20px;
 }
 
 body {
@@ -19,17 +20,16 @@ h1 {
   font-weight: bold;
 
   small {
-    margin-left: .3rem;
+    margin-left: 0.3rem;
     color: fade_out(#000, 0.6);
     font-size: 60%;
   }
 }
 
 h2 {
+  margin-top: 1.5rem;
   margin-bottom: 1rem;
-  font-size: 1.3rem;
-  font-style: italic;
-  font-weight: normal;
+  font-size: 1rem;
 }
 
 a {
@@ -41,13 +41,12 @@ p {
   margin-bottom: 2em;
 }
 
-.btn-list {
-  margin-bottom: 1.5rem;
+footer {
+  margin-top: 2rem;
 }
 
-
 .btn {
-  padding: .6rem .8rem .64rem .8rem;
+  padding: 0.6rem 0.8rem 0.64rem 0.8rem;
   border: none;
   color: #fff;
   cursor: pointer;
@@ -58,8 +57,8 @@ p {
 
 
 .icon {
-  height: .6rem;
-  margin: 0 .1rem;
+  height: 0.6rem;
+  margin: 0 0.1rem;
 }
 
 main {
@@ -70,9 +69,11 @@ main {
   .btn {
     width: 100%;
     display: block;
-    margin: 0 0.25rem 0.75rem 0;
+    margin: 0 0.2rem 0.8rem 0;
     background-color: $color-primary;
     border-radius: 0.2rem;
+    font-size: 75%;
+    text-transform: uppercase;
   }
 
   @media (min-width: 768px) {
@@ -86,6 +87,14 @@ main {
         background-color: darken($color-primary, 6%);
       }
     }
+
+    .btn-danger {
+      background-color: $color-danger;
+
+      &:hover {
+        background-color: darken($color-danger, 12% + 4%);
+      }
+    }
   }
 }
 
@@ -94,7 +103,7 @@ main {
   background-color: $color-primary;
 
   &, a {
-    font-size: .85rem;
+    font-size: 0.85rem;
     color: #fff;
   }
 
@@ -126,12 +135,12 @@ main {
 
     &:first-of-type:before {
       content: '⇐';
-      margin-right: .5rem;
+      margin-right: 0.5rem;
     }
 
     &:last-of-type:before {
       content: '❌';
-      margin-right: .5rem;
+      margin-right: 0.5rem;
     }
   }
 }
