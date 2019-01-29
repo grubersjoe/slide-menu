@@ -188,9 +188,8 @@ class SlideMenu {
     // Remove the wrapper element
     unwrapElement(this.wrapperElem);
 
-    // TODO: Check out if this makes sense
     // Remove inline styles
-    // this.menuElem.style.cssText = '';
+    this.menuElem.style.cssText = '';
 
     // Delete the reference to *this* instance
     // NOTE: Garbage collection is not possible, as long as other references to this object exist
@@ -448,7 +447,7 @@ class SlideMenu {
     if (submenuLinkBefore) {
       const linkBeforeElem = document.createElement('span');
       linkBeforeElem.classList.add(SlideMenu.CLASS_NAMES.decorator);
-      linkBeforeElem.innerText = submenuLinkBefore;
+      linkBeforeElem.innerHTML = submenuLinkBefore;
 
       anchor.insertBefore(linkBeforeElem, anchor.firstChild);
     }
@@ -456,7 +455,7 @@ class SlideMenu {
     if (submenuLinkAfter) {
       const linkAfterElem = document.createElement('span');
       linkAfterElem.classList.add(SlideMenu.CLASS_NAMES.decorator);
-      linkAfterElem.innerText = submenuLinkAfter;
+      linkAfterElem.innerHTML = submenuLinkAfter;
 
       anchor.appendChild(linkAfterElem);
     }
