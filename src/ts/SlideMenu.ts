@@ -1,6 +1,6 @@
 import '../styles/slide-menu.scss';
 
-import { parents, parentsOne, unwrapElement, wrapElement } from './DomUtils';
+import { parents, parentsOne, unwrapElement, wrapElement } from './utils/dom';
 
 declare let window: IWindow;
 
@@ -13,14 +13,14 @@ interface ISlideMenuElement extends HTMLElement {
 }
 
 interface IMenuOptions {
-  position: string;
-  showBackLink: boolean;
-  keyOpen: string;
-  keyClose: string;
-  submenuLinkBefore: string;
-  submenuLinkAfter: string;
   backLinkBefore: string;
   backLinkAfter: string;
+  keyOpen: string;
+  keyClose: string;
+  position: string;
+  showBackLink: boolean;
+  submenuLinkBefore: string;
+  submenuLinkAfter: string;
 }
 
 enum Direction {
@@ -58,7 +58,7 @@ class SlideMenu {
     active: `${SlideMenu.NAMESPACE}__submenu--active`,
     control: `${SlideMenu.NAMESPACE}__control`,
     decorator: `${SlideMenu.NAMESPACE}__decorator`,
-    slider: `${SlideMenu.NAMESPACE}__slider`,
+    wrapper: `${SlideMenu.NAMESPACE}__slider`,
   };
 
   private level: number;
@@ -83,7 +83,7 @@ class SlideMenu {
 
     // Add wrapper (for the slide effect)
     this.wrapperElem = document.createElement('div');
-    this.wrapperElem.classList.add(SlideMenu.CLASS_NAMES.slider);
+    this.wrapperElem.classList.add(SlideMenu.CLASS_NAMES.wrapper);
 
     const firstUl = this.menuElem.querySelector('ul');
     if (firstUl) {
