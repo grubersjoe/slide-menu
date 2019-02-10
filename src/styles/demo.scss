@@ -34,7 +34,7 @@ h2 {
 
 a {
   text-decoration: none;
-  color: $color-primary;
+  color: saturate(lighten($color-primary, 16%), 8%);
 }
 
 a, .btn {
@@ -43,7 +43,11 @@ a, .btn {
 }
 
 p {
-  margin-bottom: 2em;
+  margin: 0 0 0.5rem;
+}
+
+p:last-of-type {
+  margin: 0 0 2rem;
 }
 
 footer {
@@ -51,7 +55,6 @@ footer {
   font-size: 90%;
 
   a {
-    color: inherit;
     font-style: italic;
   }
 
@@ -111,6 +114,11 @@ main {
         background-color: darken($color-danger, 8%);
       }
     }
+  }
+
+  #events {
+    font-family: monospace;
+    font-size: 80%;
   }
 }
 

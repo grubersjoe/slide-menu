@@ -19,7 +19,7 @@ npm install @grubersjoe/slide-menu
 
 Now import `dist/slide-menu.js` and `dist/slide-menu.css` in your bundler or build system of choice or use a 1998 `<script>` and `<link>` tag. Afterwards `SlideMenu` will be available in the global namespace (`window.SlideMenu`).
 
-To keep the bundle size small (16 kB vs. 23 kB) Internet Explorer 11 is not supported out of the box. If you need to support Internet Explorer 11 use `dist/slide-menu.ie.js` instead. 
+To keep the bundle size small (17 kB vs. 22 kB) Internet Explorer 11 is not supported out of the box. If you need to support Internet Explorer 11 use `dist/slide-menu.ie.js` instead. 
 
 
 ## Usage
@@ -115,10 +115,14 @@ You can call the API in two different ways:
 
 `SlideMenu` emits events for all kind of actions, which trigger as soon as the action is method is called. Plus, all events have  also an `<event>-after` equivalent, which is fired after the step is complete (completely animated).
 
-* `sm.open[-after]` fires immediately when the `open()` method is called or after the animation is complete respectively.
+* `sm.back[-after]` fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
 * `sm.close[-after]` fires immediately when the `close()` method is called or after the animation is complete respectively. 
 * `sm.forward[-after]`fires immediately when navigating forward in the menu hierarchy or after the animation is complete respectively. 
-* `sm.back[-after]` fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
+* `sm.navigate[-after]`fires immediately when calling the `navigateTo()` method or after the animation is complete respectively. 
+* `sm.open[-after]` fires immediately when the `open()` method is called or after the animation is complete respectively.
+
+
+Make sure to add the event listener to the HTML element, which contains the menu, since the events for this specific menu are dispatched there!
 
 ### Control buttons
  

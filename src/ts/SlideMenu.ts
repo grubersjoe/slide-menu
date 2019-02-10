@@ -134,9 +134,9 @@ class SlideMenu {
     this.isOpen = show;
 
     if (animate) {
-      this.slideElem(this.menuElem, offset);
+      this.moveSlider(this.menuElem, offset);
     } else {
-      const action = this.slideElem.bind(this, this.menuElem, offset);
+      const action = this.moveSlider.bind(this, this.menuElem, offset);
       this.runWithoutAnimation(action);
     }
   }
@@ -240,7 +240,7 @@ class SlideMenu {
     // Trigger the animation only if currently on different level
     if (level > -1 && level !== this.level) {
       this.level = level;
-      this.slideElem(this.wrapperElem, -this.level * 100);
+      this.moveSlider(this.wrapperElem, -this.level * 100);
     }
 
     parentUl.forEach((ul: HTMLUListElement) => {
@@ -269,12 +269,19 @@ class SlideMenu {
 
     // Handler for end of CSS transition
     this.menuElem.addEventListener('transitionend', this.onTransitionEnd.bind(this));
+    this.wrapperElem.addEventListener('transitionend', this.onTransitionEnd.bind(this));
 
     this.initKeybindings();
     this.initSubmenuVisibility();
   }
 
-  private onTransitionEnd() {
+  private onTransitionEnd(event: Event) {
+    // Ensure the transitionEnd event was fired by the correct element
+    // (elements inside the menu might use CSS transitions as well)
+    if (event.target !== this.menuElem && event.target !== this.wrapperElem) {
+      return;
+    }
+
     this.isAnimating = false;
 
     if (this.lastAction) {
@@ -353,7 +360,7 @@ class SlideMenu {
     this.triggerEvent(action);
 
     this.level = this.level + dir;
-    this.slideElem(this.wrapperElem, offset);
+    this.moveSlider(this.wrapperElem, offset);
   }
 
   /**
@@ -361,7 +368,7 @@ class SlideMenu {
    * @param elem
    * @param offset
    */
-  private slideElem(elem: HTMLElement, offset: string | number): void {
+  private moveSlider(elem: HTMLElement, offset: string | number): void {
     // Add percentage sign
     if (!offset.toString().includes('%')) {
       offset += '%';

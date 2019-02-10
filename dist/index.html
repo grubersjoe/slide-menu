@@ -1,16 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Slide Menu</title>
+  <title>Slide Menu (Demo)</title>
 
   <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700" rel="stylesheet">
 <meta name="charset" content="utf-8"><meta name="description" content="A library agnostic multilevel page menu with a smooth slide effect based on CSS transitions"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="slide-menu.css" rel="stylesheet"><link href="demo.css" rel="stylesheet"></head>
 <body>
   <main role="main">
     <h1>Slide Menu
-      <small>v1.1.2</small>
+      <small>v1.1.3</small>
     </h1>
     <p>A library agnostic multilevel page menu with a smooth slide effect based on CSS transitions.</p>
+    <p>
+      <a href="https://github.com/grubersjoe/slide-menu">Read the documentation here.</a>
+    </p>
 
     <h2>Multi-purpose menu (left)</h2>
     <div>
@@ -179,23 +182,39 @@
   </nav>
 
   <script>
-    function logEvent(eventName) {
+    function logEvent(id, event) {
       const events = document.getElementById('events');
       const li = document.createElement('li');
+      const time = parseInt(event.timeStamp);
 
-      li.appendChild(document.createTextNode(eventName);
+      // html-webpack-plugin does not work with ES6 template strings =/
+      li.appendChild(document.createTextNode(id + ': ' + time + ' - ' + event.type));
       events.appendChild(li);
     }
 
     document.addEventListener("DOMContentLoaded", function () {
       const menuLeftElem = document.getElementById('test-menu-left');
+      const menuRightElem = document.getElementById('test-menu-right');
+
+      const allEvents = [
+        'sm.back', 'sm.back-after',
+        'sm.close', 'sm.close-after',
+        'sm.forward', 'sm.forward-after',
+        'sm.navigate', 'sm.navigate-after',
+        'sm.open', 'sm.open-after',
+      ];
+
+      allEvents.forEach(eventName => {
+        menuLeftElem.addEventListener(eventName, event => logEvent('Menu left', event));
+        menuRightElem.addEventListener(eventName, event => logEvent('Menu right', event));
+      });
+
       const menuLeft = new SlideMenu(menuLeftElem, {
         position: 'left',
         submenuLinkAfter: ' ⮞',
         backLinkBefore: '⮜ '
       });
 
-      const menuRightElem = document.getElementById('test-menu-right');
       const menuRight = new SlideMenu(menuRightElem, {
         keyClose: 'Escape',
         submenuLinkAfter: '<span style="margin-left: 1em; font-size: 85%;">⮞</span>',
@@ -205,10 +224,6 @@
       if (window.innerWidth > 767) {
         menuRight.open(false);
       }
-
-      menuRightElem.addEventListener('sm.open', (e) => {
-        console.log(e);
-      });
     });
   </script>
 <script type="text/javascript" src="slide-menu.js"></script><script type="text/javascript" src="demo.js"></script></body>
