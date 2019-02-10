@@ -1,53 +1,70 @@
-$color-primary: #368883;
+$color-primary: hsl(206, 36%, 20%);
+$color-danger: hsl(356, 62%, 38%);
 
 *:active, *:focus {
   outline: none !important;
 }
 
 html {
-  font-size: 1.2rem;
+  font-size: 20px;
 }
 
 body {
   font-family: 'Lato', sans-serif;
   line-height: 1.4;
-  color: fade_out(#000, 0.1);
+  color: fade_out(#000, 0.06);
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
 
   small {
-    margin-left: .3rem;
-    color: fade_out(#000, 0.6);
+    margin-left: 0.3rem;
+    color: fade_out(#000, 0.4);
     font-size: 60%;
   }
 }
 
 h2 {
+  margin-top: 1.5rem;
   margin-bottom: 1rem;
-  font-size: 1.3rem;
-  font-style: italic;
-  font-weight: normal;
+  font-size: 1rem;
 }
 
 a {
   text-decoration: none;
-  color: $color-primary;
+  color: saturate(lighten($color-primary, 16%), 8%);
+}
+
+a, .btn {
+  transition: background-color 0.15s ease-in-out;
+  will-change: background-color;
 }
 
 p {
-  margin-bottom: 2em;
+  margin: 0 0 0.5rem;
 }
 
-.btn-list {
-  margin-bottom: 1.5rem;
+p:last-of-type {
+  margin: 0 0 2rem;
 }
 
+footer {
+  margin-top: 2rem;
+  font-size: 90%;
+
+  a {
+    font-style: italic;
+  }
+
+  path {
+    fill: $color-danger;
+  }
+}
 
 .btn {
-  padding: .6rem .8rem .64rem .8rem;
+  padding: 0.6rem 0.8rem 0.64rem 0.8rem;
   border: none;
   color: #fff;
   cursor: pointer;
@@ -58,8 +75,8 @@ p {
 
 
 .icon {
-  height: .6rem;
-  margin: 0 .1rem;
+  height: 0.6rem;
+  margin: 0 0.1rem;
 }
 
 main {
@@ -71,8 +88,11 @@ main {
     width: 100%;
     display: block;
     margin: 0 0.25rem 0.75rem 0;
-    background-color: $color-primary;
+    background-color: lighten($color-primary, 8%);
     border-radius: 0.2rem;
+    font-size: 70%;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
   }
 
   @media (min-width: 768px) {
@@ -83,9 +103,22 @@ main {
       display: inline-block;
 
       &:hover {
-        background-color: darken($color-primary, 6%);
+        background-color: $color-primary;
       }
     }
+
+    .btn-danger {
+      background-color: $color-danger;
+
+      &:hover {
+        background-color: darken($color-danger, 8%);
+      }
+    }
+  }
+
+  #events {
+    font-family: monospace;
+    font-size: 80%;
   }
 }
 
@@ -94,14 +127,14 @@ main {
   background-color: $color-primary;
 
   &, a {
-    font-size: .85rem;
+    font-size: 0.8rem;
     color: #fff;
   }
 
   a {
     padding: 0.9rem 1.5rem;
+    border-bottom: solid 1px darken($color-primary, 8%);
     text-decoration: none;
-    border-bottom: solid 1px darken($color-primary, 6%);
 
     &:hover {
       background-color: darken($color-primary, 6%);
@@ -114,25 +147,34 @@ main {
   }
 
   .btn {
-    padding: 0.5rem;
+    padding: 0.75rem 1.5rem;
     flex: 1 0 auto;
     font-size: 90%;
     color: #fff;
-    background-color: darken($color-primary, 12%);
+    background-color: darken($color-primary, 6%);
+    text-transform: uppercase;
 
-    &:hover {
-      background-color: darken($color-primary, 12% + 4%);
+    &:first-of-type {
+      text-align: left;
+
+      &:before {
+        content: '⮜';
+        margin-right: 0.5rem;
+      }
     }
 
-    &:first-of-type:before {
-      content: '⇐';
-      margin-right: .5rem;
-    }
+    &:last-of-type {
+      text-align: right;
 
-    &:last-of-type:before {
-      content: '❌';
-      margin-right: .5rem;
+      &:before {
+        content: '✕';
+        margin-right: 0.5rem;
+      }
     }
+  }
+
+  .slide-menu__backlink {
+    text-transform: uppercase;
   }
 }
 

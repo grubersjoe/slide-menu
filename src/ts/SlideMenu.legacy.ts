@@ -1,2 +1,2 @@
-import './Polyfills';
+import './utils/polyfills';
 import './SlideMenu';

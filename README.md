@@ -1,14 +1,14 @@
 # Slide Menu
 
-*A library agnostic multilevel JavaScript menu with a smooth slide effect and various options.*
+*A library agnostic multilevel page menu with a smooth slide effect based on CSS transitions and various options.*
 
 Support: All current browsers and IE11+ (if using `dist/slide-menu.ie.js`).
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
-## v1 has been released – breaking changes
+## Breaking changes
 
-Version 1 has been released and includes breaking changes: Since the library has been rewritten in Typescript, jQuery is no longer a required dependency (yay!). Obviously, this also menas, that `SlideMenu` can't be used as a jQuery plugin any more.
+Version 1.0 has been released and includes breaking changes: Since the library has been rewritten in TypeScript, jQuery is no longer a required dependency. Obviously, this also means, that `SlideMenu` can't be used as a jQuery plugin any more.
 
 See below instructions how to use the new version. 
 
@@ -17,9 +17,9 @@ See below instructions how to use the new version.
 npm install @grubersjoe/slide-menu
 ``` 
 
-Now include `dist/slide-menu.js` and `dist/slide-menu.css` into your bundler/ build system of choice or use a 1998 `<script>` tag. `SlideMenu` is available in the global namespace (`window.SlideMenu`) afterwards.
+Now import `dist/slide-menu.js` and `dist/slide-menu.css` in your bundler or build system of choice or use a 1998 `<script>` and `<link>` tag. Afterwards `SlideMenu` will be available in the global namespace (`window.SlideMenu`).
 
-To keep the bundle size small (16 kB vs. 23 kB) Internet Explorer 11 is not supported out of the box. If you need to support Internet Explorer 11 use `dist/slide-menu.ie.js` instead. 
+To keep the bundle size small (17 kB vs. 22 kB) Internet Explorer 11 is not supported out of the box. If you need to support Internet Explorer 11 use `dist/slide-menu.ie.js` instead. 
 
 
 ## Usage
@@ -52,7 +52,8 @@ Create the menu then like this:
 
 ```javascript
 document.addEventListener("DOMContentLoaded", function () {
-  const menu = new SlideMenu(document.getElementById('example-menu'));
+  const menuElement = document.getElementById('example-menu');
+  const menu = new SlideMenu(menuElement);
 });
 ```
  
@@ -62,14 +63,14 @@ The `SlideMenu()` constructor takes an optional second parameter to pass in vari
   
 Option | Description | Valid values | Default
 --- | --- | --- | ---
+`backLinkAfter` | HTML to append to back link in submenus | HTML code |  `''`
+`backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  `''`
+`keycodeClose` | Key used to close the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
+`keycodeOpen` | Key used to open the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
 `position` | Position of the menu | `'left'` or `'right'` | `'right'`
 `showBackLink` | Add a link to navigate back in submenus (first entry) | *boolean* | `true`
-`keycodeOpen` | Key used to open the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
-`keycodeClose` | Key used to close the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
 `submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  `''`
 `submenuLinkAfter` | HTML to append to links with a submenu | HTML code |  `''`
-`backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  `''`
-`backLinkAfter` | HTML to append to back link in submenus | HTML code |  `''`
  
  Example:
  
@@ -86,14 +87,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 You can call the API in two different ways:
 
-* Reuse the reference to the `SlideMenu` instance directly: 
+* Reuse the reference to the `SlideMenu` instance: 
     ```javascript
     const menu = new SlideMenu(document.getElementById('example-menu'));
   
     // ... later
     menu.close();
     ```
-* The `SlideMenu` instance is added as property of the menu DOM element (not incredibly kosher I guess). So if you need to control an existing menu without a reference to it, you can fetch it any time this way:
+* The `SlideMenu` instance is also added as property of the menu DOM element (I'm still not sure if this might be a really bad idea). So if you need to control an existing menu without a reference to it, you can fetch it any time this way:
 
     ```javascript
     const menu = document.getElementById('example-menu')._slideMenu;
@@ -102,21 +103,26 @@ You can call the API in two different ways:
 
 ### Methods
 
-* `toggle(animate = true)` - Toggle the menu
-* `open(animate = true)` - Open the menu
 * `close(animate = true)` - Close the menu
 * `back()` - Navigate on level back if possible
+* `destroy()` - revert all DOM changes made by SlideMenu. This includes inline styles, but not the `slide-menu` class name for the container element.
 * `navigateTo(target)`
     Open the menu level which contains specified menu element. `target` can either be a `document.querySelector` compatible string selector or the the DOM element (inside the menu). The first found element (if any) will be used.
+* `open(animate = true)` - Open the menu
+* `toggle(animate = true)` - Toggle the menu
 
 ### Events
 
-`SlideMenu` emits events for all kind of actions. All of the events also have  an `*-after` equivalent, which is triggered after the step is complete (completely animated).
+`SlideMenu` emits events for all kind of actions, which trigger as soon as the action is method is called. Plus, all events have  also an `<event>-after` equivalent, which is fired after the step is complete (completely animated).
 
-* `sm.open[-after]` fires immediately when the `open()` method is called or after the animation is complete respectively.
+* `sm.back[-after]` fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
 * `sm.close[-after]` fires immediately when the `close()` method is called or after the animation is complete respectively. 
 * `sm.forward[-after]`fires immediately when navigating forward in the menu hierarchy or after the animation is complete respectively. 
-* `sm.back[-after]` fires immediately when navigating backwards in the menu hierarchy or after the animation is complete respectively. 
+* `sm.navigate[-after]`fires immediately when calling the `navigateTo()` method or after the animation is complete respectively. 
+* `sm.open[-after]` fires immediately when the `open()` method is called or after the animation is complete respectively.
+
+
+Make sure to add the event listener to the HTML element, which contains the menu, since the events for this specific menu are dispatched there!
 
 ### Control buttons
  
@@ -132,4 +138,19 @@ Buttons to control the menu can be created easily. Add the class `slide-menu__co
 ```html
 <a class="slide-menu-control" data-action="close">Close this menu</a>
 <a class="slide-menu-control" data-target="this" data-action="close">Close this menu</a>
+```
+
+## Development
+
+```sh
+yarn install
+yarn start:dev
+```
+
+Open http://localhost:9000/.
+
+To create a production build:
+
+```sh
+yarn build && yarn post-build
 ```
