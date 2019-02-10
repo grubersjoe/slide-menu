@@ -8,7 +8,7 @@
 <body>
   <main role="main">
     <h1>Slide Menu
-      <small><%= version %></small>
+      <small>v<%= version %></small>
     </h1>
     <p><%= description %>.</p>
 
@@ -47,18 +47,21 @@
         Jump to specific link (2)
       </button>
       <button type="button" class="btn slide-menu__control" data-target="test-menu-right" data-action="navigateTo" data-arg="#special-link-3">
-        Jump to specific link (3)
+        Jump to specific link (Blog)
       </button>
       <br>
       <button type="button" class="btn btn-danger slide-menu__control" data-target="test-menu-right" data-action="destroy">
-        Destroy the menu
+        Destroy the right menu
       </button>
     </div>
+
+    <h2>Events</h2>
+    <ul id="events"></ul>
 
     <footer>
       Made with
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon">
-        <path fill="#dc3545" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
+        <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
       </svg>
       by <a href="https://grubersjoe.de">@grubersjoe</a>
     </footer>
@@ -69,7 +72,7 @@
       <button type="button" class="btn slide-menu__control" data-action="close">Close</button>
     </div>
 
-    <p>Slide Menu can also be used for other content different from traditional menus.</p>
+    <p><em>Slide Menu</em> can also be used for other content different from traditional menus.</p>
   </nav>
 
   <nav class="slide-menu" id="test-menu-right">
@@ -176,21 +179,36 @@
   </nav>
 
   <script>
+    function logEvent(eventName) {
+      const events = document.getElementById('events');
+      const li = document.createElement('li');
+
+      li.appendChild(document.createTextNode(eventName);
+      events.appendChild(li);
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
-      const menuLeft = new SlideMenu(document.getElementById('test-menu-left'), {
+      const menuLeftElem = document.getElementById('test-menu-left');
+      const menuLeft = new SlideMenu(menuLeftElem, {
         position: 'left',
-        submenuLinkAfter: ' >',
-        backLinkBefore: '< '
+        submenuLinkAfter: ' ⮞',
+        backLinkBefore: '⮜ '
       });
 
-      const menuRight = new SlideMenu(document.getElementById('test-menu-right'), {
-        submenuLinkAfter: ' ⇒',
-        backLinkBefore: '⇐ ',
+      const menuRightElem = document.getElementById('test-menu-right');
+      const menuRight = new SlideMenu(menuRightElem, {
+        keyClose: 'Escape',
+        submenuLinkAfter: '<span style="margin-left: 1em; font-size: 85%;">⮞</span>',
+        backLinkBefore: '<span style="margin-right: 1em; font-size: 85%;">⮜</span>'
       });
 
       if (window.innerWidth > 767) {
         menuRight.open(false);
       }
+
+      menuRightElem.addEventListener('sm.open', (e) => {
+        console.log(e);
+      });
     });
   </script>
 </body>

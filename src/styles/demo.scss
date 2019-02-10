@@ -1,5 +1,5 @@
-$color-primary: #368883;
-$color-danger: #dc3545;
+$color-primary: hsl(206, 36%, 20%);
+$color-danger: hsl(356, 62%, 38%);
 
 *:active, *:focus {
   outline: none !important;
@@ -12,16 +12,16 @@ html {
 body {
   font-family: 'Lato', sans-serif;
   line-height: 1.4;
-  color: fade_out(#000, 0.1);
+  color: fade_out(#000, 0.06);
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
 
   small {
     margin-left: 0.3rem;
-    color: fade_out(#000, 0.6);
+    color: fade_out(#000, 0.4);
     font-size: 60%;
   }
 }
@@ -37,12 +37,27 @@ a {
   color: $color-primary;
 }
 
+a, .btn {
+  transition: background-color 0.15s ease-in-out;
+  will-change: background-color;
+}
+
 p {
   margin-bottom: 2em;
 }
 
 footer {
   margin-top: 2rem;
+  font-size: 90%;
+
+  a {
+    color: inherit;
+    font-style: italic;
+  }
+
+  path {
+    fill: $color-danger;
+  }
 }
 
 .btn {
@@ -69,10 +84,11 @@ main {
   .btn {
     width: 100%;
     display: block;
-    margin: 0 0.2rem 0.8rem 0;
-    background-color: $color-primary;
+    margin: 0 0.25rem 0.75rem 0;
+    background-color: lighten($color-primary, 8%);
     border-radius: 0.2rem;
-    font-size: 75%;
+    font-size: 70%;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
   }
 
@@ -84,7 +100,7 @@ main {
       display: inline-block;
 
       &:hover {
-        background-color: darken($color-primary, 6%);
+        background-color: $color-primary;
       }
     }
 
@@ -92,7 +108,7 @@ main {
       background-color: $color-danger;
 
       &:hover {
-        background-color: darken($color-danger, 12% + 4%);
+        background-color: darken($color-danger, 8%);
       }
     }
   }
@@ -103,14 +119,14 @@ main {
   background-color: $color-primary;
 
   &, a {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #fff;
   }
 
   a {
     padding: 0.9rem 1.5rem;
+    border-bottom: solid 1px darken($color-primary, 8%);
     text-decoration: none;
-    border-bottom: solid 1px darken($color-primary, 6%);
 
     &:hover {
       background-color: darken($color-primary, 6%);
@@ -123,25 +139,34 @@ main {
   }
 
   .btn {
-    padding: 0.5rem;
+    padding: 0.75rem 1.5rem;
     flex: 1 0 auto;
     font-size: 90%;
     color: #fff;
-    background-color: darken($color-primary, 12%);
+    background-color: darken($color-primary, 6%);
+    text-transform: uppercase;
 
-    &:hover {
-      background-color: darken($color-primary, 12% + 4%);
+    &:first-of-type {
+      text-align: left;
+
+      &:before {
+        content: '⮜';
+        margin-right: 0.5rem;
+      }
     }
 
-    &:first-of-type:before {
-      content: '⇐';
-      margin-right: 0.5rem;
-    }
+    &:last-of-type {
+      text-align: right;
 
-    &:last-of-type:before {
-      content: '❌';
-      margin-right: 0.5rem;
+      &:before {
+        content: '✕';
+        margin-right: 0.5rem;
+      }
     }
+  }
+
+  .slide-menu__backlink {
+    text-transform: uppercase;
   }
 }
 

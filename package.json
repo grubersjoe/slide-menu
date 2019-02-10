@@ -1,9 +1,9 @@
 {
   "name": "@grubersjoe/slide-menu",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
-  "description": "A library agnostic multilevel JavaScript menu with a smooth slide effect",
+  "description": "A library agnostic multilevel page menu with a smooth slide effect based on CSS transitions",
   "repository": {
     "type": "git",
     "url": "https://github.com/grubersjoe/slide-menu.git"

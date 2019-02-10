@@ -13,15 +13,26 @@ interface ISlideMenuElement extends HTMLElement {
 }
 
 interface IMenuOptions {
-  backLinkBefore: string;
-  backLinkAfter: string;
-  keyOpen: string;
-  keyClose: string;
-  position: string;
-  showBackLink: boolean;
-  submenuLinkBefore: string;
-  submenuLinkAfter: string;
+  backLinkBefore?: string;
+  backLinkAfter?: string;
+  keyOpen?: string;
+  keyClose?: string;
+  position?: MenuPosition | string;
+  showBackLink?: boolean;
+  submenuLinkBefore?: string;
+  submenuLinkAfter?: string;
 }
+
+type DefaultOptions = {
+  backLinkAfter: string;
+  backLinkBefore: string,
+  keyClose: string,
+  keyOpen: string,
+  position: MenuPosition | string,
+  showBackLink: boolean,
+  submenuLinkAfter: string,
+  submenuLinkBefore: string,
+};
 
 enum Direction {
   Backward = -1,
@@ -44,8 +55,8 @@ enum Action {
 const DEFAULT_OPTIONS = {
   backLinkAfter: '',
   backLinkBefore: '',
-  keyClose: undefined,
-  keyOpen: undefined,
+  keyClose: '',
+  keyOpen: '',
   position: 'right',
   showBackLink: true,
   submenuLinkAfter: '',
@@ -56,6 +67,7 @@ class SlideMenu {
   public static readonly NAMESPACE = 'slide-menu';
   public static readonly CLASS_NAMES = {
     active: `${SlideMenu.NAMESPACE}__submenu--active`,
+    backlink: `${SlideMenu.NAMESPACE}__backlink`,
     control: `${SlideMenu.NAMESPACE}__control`,
     decorator: `${SlideMenu.NAMESPACE}__decorator`,
     wrapper: `${SlideMenu.NAMESPACE}__slider`,
@@ -66,7 +78,7 @@ class SlideMenu {
   private isAnimating: boolean;
   private lastAction: Action | null;
 
-  private readonly options: IMenuOptions;
+  private readonly options: DefaultOptions & IMenuOptions;
 
   private readonly menuElem: ISlideMenuElement;
   private readonly wrapperElem: HTMLElement;
@@ -163,8 +175,8 @@ class SlideMenu {
 
     // Remove link decorators
     if (submenuLinkAfter || submenuLinkBefore) {
-      Array
-        .from(this.wrapperElem.querySelectorAll(`.${SlideMenu.CLASS_NAMES.decorator}`))
+      this.wrapperElem
+        .querySelectorAll(`.${SlideMenu.CLASS_NAMES.decorator}`)
         .forEach((decorator: HTMLSpanElement) => {
           if (decorator.parentElement) {
             decorator.parentElement.removeChild(decorator);
@@ -172,10 +184,9 @@ class SlideMenu {
         });
     }
 
-    // Remove backlinks
+    // Remove back links
     if (showBackLink) {
-      Array
-        .from(this.wrapperElem.querySelectorAll(`.${SlideMenu.CLASS_NAMES.control}`))
+      this.wrapperElem.querySelectorAll(`.${SlideMenu.CLASS_NAMES.control}`)
         .forEach((backlink: HTMLElement) => {
           const parentLi = parentsOne(backlink, 'li');
 
@@ -190,6 +201,9 @@ class SlideMenu {
 
     // Remove inline styles
     this.menuElem.style.cssText = '';
+    this.menuElem
+      .querySelectorAll('ul')
+      .forEach((ul: HTMLElement) => ul.style.cssText = '');
 
     // Delete the reference to *this* instance
     // NOTE: Garbage collection is not possible, as long as other references to this object exist
@@ -213,8 +227,8 @@ class SlideMenu {
     }
 
     // Hide other active menus
-    Array
-      .from(this.wrapperElem.querySelectorAll(`.${SlideMenu.CLASS_NAMES.active}`))
+    this.wrapperElem
+      .querySelectorAll(`.${SlideMenu.CLASS_NAMES.active}`)
       .forEach((activeElem: HTMLElement) => {
         activeElem.style.display = 'none';
         activeElem.classList.remove(SlideMenu.CLASS_NAMES.active);
@@ -240,9 +254,9 @@ class SlideMenu {
    */
   private initEventHandlers(): void {
     // Ordinary navigation inside the menu
-    Array
-      .from(this.menuElem.querySelectorAll('a'))
-      .forEach((a) => a.addEventListener('click', (event) => {
+    this.menuElem
+      .querySelectorAll('a')
+      .forEach((anchor) => anchor.addEventListener('click', (event) => {
         const target = event.target as HTMLElement;
         const targetAnchor = target.matches('a')
           ? target
@@ -403,8 +417,8 @@ class SlideMenu {
    * Enhance the markup of menu items which contain a submenu
    */
   private initSubmenus(): void {
-    Array
-      .from(this.menuElem.querySelectorAll('a'))
+    this.menuElem
+      .querySelectorAll('a')
       .forEach((anchor: HTMLAnchorElement) => {
         if (anchor.parentElement === null) {
           return;
@@ -424,12 +438,13 @@ class SlideMenu {
         const anchorText = anchor.textContent;
         this.addLinkDecorators(anchor);
 
+        // Add back links
         if (this.options.showBackLink) {
           const {backLinkBefore, backLinkAfter} = this.options;
 
           const backLink = document.createElement('a');
           backLink.innerHTML = backLinkBefore + anchorText + backLinkAfter;
-          backLink.classList.add(SlideMenu.CLASS_NAMES.control);
+          backLink.classList.add(SlideMenu.CLASS_NAMES.backlink, SlideMenu.CLASS_NAMES.control);
           backLink.setAttribute('data-action', Action.Back);
 
           const backLinkLi = document.createElement('li');
@@ -490,5 +505,5 @@ document.addEventListener('click', (event) => {
   }
 });
 
-// Expose SlideMenu to global namespace
+// Expose SlideMenu to the global namespace
 window.SlideMenu = SlideMenu;

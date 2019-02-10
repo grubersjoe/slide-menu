@@ -105,7 +105,7 @@ You can call the API in two different ways:
 
 * `close(animate = true)` - Close the menu
 * `back()` - Navigate on level back if possible
-* `destroy()` - revert all DOM changes made by SlideMenu. However, this does not remove class names or current inline styles!
+* `destroy()` - revert all DOM changes made by SlideMenu. This includes inline styles, but not the `slide-menu` class name for the container element.
 * `navigateTo(target)`
     Open the menu level which contains specified menu element. `target` can either be a `document.querySelector` compatible string selector or the the DOM element (inside the menu). The first found element (if any) will be used.
 * `open(animate = true)` - Open the menu
