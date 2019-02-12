@@ -122,7 +122,23 @@ You can call the API in two different ways:
 * `sm.open[-after]` fires immediately when the `open()` method is called or after the animation is complete respectively.
 
 
-Make sure to add the event listener to the HTML element, which contains the menu, since the events for this specific menu are dispatched there!
+Make sure to add the event listener to the HTML element, which contains the menu, since the events for this specific menu are dispatched there:
+
+```javascript
+document.addEventListener("DOMContentLoaded", function () {
+  const menuElement = document.getElementById('example-menu');
+  const menu = new SlideMenu(menuElement);
+
+  // Attach the event listener to the *DOM element*, not the SlideMenu instance
+  menuElement.addEventListener('sm.open', function () {
+    console.log('The menu opens');
+  });
+
+  menuElement.addEventListener('sm.open-after', function () {
+    console.log('The menu has opened');
+  });
+});
+```
 
 ### Control buttons
  
@@ -152,5 +168,5 @@ Open http://localhost:9000/.
 To create a production build:
 
 ```sh
-yarn build && yarn post-build
+yarn build
 ```
