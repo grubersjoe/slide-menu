@@ -2,37 +2,26 @@ import '../styles/slide-menu.scss';
 
 import { parents, parentsOne, unwrapElement, wrapElement } from './utils/dom';
 
-declare let window: IWindow;
-
-interface IWindow extends Window {
-  SlideMenu: typeof SlideMenu;
+declare global {
+  interface Window {
+    SlideMenu: typeof SlideMenu;
+  }
 }
 
-interface ISlideMenuElement extends HTMLElement {
+interface MenuHTMLElement extends HTMLElement {
   _slideMenu: SlideMenu;
 }
 
-interface IMenuOptions {
+interface Options {
   backLinkBefore?: string;
   backLinkAfter?: string;
   keyOpen?: string;
   keyClose?: string;
-  position?: MenuPosition | string;
+  position?: MenuPosition;
   showBackLink?: boolean;
   submenuLinkBefore?: string;
   submenuLinkAfter?: string;
 }
-
-type DefaultOptions = {
-  backLinkAfter: string;
-  backLinkBefore: string,
-  keyClose: string,
-  keyOpen: string,
-  position: MenuPosition | string,
-  showBackLink: boolean,
-  submenuLinkAfter: string,
-  submenuLinkBefore: string,
-};
 
 enum Direction {
   Backward = -1,
@@ -73,17 +62,17 @@ class SlideMenu {
     wrapper: `${SlideMenu.NAMESPACE}__slider`,
   };
 
-  private level: number;
-  private isOpen: boolean;
-  private isAnimating: boolean;
-  private lastAction: Action | null;
+  private level: number = 0;
+  private isOpen: boolean = false;
+  private isAnimating: boolean = false;
+  private lastAction: Action | null = null;
 
-  private readonly options: DefaultOptions & IMenuOptions;
+  private readonly options: typeof DEFAULT_OPTIONS;
 
-  private readonly menuElem: ISlideMenuElement;
+  private readonly menuElem: MenuHTMLElement;
   private readonly wrapperElem: HTMLElement;
 
-  constructor(elem: HTMLElement, options?: IMenuOptions) {
+  constructor(elem: HTMLElement, options?: Options) {
     if (elem === null) {
       throw new Error('Argument `elem` must be a valid HTML node');
     }
@@ -91,7 +80,7 @@ class SlideMenu {
     // (Create a new object for every instance)
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
 
-    this.menuElem = elem as ISlideMenuElement;
+    this.menuElem = elem as MenuHTMLElement;
 
     // Add wrapper (for the slide effect)
     this.wrapperElem = document.createElement('div');
@@ -101,11 +90,6 @@ class SlideMenu {
     if (firstUl) {
       wrapElement(firstUl, this.wrapperElem);
     }
-
-    this.level = 0;
-    this.isOpen = false;
-    this.isAnimating = false;
-    this.lastAction = null;
 
     this.initMenu();
     this.initSubmenus();
@@ -117,10 +101,8 @@ class SlideMenu {
 
   /**
    * Toggle the menu
-   * @param {boolean|null} show
-   * @param {boolean} animate
    */
-  public toggle(show: boolean, animate: boolean = true): void {
+  public toggle(show?: boolean, animate: boolean = true): void {
     let offset;
 
     if (show === undefined) {
@@ -143,7 +125,6 @@ class SlideMenu {
 
   /**
    * Open the menu
-   * @param {boolean} animate Use CSS transitions
    */
   public open(animate: boolean = true): void {
     this.triggerEvent(Action.Open);
@@ -152,7 +133,6 @@ class SlideMenu {
 
   /**
    * Close the menu
-   * @param {boolean} animate Use CSS transitions
    */
   public close(animate: boolean = true): void {
     this.triggerEvent(Action.Close);
@@ -175,25 +155,28 @@ class SlideMenu {
 
     // Remove link decorators
     if (submenuLinkAfter || submenuLinkBefore) {
-      this.wrapperElem
-        .querySelectorAll(`.${SlideMenu.CLASS_NAMES.decorator}`)
-        .forEach((decorator: HTMLSpanElement) => {
-          if (decorator.parentElement) {
-            decorator.parentElement.removeChild(decorator);
-          }
-        });
+      const linkDecorators = this.wrapperElem
+        .querySelectorAll(`.${SlideMenu.CLASS_NAMES.decorator}`) as any as HTMLElement[];
+
+      linkDecorators.forEach((decorator: HTMLElement) => {
+        if (decorator.parentElement) {
+          decorator.parentElement.removeChild(decorator);
+        }
+      });
     }
 
     // Remove back links
     if (showBackLink) {
-      this.wrapperElem.querySelectorAll(`.${SlideMenu.CLASS_NAMES.control}`)
-        .forEach((backlink: HTMLElement) => {
-          const parentLi = parentsOne(backlink, 'li');
+      const backLinks = this.wrapperElem
+        .querySelectorAll(`.${SlideMenu.CLASS_NAMES.control}`) as any as HTMLElement[];
 
-          if (parentLi && parentLi.parentElement) {
-            parentLi.parentElement.removeChild(parentLi);
-          }
-        });
+      backLinks.forEach((backlink: HTMLElement) => {
+        const parentLi = parentsOne(backlink, 'li');
+
+        if (parentLi && parentLi.parentElement) {
+          parentLi.parentElement.removeChild(parentLi);
+        }
+      });
     }
 
     // Remove the wrapper element
@@ -212,9 +195,8 @@ class SlideMenu {
 
   /**
    * Navigate to a specific link on any level (useful to open the correct hierarchy directly)
-   * @param {string | HTMLElement} target
    */
-  public navigateTo(target: string | HTMLElement): void {
+  public navigateTo(target: HTMLElement | string): void {
     this.triggerEvent(Action.Navigate);
 
     if (typeof target === 'string') {
@@ -227,23 +209,24 @@ class SlideMenu {
     }
 
     // Hide other active menus
-    this.wrapperElem
-      .querySelectorAll(`.${SlideMenu.CLASS_NAMES.active}`)
-      .forEach((activeElem: HTMLElement) => {
-        activeElem.style.display = 'none';
-        activeElem.classList.remove(SlideMenu.CLASS_NAMES.active);
-      });
+    const activeMenus = this.wrapperElem
+      .querySelectorAll(`.${SlideMenu.CLASS_NAMES.active}`) as any as HTMLElement[];
+
+    activeMenus.forEach((activeElem: HTMLElement) => {
+      activeElem.style.display = 'none';
+      activeElem.classList.remove(SlideMenu.CLASS_NAMES.active);
+    });
 
     const parentUl = parents(target, 'ul');
     const level = parentUl.length - 1;
 
     // Trigger the animation only if currently on different level
-    if (level > -1 && level !== this.level) {
+    if (level >= 0 && level !== this.level) {
       this.level = level;
       this.moveSlider(this.wrapperElem, -this.level * 100);
     }
 
-    parentUl.forEach((ul: HTMLUListElement) => {
+    parentUl.forEach((ul: HTMLElement) => {
       ul.style.display = 'block';
       ul.classList.add(SlideMenu.CLASS_NAMES.active);
     });
@@ -253,19 +236,17 @@ class SlideMenu {
    * Set up all event handlers
    */
   private initEventHandlers(): void {
-    // Ordinary navigation inside the menu
-    this.menuElem
-      .querySelectorAll('a')
-      .forEach((anchor) => anchor.addEventListener('click', (event) => {
-        const target = event.target as HTMLElement;
-        const targetAnchor = target.matches('a')
-          ? target
-          : parentsOne(target, 'a');
+    // Ordinary links inside the menu
+    const anchors = Array.from(this.menuElem.querySelectorAll('a'));
 
-        if (targetAnchor) {
-          this.navigate(Direction.Forward, targetAnchor);
-        }
-      }));
+    anchors.forEach((anchor: HTMLAnchorElement) => anchor.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      const targetAnchor = target.matches('a') ? target : parentsOne(target, 'a');
+
+      if (targetAnchor) {
+        this.navigate(Direction.Forward, targetAnchor);
+      }
+    }));
 
     // Handler for end of CSS transition
     this.menuElem.addEventListener('transitionend', this.onTransitionEnd.bind(this));
@@ -321,8 +302,6 @@ class SlideMenu {
 
   /**
    * Trigger a custom event to support callbacks
-   * @param action
-   * @param {boolean} afterAnimation Mark this event as `before` or `after` callback
    */
   private triggerEvent(action: Action, afterAnimation: boolean = false): void {
     this.lastAction = action;
@@ -335,8 +314,6 @@ class SlideMenu {
 
   /**
    * Navigate the menu - that is slide it one step left or right
-   * @param {Direction} dir Navigation direction: Direction.Forward or Direction.Backward
-   * @param {HTMLElement} anchor The clicked anchor or button element
    */
   private navigate(dir: Direction = Direction.Forward, anchor?: HTMLElement) {
     if (this.isAnimating || (dir === Direction.Backward && this.level === 0)) {
@@ -356,7 +333,7 @@ class SlideMenu {
       ul.style.display = 'block';
     }
 
-    const action = dir === Direction.Forward ? Action.Forward : Action.Back;
+    const action = (dir === Direction.Forward) ? Action.Forward : Action.Back;
     this.triggerEvent(action);
 
     this.level = this.level + dir;
@@ -365,8 +342,6 @@ class SlideMenu {
 
   /**
    * Start the slide animation (the CSS transition)
-   * @param elem
-   * @param offset
    */
   private moveSlider(elem: HTMLElement, offset: string | number): void {
     // Add percentage sign
@@ -405,7 +380,6 @@ class SlideMenu {
 
   /**
    * Pause the CSS transitions, to apply CSS changes directly without an animation
-   * @param action
    */
   private runWithoutAnimation(action: () => void): void {
     const transitionElems = [this.menuElem, this.wrapperElem];
@@ -503,12 +477,14 @@ document.addEventListener('click', (event) => {
     throw new Error(`Unable to find menu ${target}`);
   }
 
-  const instance = (menu as ISlideMenuElement)._slideMenu;
-  const action = control.getAttribute('data-action');
+  const instance = (menu as MenuHTMLElement)._slideMenu;
+  const method = control.getAttribute('data-action');
   const arg = control.getAttribute('data-arg');
 
-  if (instance && action && typeof instance[action] === 'function') {
-    arg ? instance[action](arg) : instance[action]();
+  // @ts-ignore
+  if (instance && method && typeof instance[method] === 'function') {
+    // @ts-ignore
+    arg ? instance[method](arg) : instance[method]();
   }
 });
 
