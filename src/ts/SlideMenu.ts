@@ -61,7 +61,7 @@ class SlideMenu {
   private isAnimating: boolean = false;
   private lastAction: Action | null = null;
 
-  private readonly options: typeof DEFAULT_OPTIONS;
+  private readonly options: SlideMenuOptions;
 
   private readonly menuElem: MenuHTMLElement;
   private readonly wrapperElem: HTMLElement;
@@ -459,16 +459,16 @@ class SlideMenu {
 
 // Link control buttons with the API
 document.addEventListener('click', event => {
-  const control = event.target as HTMLElement;
+  const btn = parents(event.target as HTMLElement, `.${SlideMenu.CLASS_NAMES.control}`, 1)[0];
 
-  if (!control.className.includes(`${SlideMenu.CLASS_NAMES.control}`)) {
+  if (!btn || !btn.className.includes(SlideMenu.CLASS_NAMES.control)) {
     return;
   }
 
-  const target = control.getAttribute('data-target');
+  const target = btn.getAttribute('data-target');
   const menu =
     !target || target === 'this'
-      ? parentsOne(control, `.${SlideMenu.NAMESPACE}`)
+      ? parentsOne(btn, `.${SlideMenu.NAMESPACE}`)
       : document.getElementById(target); // assumes #id
 
   if (!menu) {
@@ -476,8 +476,8 @@ document.addEventListener('click', event => {
   }
 
   const instance = (menu as MenuHTMLElement)._slideMenu;
-  const method = control.getAttribute('data-action');
-  const arg = control.getAttribute('data-arg');
+  const method = btn.getAttribute('data-action');
+  const arg = btn.getAttribute('data-arg');
 
   // @ts-ignore
   if (instance && method && typeof instance[method] === 'function') {

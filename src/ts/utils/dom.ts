@@ -25,7 +25,7 @@ export function unwrapElement(elem: HTMLElement): void {
 export function parents(elem: Node, selector: string, limit?: number): HTMLElement[] {
   const matched = [];
 
-  while (elem.parentElement !== null || (limit !== undefined && matched.length < limit)) {
+  while (elem && elem.parentElement !== null && (limit !== undefined && matched.length < limit)) {
     if (elem instanceof HTMLElement && elem.matches(selector)) {
       // @ts-ignore
       matched.push(elem);
