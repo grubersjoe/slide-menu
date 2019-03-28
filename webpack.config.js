@@ -80,7 +80,8 @@ module.exports = [
           charset: 'utf-8',
           description: packageMeta.description,
           viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-        }
+        },
+        favicon: './src/favicon.png',
       }),
       new MiniCssExtractPlugin({
         filename: '[name].css',
