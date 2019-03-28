@@ -1,7 +1,8 @@
 $color-primary: hsl(206, 36%, 20%);
 $color-danger: hsl(356, 62%, 38%);
 
-*:active, *:focus {
+*:active,
+*:focus {
   outline: none !important;
 }
 
@@ -37,7 +38,8 @@ a {
   color: saturate(lighten($color-primary, 16%), 8%);
 }
 
-a, .btn {
+a,
+.btn {
   transition: background-color 0.15s ease-in-out;
   will-change: background-color;
 }
@@ -72,7 +74,6 @@ footer {
   font-size: 85%;
   line-height: 1;
 }
-
 
 .icon {
   height: 0.6rem;
@@ -126,7 +127,8 @@ main {
   width: 340px;
   background-color: $color-primary;
 
-  &, a {
+  &,
+  a {
     font-size: 0.8rem;
     color: #fff;
   }

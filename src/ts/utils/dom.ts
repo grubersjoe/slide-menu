@@ -9,7 +9,7 @@ export function wrapElement(elem: HTMLElement, wrapper: HTMLElement): HTMLElemen
   return elem;
 }
 
-export function unwrapElement(elem: HTMLElement) {
+export function unwrapElement(elem: HTMLElement): void {
   const parent = elem.parentElement;
 
   if (parent === null) {

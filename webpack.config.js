@@ -40,6 +40,7 @@ module.exports = [
                         browsers: ['> 1%', 'not ie > 0']
                       },
                       useBuiltIns: 'usage',
+                      corejs: "3",
                     }
                   ],
                 ],
@@ -115,6 +116,7 @@ module.exports = [
                         browsers: ['> 1%', 'ie > 11']
                       },
                       useBuiltIns: 'usage',
+                      corejs: "3",
                     }
                   ],
                 ],
