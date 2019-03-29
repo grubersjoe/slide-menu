@@ -264,6 +264,7 @@ class SlideMenu {
 
     if (this.lastAction) {
       this.triggerEvent(this.lastAction, true);
+      this.lastAction = null;
     }
   }
 
@@ -386,7 +387,6 @@ class SlideMenu {
 
     action();
 
-    // noinspection TsLint
     this.menuElem.offsetHeight; // Trigger a reflow, flushing the CSS changes
     transitionElems.forEach(elem => elem.style.removeProperty('transition'));
 
@@ -459,7 +459,13 @@ class SlideMenu {
 
 // Link control buttons with the API
 document.addEventListener('click', event => {
-  const btn = parents(event.target as HTMLElement, `.${SlideMenu.CLASS_NAMES.control}`, 1)[0];
+  if (!(event.target instanceof HTMLElement)) {
+    return;
+  }
+
+  const btn = event.target.className.includes(SlideMenu.CLASS_NAMES.control)
+    ? event.target
+    : parentsOne(event.target, `.${SlideMenu.CLASS_NAMES.control}`);
 
   if (!btn || !btn.className.includes(SlideMenu.CLASS_NAMES.control)) {
     return;
