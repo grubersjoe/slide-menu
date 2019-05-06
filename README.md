@@ -8,9 +8,7 @@ Support: All current browsers and IE11+ (if using `dist/slide-menu.ie.js`).
 
 ## Breaking changes
 
-Version 1.0 has been released and includes breaking changes: Since the library has been rewritten in TypeScript, jQuery is no longer a required dependency. Obviously, this also means, that `SlideMenu` can't be used as a jQuery plugin any more.
-
-See below instructions how to use the new version. 
+Version 1.0 has been released and includes breaking changes: SlideMenu no longer depends on jQuery and the library has been rewritten in TypeScript. See below instructions how to use the current version. 
 
 ## Install
 ```sh
