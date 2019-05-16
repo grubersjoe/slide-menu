@@ -63,8 +63,8 @@ Option | Description | Valid values | Default
 --- | --- | --- | ---
 `backLinkAfter` | HTML to append to back link in submenus | HTML code |  `''`
 `backLinkBefore` | HTML to prepend to back link in submenus | HTML code |  `''`
-`keycodeClose` | Key used to close the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
-`keycodeOpen` | Key used to open the menu | [Any valid KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
+`keycodeClose` | Key used to close the menu | [Any valid KeyboardEvent key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
+`keycodeOpen` | Key used to open the menu | [Any valid KeyboardEvent key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) | `undefined`
 `position` | Position of the menu | `'left'` or `'right'` | `'right'`
 `showBackLink` | Add a link to navigate back in submenus (first entry) | *boolean* | `true`
 `submenuLinkBefore` | HTML to prepend to links with a submenu | HTML code |  `''`
