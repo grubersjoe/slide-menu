@@ -73,7 +73,7 @@ module.exports = [
         template: 'src/index.html',
         templateParameters: {
           version: packageMeta.version,
-          title: 'Slide Menu',
+          title: `Slide Menu`,
           description: packageMeta.description,
         },
         meta: {
