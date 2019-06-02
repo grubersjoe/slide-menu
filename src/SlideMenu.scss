@@ -11,10 +11,10 @@ $sm-transition-easing: ease-in-out !default;
   right: 0;
   display: none;
   overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   transition: transform $sm-transition-dur $sm-transition-easing;
   transform: translateX(100%);
-  overflow-y: auto;
   will-change: transform;
   z-index: 1000;
 

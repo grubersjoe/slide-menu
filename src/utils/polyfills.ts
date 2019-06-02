@@ -1,7 +1,4 @@
-/**
- * Polyfills for *drum roll* Internet Explorer 11
- */
-
+// Polyfills for Internet Explorer 11
 import 'custom-event-polyfill';
 
 if (!Element.prototype.matches) {

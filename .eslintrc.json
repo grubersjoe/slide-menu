@@ -3,19 +3,14 @@
     "browser": true,
     "es6": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": [
       1,
@@ -24,6 +19,9 @@
       }
     ],
     "@typescript-eslint/indent": 0,
-    "semi": "error"
+    "no-undef": 0
+  },
+  "globals": {
+    "__dirname": true
   }
 }

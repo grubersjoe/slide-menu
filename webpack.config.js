@@ -1,148 +1,92 @@
 const path = require('path');
 
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const packageMeta = require('./package.json');
+const package = require('./package.json');
+
+const extensions = ['.ts', '.js'];
+const rules = [
+  {
+    test: /\.ts$/,
+    use: 'babel-loader',
+    exclude: /node_modules/,
+  },
+  {
+    test: /\.scss$/,
+    use: [
+      MiniCssExtractPlugin.loader,
+      'css-loader',
+      {
+        loader: 'sass-loader',
+        options: {
+          outputStyle: 'compressed',
+        },
+      },
+    ],
+  },
+];
 
 module.exports = [
+  // SlideMenu
   (env, options) => ({
-    entry: {
-      'slide-menu': './src/ts/SlideMenu.ts',
-      demo: './src/styles/demo.scss',
-    },
+    entry: './src/SlideMenu.ts',
     resolve: {
-      extensions: ['.ts', '.js'],
+      extensions,
     },
     output: {
-      path: `${__dirname}/dist`,
-      filename: '[name].js',
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'slide-menu.js',
     },
-    devServer: {
-      contentBase: path.join(__dirname, 'dist'),
-      compress: true,
-      port: 9000,
-    },
-    devtool: options.mode !== 'production' ? 'source-map' : false,
+    devtool: options.mode === 'production' ? false : 'source-map',
     module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  [
-                    '@babel/env',
-                    {
-                      targets: {
-                        browsers: ['> 1%', 'not ie > 0']
-                      },
-                      useBuiltIns: 'usage',
-                      corejs: "3",
-                    }
-                  ],
-                ],
-              }
-            },
-            {
-              loader: 'ts-loader',
-            }
-          ],
-          exclude: /node_modules/,
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            ...(options.mode === 'production' ? ['postcss-loader'] : []),
-            {
-              loader: 'sass-loader',
-              options: {
-                outputStyle: 'compressed',
-              }
-            }
-          ],
-        },
-      ],
+      rules,
     },
     plugins: [
-      new HtmlWebpackPlugin({
-        template: 'src/index.html',
-        templateParameters: {
-          version: packageMeta.version,
-          title: `Slide Menu`,
-          description: packageMeta.description,
-        },
-        meta: {
-          charset: 'utf-8',
-          description: packageMeta.description,
-          viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-        },
-        favicon: './src/favicon.png',
-      }),
+      new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
-        filename: '[name].css',
+        filename: 'slide-menu.css',
       }),
     ],
   }),
 
-  // Build code for legacy browsers seperately
-  (env, options) => ({
-    entry: {
-      'slide-menu.ie': './src/ts/SlideMenu.legacy.ts',
-    },
+  // Demo
+  () => ({
+    entry: './src/demo/demo.ts',
     resolve: {
-      extensions: ['.ts', '.js'],
+      extensions,
     },
     output: {
-      path: `${__dirname}/dist`,
-      filename: '[name].js',
+      path: path.resolve(__dirname, 'docs/'),
+      publicPath: '/',
+      filename: 'demo.js',
+    },
+    devServer: {
+      publicPath: '/',
     },
     module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  [
-                    '@babel/env',
-                    {
-                      targets: {
-                        browsers: ['> 1%', 'ie > 11']
-                      },
-                      useBuiltIns: 'usage',
-                      corejs: "3",
-                    }
-                  ],
-                ],
-              }
-            },
-            {
-              loader: 'ts-loader',
-            }
-          ],
-          exclude: /node_modules/,
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            'css-loader',
-            ...(options.mode === 'production' ? ['postcss-loader'] : []),
-            {
-              loader: 'sass-loader',
-              options: {
-                outputStyle: 'compressed',
-              }
-            }
-          ],
-        },
-      ],
+      rules,
     },
+    plugins: [
+      new CleanWebpackPlugin(),
+      new HtmlWebpackPlugin({
+        template: './src/demo/index.html',
+        templateParameters: {
+          version: package.version,
+          title: `Slide Menu`,
+          description: package.description,
+        },
+        meta: {
+          charset: 'utf-8',
+          description: package.description,
+          viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+        },
+        favicon: './src/demo/favicon.png',
+      }),
+      new MiniCssExtractPlugin({
+        filename: 'demo.css',
+      }),
+    ],
   }),
 ];

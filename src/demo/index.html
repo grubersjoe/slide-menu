@@ -16,34 +16,6 @@
         <a href="https://github.com/grubersjoe/slide-menu">Read the documentation here.</a>
       </p>
 
-      <h2>Multi-purpose menu (left)</h2>
-      <div>
-        <button
-          type="button"
-          class="btn slide-menu__control"
-          data-target="test-menu-left"
-          data-action="toggle"
-        >
-          Toggle menu
-        </button>
-        <button
-          type="button"
-          class="btn slide-menu__control"
-          data-target="test-menu-left"
-          data-action="open"
-        >
-          Open menu
-        </button>
-        <button
-          type="button"
-          class="btn slide-menu__control"
-          data-target="test-menu-left"
-          data-action="close"
-        >
-          Close menu
-        </button>
-      </div>
-
       <h2>Navigation menu (right)</h2>
       <div>
         <button
@@ -117,6 +89,34 @@
         </button>
       </div>
 
+      <h2>Multi-purpose menu (left)</h2>
+      <div>
+        <button
+          type="button"
+          class="btn slide-menu__control"
+          data-target="test-menu-left"
+          data-action="toggle"
+        >
+          Toggle menu
+        </button>
+        <button
+          type="button"
+          class="btn slide-menu__control"
+          data-target="test-menu-left"
+          data-action="open"
+        >
+          Open menu
+        </button>
+        <button
+          type="button"
+          class="btn slide-menu__control"
+          data-target="test-menu-left"
+          data-action="close"
+        >
+          Close menu
+        </button>
+      </div>
+
       <h2>Events</h2>
       <ul id="events"></ul>
 
@@ -127,7 +127,7 @@
             d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"
           ></path>
         </svg>
-        by <a href="https://grubersjoe.de">@grubersjoe</a>
+        by <a href="https://jogruber.de">@grubersjoe</a>
       </footer>
     </main>
 
@@ -243,56 +243,5 @@
         </li>
       </ul>
     </nav>
-
-    <script>
-      function logEvent(id, event) {
-        const events = document.getElementById('events');
-        const li = document.createElement('li');
-        const time = parseInt(event.timeStamp);
-
-        // html-webpack-plugin does not work with ES6 template strings =/
-        li.appendChild(document.createTextNode(id + ': ' + time + ' - ' + event.type));
-        events.appendChild(li);
-      }
-
-      document.addEventListener('DOMContentLoaded', function() {
-        const menuLeftElem = document.getElementById('test-menu-left');
-        const menuRightElem = document.getElementById('test-menu-right');
-
-        const allEvents = [
-          'sm.back',
-          'sm.back-after',
-          'sm.close',
-          'sm.close-after',
-          'sm.forward',
-          'sm.forward-after',
-          'sm.navigate',
-          'sm.navigate-after',
-          'sm.open',
-          'sm.open-after',
-        ];
-
-        allEvents.forEach(eventName => {
-          menuLeftElem.addEventListener(eventName, event => logEvent('Menu left', event));
-          menuRightElem.addEventListener(eventName, event => logEvent('Menu right', event));
-        });
-
-        const menuLeft = new SlideMenu(menuLeftElem, {
-          position: 'left',
-          submenuLinkAfter: ' ⮞',
-          backLinkBefore: '⮜ ',
-        });
-
-        const menuRight = new SlideMenu(menuRightElem, {
-          keyClose: 'Escape',
-          submenuLinkAfter: '<span style="margin-left: 1em; font-size: 85%;">⮞</span>',
-          backLinkBefore: '<span style="margin-right: 1em; font-size: 85%;">⮜</span>',
-        });
-
-        if (window.innerWidth > 767) {
-          menuRight.open(false);
-        }
-      });
-    </script>
   </body>
 </html>

@@ -1,6 +1,9 @@
 $color-primary: hsl(206, 36%, 20%);
 $color-danger: hsl(356, 62%, 38%);
 
+$sm-menu-width: 340px;
+$sm-menu-background: $color-primary;
+
 *:active,
 *:focus {
   outline: none !important;
@@ -124,7 +127,6 @@ main {
 }
 
 .slide-menu {
-  width: 340px;
   background-color: $color-primary;
 
   &,

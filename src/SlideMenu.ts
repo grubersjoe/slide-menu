@@ -1,12 +1,13 @@
-import '../styles/slide-menu.scss';
+import './SlideMenu.scss';
 
+import './utils/polyfills';
 import { parents, parentsOne, unwrapElement, wrapElement } from './utils/dom';
 
 interface MenuHTMLElement extends HTMLElement {
   _slideMenu: SlideMenu;
 }
 
-interface SlideMenuOptions {
+interface Options {
   backLinkBefore: string;
   backLinkAfter: string;
   keyOpen: string;
@@ -17,14 +18,11 @@ interface SlideMenuOptions {
   submenuLinkAfter: string;
 }
 
+type MenuPosition = 'left' | 'right';
+
 enum Direction {
   Backward = -1,
   Forward = 1,
-}
-
-enum MenuPosition {
-  Left = 'left',
-  Right = 'right',
 }
 
 enum Action {
@@ -61,12 +59,12 @@ class SlideMenu {
   private isAnimating: boolean = false;
   private lastAction: Action | null = null;
 
-  private readonly options: SlideMenuOptions;
+  private readonly options: Options;
 
   private readonly menuElem: MenuHTMLElement;
   private readonly wrapperElem: HTMLElement;
 
-  public constructor(elem: HTMLElement, options?: Partial<SlideMenuOptions>) {
+  public constructor(elem: HTMLElement, options?: Partial<Options>) {
     if (elem === null) {
       throw new Error('Argument `elem` must be a valid HTML node');
     }
@@ -104,7 +102,7 @@ class SlideMenu {
     } else if (show) {
       offset = 0;
     } else {
-      offset = this.options.position === MenuPosition.Left ? '-100%' : '100%';
+      offset = this.options.position === 'left' ? '-100%' : '100%';
     }
 
     this.isOpen = show;
@@ -359,14 +357,14 @@ class SlideMenu {
   private initMenu(): void {
     this.runWithoutAnimation(() => {
       switch (this.options.position) {
-        case MenuPosition.Left:
+        case 'left':
           Object.assign(this.menuElem.style, {
             left: 0,
             right: 'auto',
             transform: 'translateX(-100%)',
           });
           break;
-        default:
+        case 'right':
           Object.assign(this.menuElem.style, {
             left: 'auto',
             right: 0,
@@ -492,6 +490,9 @@ document.addEventListener('click', event => {
   }
 });
 
-// Expose SlideMenu to the global namespace
-// @ts-ignore
-window.SlideMenu = SlideMenu;
+export default SlideMenu;
+
+// Expose SlideMenu to the global scope
+if (window !== undefined) {
+  window.SlideMenu = SlideMenu;
+}
