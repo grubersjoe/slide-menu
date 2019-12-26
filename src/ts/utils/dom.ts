@@ -22,12 +22,15 @@ export function unwrapElement(elem: HTMLElement): void {
   parent.removeChild(elem);
 }
 
-export function parents(elem: Node, selector: string, limit?: number): HTMLElement[] {
-  const matched = [];
+export function parents(elem: Node | null, selector: string, limit?: number): HTMLElement[] {
+  const matched: HTMLElement[] = [];
 
-  while (elem.parentElement !== null && (limit === undefined ? true : matched.length < limit)) {
+  while (
+    elem &&
+    elem.parentElement !== null &&
+    (limit === undefined ? true : matched.length < limit)
+  ) {
     if (elem instanceof HTMLElement && elem.matches(selector)) {
-      // @ts-ignore
       matched.push(elem);
     }
 

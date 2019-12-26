@@ -61,7 +61,9 @@ module.exports = [
             {
               loader: 'sass-loader',
               options: {
-                outputStyle: 'compressed',
+                sassOptions: {
+                  outputStyle: 'compressed',
+                }
               }
             }
           ],
@@ -89,7 +91,7 @@ module.exports = [
     ],
   }),
 
-  // Build code for legacy browsers seperately
+  // Build code for legacy browsers separately
   (env, options) => ({
     entry: {
       'slide-menu.ie': './src/ts/SlideMenu.legacy.ts',
@@ -137,7 +139,9 @@ module.exports = [
             {
               loader: 'sass-loader',
               options: {
-                outputStyle: 'compressed',
+                sassOptions: {
+                  outputStyle: 'compressed',
+                }
               }
             }
           ],
