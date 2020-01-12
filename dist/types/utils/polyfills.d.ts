@@ -1,1 +1,0 @@
-import 'custom-event-polyfill';

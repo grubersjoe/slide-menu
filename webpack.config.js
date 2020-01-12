@@ -21,7 +21,9 @@ const rules = [
       {
         loader: 'sass-loader',
         options: {
-          outputStyle: 'compressed',
+          sassOptions: {
+            outputStyle: 'compressed',
+          },
         },
       },
     ],

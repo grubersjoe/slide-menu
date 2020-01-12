@@ -1,7 +1,6 @@
 # Slide Menu
 
-_A multilevel page menu with a smooth slide effect based on CSS transitions and
-various options._
+_A multilevel page menu with a smooth slide effect based on CSS transitions and various options._
 
 **[Demo](https://grubersjoe.github.io/slide-menu)**
 
