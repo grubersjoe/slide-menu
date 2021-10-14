@@ -1,5 +1,7 @@
 # Slide Menu
 
+> ⚠️ This project is unmaintained. Feel free to fork it.
+
 *A library agnostic multilevel page menu with a smooth slide effect based on CSS transitions and various options.*
 
 Support: All current browsers and IE11+ (if using `dist/slide-menu.ie.js`).
